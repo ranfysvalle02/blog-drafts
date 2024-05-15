@@ -244,7 +244,7 @@ To follow along, you'll need:
 
 1. **MongoDB Atlas Cluster:** Create your free cluster and [load the Sample Dataset](https://www.mongodb.com/basics/sample-database).
 
-2. **Sample Dataset: sample_analytics.transcations** The transaction data offers a realistic dataset that allows users to hone their skills in data analysis, querying, and aggregation, particularly in the context of financial data.
+2. **Database:sample_analytics Collection:transcations** The transaction data offers a realistic dataset that allows users to hone their skills in data analysis, querying, and aggregation, particularly in the context of financial data.
 
 3. **SERPER_API_KEY:** Sign up for a free account at [https://serper.dev](https://serper.dev/). Serper is a Google Search API that will grant our CrewAI setup access to real-time market data and news, enriching our analysis beyond just database calculations.
 
