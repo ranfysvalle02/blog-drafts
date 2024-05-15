@@ -299,6 +299,7 @@ We're also going to use the Google Search API. This will be used by our "researc
 
 ```python
 from langchain_community.utilities import GoogleSerperAPIWrapper
+from langchain.agents import Tool
 
 search = GoogleSerperAPIWrapper(serper_api_key='__API_KEY__')
 search_tool = Tool(
@@ -314,7 +315,6 @@ We'll be using CrewAI to manage our agents and tasks. In this case, we have one 
 
 ```python
 from crewai import Crew, Process, Task, Agent
-from langchain.agents import Tool
 
 researcher = Agent(
   role='Investment Researcher',
