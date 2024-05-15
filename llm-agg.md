@@ -260,11 +260,9 @@ To follow along, you'll need:
 3. **LLM Resource:** CrewAI supports various LLM connections, including local models (Ollama), APIs like Azure, and all LangChain LLM components for customizable AI solutions. [Click here to learn more about CrewAI LLM Support](https://docs.crewai.com/how-to/LLM-Connections/)
 
 
-_**note**: Python version used during development was: 3.10.10_
-
 ### The Code
 
-In this section, we'll walk through the Python code used to perform financial analysis based on transaction data stored in MongoDB, using Azure OpenAI and Google Search API for data analysis and insights.
+In this section, we'll walk through the Python code used to perform financial analysis based on transaction data stored in MongoDB, using Azure OpenAI and Google Search API for data analysis and insights. The Python version used during development was: 3.10.10
 
 ### MongoDB Setup
 
