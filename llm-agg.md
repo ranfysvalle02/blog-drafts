@@ -248,6 +248,9 @@ To follow along, you'll need:
 
 3. **LLM Resource:** CrewAI supports various LLM connections, including local models (Ollama), APIs like Azure, and all LangChain LLM components for customizable AI solutions. [Click here to learn more about CrewAI LLM Support](https://docs.crewai.com/how-to/LLM-Connections/)
 
+
+_**note**: Python version used during development was: Python 3.10.10_
+
 ### Supercharge Investment Analysis with MongoDB and CrewAI
 
 ![CrewAI Visualization](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/HighLevelChart_noBG.jpg)
