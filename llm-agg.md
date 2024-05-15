@@ -280,7 +280,7 @@ collection = db["transactions"]
 
 ### Azure OpenAI Setup
 
-Next, we set up our connection to Azure OpenAI. Azure OpenAI is used to generate language models that can help us analyze and summarize our data.
+Next, we set up our connection to Azure OpenAI. Azure OpenAI can be replaced by your preferred LLM.
 
 ```python
 from langchain_openai import AzureChatOpenAI
