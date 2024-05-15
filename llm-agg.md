@@ -461,18 +461,9 @@ While the combination of MongoDB's Aggregation Framework and GenAI represents a 
 
 2. **Uncertainty in Predictions:** Despite the sophistication of the analysis, there will always be an inherent degree of uncertainty in investment predictions. Future outcomes are inherently unknowable, and factors beyond the scope of historical data can influence results.
 
-3. **LLM Limitations:** LLMs are still evolving, and their ability to interpret and analyze financial data is continually improving. However, biases in training data or limitations in the model's architecture could lead to inaccurate or misleading insights.
+3. **LLM Limitations:** LLMs are still evolving, and their ability to research, interpret and analyze data is continually improving. However, biases in training data or limitations in the model's architecture could lead to inaccurate or misleading insights.
 
-**Responsible Investment Analysis**
-
-By acknowledging these limitations and taking steps to mitigate them, you can ensure a more responsible and well-rounded approach to investment analysis. Here are some best practices:
-
-* **Diversification:**  Don't put all your eggs in one basket. Spread your investments across different asset classes and sectors to minimize risk.
-* **Fundamental Analysis:**  While AI can offer valuable insights,  don't neglect fundamental analysis of companies you're considering investing in. This involves studying a company's financial health, competitive advantage, and future prospects.
-* **Independent Research:**  Don't rely solely on AI-generated recommendations. Conduct your own research and due diligence before making any investment decisions.
-* **Human Expertise:**  AI is a powerful tool, but it  can't replace human expertise. Seek guidance from a qualified financial advisor who can provide personalized investment advice based on your unique circumstances and risk tolerance.
-
-By combining AI's capabilities with these best practices, you can leverage data-driven insights  for more informed investment decisions. 
+By being aware of these limitations and taking steps to mitigate them, you can ensure a more responsible and well-rounded approach to investment analysis.
 
 ### Conclusion
 
@@ -490,6 +481,8 @@ The future of investment analysis belongs to those who embrace the power of data
 Don't just analyze the market – shape it. Start harnessing the potential of MongoDB and AI today, and transform your investment decision-making process.
 
 The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ranfysvalle02/mdb-agg-crewai/blob/main/investment_analysis.py)
+
+
 
 
 
