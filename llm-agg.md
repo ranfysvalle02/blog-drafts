@@ -453,21 +453,25 @@ Based on current news and events:
 It is also suggested to keep a close eye on those stocks that are currently showing negative returns. Understanding the reasons behind their poor performance could provide investment opportunities if these issues are addressed and the businesses start to turn around.
 ```
 
-## Limitations to Consider
+### Limitations and Considerations
 
-While the approach of combining LLMs and MongoDB's Aggregation Framework offers exciting possibilities, it's important to acknowledge some limitations:
+While the combination of Large Language Models (LLMs), MongoDB's Aggregation Framework, and CrewAI offers a powerful approach to investment analysis, there are some limitations and considerations to keep in mind:
 
-* **Reliance on Historical Data:**  Both LLMs and the Aggregation Framework rely heavily on historical data for training and analysis.  This raises the question of whether past performance is always indicative of future results. The market is inherently unpredictable, and unforeseen events can significantly impact investment outcomes.
-* **Uncertainty in Predictions:** No matter how sophisticated the analysis, there will always be a degree of uncertainty in investment predictions. The  future performance of any investment involves a complex interplay of various factors, some of which may be difficult to quantify or predict accurately.
-* **Potential for Bias:**  Both financial data and LLMs themselves can be susceptible to biases.  Inaccurate or incomplete data used for training can lead to biased models, potentially skewing the investment recommendations.
+1. **Historical Data Dependence:** Both LLMs and the Aggregation Framework rely heavily on historical data for training and analysis. While historical data can provide valuable insights, it's important to remember that past performance is not always indicative of future results. The market is inherently unpredictable, and unforeseen events can significantly impact investment outcomes.
 
-**Addressing These Limitations:**
+2. **Uncertainty in Predictions:** Despite the sophistication of the analysis, there will always be a degree of uncertainty in investment predictions. The future performance of any investment is influenced by a complex interplay of various factors, some of which may be difficult to quantify or predict accurately.
 
-* **Diversification:**  A well-diversified portfolio can help mitigate the risks associated with over-reliance on historical data and uncertain predictions.
-* **Human Oversight:**  While AI can be a powerful tool,  human expertise and judgment remain crucial for interpreting the data and making informed investment decisions.  
-* **Continuous Learning:**  LLMs and the Aggregation Framework should be continuously updated with new data to improve their accuracy and reduce bias over time.
+3. **Potential for Bias:** Both financial data and LLMs can be susceptible to biases. If the data used for training is inaccurate or incomplete, it can lead to biased models, potentially skewing the investment recommendations.
 
-By being aware of these limitations and taking appropriate steps to address them, investors can leverage this approach with greater confidence and make more informed investment decisions.
+To address these limitations:
+
+- **Diversify Investments:** A well-diversified portfolio can help mitigate the risks associated with over-reliance on historical data and uncertain predictions.
+
+- **Maintain Human Oversight:** While AI can be a powerful tool, human expertise and judgment remain crucial for interpreting the data and making informed investment decisions. 
+
+- **Continually Update and Learn:** LLMs and the Aggregation Framework should be continuously updated with new data to improve their accuracy and reduce bias over time.
+
+By acknowledging these limitations and taking appropriate measures to address them, investors can leverage this approach with greater confidence and make more informed investment decisions.
 
 ### Conclusion
 
