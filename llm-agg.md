@@ -453,6 +453,22 @@ Based on current news and events:
 It is also suggested to keep a close eye on those stocks that are currently showing negative returns. Understanding the reasons behind their poor performance could provide investment opportunities if these issues are addressed and the businesses start to turn around.
 ```
 
+## Limitations to Consider
+
+While the approach of combining LLMs and MongoDB's Aggregation Framework offers exciting possibilities, it's important to acknowledge some limitations:
+
+* **Reliance on Historical Data:**  Both LLMs and the Aggregation Framework rely heavily on historical data for training and analysis.  This raises the question of whether past performance is always indicative of future results. The market is inherently unpredictable, and unforeseen events can significantly impact investment outcomes.
+* **Uncertainty in Predictions:** No matter how sophisticated the analysis, there will always be a degree of uncertainty in investment predictions. The  future performance of any investment involves a complex interplay of various factors, some of which may be difficult to quantify or predict accurately.
+* **Potential for Bias:**  Both financial data and LLMs themselves can be susceptible to biases.  Inaccurate or incomplete data used for training can lead to biased models, potentially skewing the investment recommendations.
+
+**Addressing These Limitations:**
+
+* **Diversification:**  A well-diversified portfolio can help mitigate the risks associated with over-reliance on historical data and uncertain predictions.
+* **Human Oversight:**  While AI can be a powerful tool,  human expertise and judgment remain crucial for interpreting the data and making informed investment decisions.  
+* **Continuous Learning:**  LLMs and the Aggregation Framework should be continuously updated with new data to improve their accuracy and reduce bias over time.
+
+By being aware of these limitations and taking appropriate steps to address them, investors can leverage this approach with greater confidence and make more informed investment decisions.
+
 ### Conclusion
 
 In this blog post, we explored how MongoDB's Aggregation Framework, Large Language Models (LLMs), and CrewAI can be leveraged to transform investment analysis. The key to unlocking smarter investment decisions lies in harnessing the power of your transaction data. MongoDB's Aggregation Framework provides the tools to efficiently calculate essential metrics like ROI, trends, and volatility. When combined with AI's ability to interpret these findings, you gain a deeper understanding of the market. This empowers you to identify hidden opportunities, make informed decisions, and automate routine analysis, ultimately boosting your investment success.
