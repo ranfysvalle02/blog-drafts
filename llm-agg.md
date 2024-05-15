@@ -22,7 +22,7 @@ That's where MongoDB's Aggregation Framework shines, offering an efficient and p
 
 In this blog post, we’ll combine the power of the MongoDB Aggregation framework with GenAI to overcome the limitations of “Classic RAG”. We'll explore this by delving into the MongoDB Atlas Sample Dataset, specifically the `sample_analytics` database. The transaction data offers a realistic dataset that allows users to hone their skills in data analysis, querying, and aggregation, particularly in the context of financial data.
 
-## Explanation of the `sample_analytics` documents
+### Explanation of the `sample_analytics` documents
 Collection: transactions
 
 - transaction_id: This is a unique identifier that distinctly marks each transaction.
@@ -41,7 +41,7 @@ Stock transaction data offers a wealth of information for investment researchers
 * **Uncover Hidden Opportunities:** Discover undervalued stocks or sectors poised for growth.
 * **Manage Risk:** Assess the volatility of specific holdings and make informed decisions about asset allocation for optimal risk-return balance.
 
-## The Task: Investment Performance Analysis
+### The Task: Investment Performance Analysis
 
 Consider a scenario where we need to determine the return on investment (ROI) for each stock over a certain period. This task involves filtering the sales by product, calculating the ROI, and then sorting these to find the stocks with the highest returns. Traditional methods like SQL or application code processing can be complex and inefficient, especially with large datasets.
 
@@ -57,7 +57,7 @@ Navigating these complexities can be made more efficient by harnessing the power
 * **Benchmarking:** Comparing your portfolio's ROI to relevant market indices helps gauge how your investments are performing relative to the overall market.
 * **Tax Implications:** In many jurisdictions, calculating the ROI of investments plays a role in determining capital gains or losses, impacting tax calculations.
 
-## The Solution: MongoDB's Aggregation Framework
+### The Solution: MongoDB's Aggregation Framework
 
 ![MongoDB Aggregation Pipeline Visualization](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/xa1.png)
 
@@ -206,7 +206,7 @@ The result will be a list of documents, each representing a unique stock, and co
 
 This approach leverages MongoDB's Aggregation Framework to perform complex data analysis tasks efficiently, directly within the database, without requiring extensive data transfer or additional processing in the application code.
 
-## Analysis
+### Analysis
 
 The data presented above provides a snapshot of the return on investment (ROI) for various tech stocks.
 
@@ -250,7 +250,7 @@ To follow along, you'll need:
 
 4. **LLM Resource:** CrewAI supports various LLM connections, including local models (Ollama), APIs like Azure, and all LangChain LLM components for customizable AI solutions. [Click here to learn more about CrewAI LLM Support](https://docs.crewai.com/how-to/LLM-Connections/)
 
-## Supercharge Investment Analysis with MongoDB and CrewAI
+### Supercharge Investment Analysis with MongoDB and CrewAI
 
 ![CrewAI Visualization](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/HighLevelChart_noBG.jpg)
 
@@ -260,7 +260,7 @@ To follow along, you'll need:
 The financial world is fueled by data analysis. The faster you can extract meaningful insights from raw data, the better your investment decisions will be. CrewAI, combined with the power of MongoDB Atlas, provides a unique automation approach that goes beyond basic number-crunching to deliver truly actionable analysis.
 
 For this example, we will create an Investment Researcher Agent. This agent is our expert, skilled in finding valuable data using tools like search engines. It's designed to hunt down financial trends, company news, and analyst insights.
-## The Code
+### The Code
 
 In this section, we'll walk through the Python code used to perform financial analysis based on transaction data stored in MongoDB, using Azure OpenAI and Google Search API for data analysis and insights.
 
