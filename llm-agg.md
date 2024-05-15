@@ -455,11 +455,11 @@ It is also suggested to keep a close eye on those stocks that are currently show
 
 ### Limitations and Considerations
 
-While the combination of MongoDB's Aggregation Framework and LLMs represents a powerful tool for data analysis and interpretation, it's important to recognize a few potential limitations:
+While the combination of MongoDB's Aggregation Framework and GenAI represents a powerful tool for data analysis and interpretation, it's important to recognize a few potential limitations:
 
 1. **Dependence on Historical Data:** Both LLMs and the Aggregation Framework rely heavily on historical data for training and analysis. However, past performance may not always predict future results, especially in unpredictable markets where unforeseen events can significantly impact investment outcomes.
 
-2. **Predictive Uncertainty:** Despite the sophistication of the analysis, there will always be an inherent degree of uncertainty in investment predictions. Future outcomes are inherently unknowable, and factors beyond the scope of historical data can influence results.
+2. **Uncertainty in Predictions:** Despite the sophistication of the analysis, there will always be an inherent degree of uncertainty in investment predictions. Future outcomes are inherently unknowable, and factors beyond the scope of historical data can influence results.
 
 3. **LLM Limitations:** LLMs are still evolving, and their ability to interpret and analyze financial data is continually improving. However, biases in training data or limitations in the model's architecture could lead to inaccurate or misleading insights.
 
