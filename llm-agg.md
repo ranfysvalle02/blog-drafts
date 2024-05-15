@@ -413,7 +413,7 @@ Finally, we kick off our task execution. The researcher agent will use the data 
 tech_crew.kickoff(inputs={'agg_data': str(results)})
 ```
 
-## Example OUTPUT
+### Example OUTPUT
 
 ```
 Thought: I now know the final answer
@@ -453,11 +453,11 @@ Based on current news and events:
 It is also suggested to keep a close eye on those stocks that are currently showing negative returns. Understanding the reasons behind their poor performance could provide investment opportunities if these issues are addressed and the businesses start to turn around.
 ```
 
-## Conclusion
+### Conclusion
 
 In this blog post, we explored how MongoDB's Aggregation Framework, Large Language Models (LLMs), and CrewAI can be leveraged to transform investment analysis. The key to unlocking smarter investment decisions lies in harnessing the power of your transaction data. MongoDB's Aggregation Framework provides the tools to efficiently calculate essential metrics like ROI, trends, and volatility. When combined with AI's ability to interpret these findings, you gain a deeper understanding of the market. This empowers you to identify hidden opportunities, make informed decisions, and automate routine analysis, ultimately boosting your investment success.
 
-## The Future: AI-Powered Investment Analysis
+### The Future: AI-Powered Investment Analysis
 
 The future of investment analysis belongs to those who embrace the power of data and AI. By combining MongoDB's robust data handling with the insight-generating capabilities of AI tools like CrewAI, you gain the tools to:
 
