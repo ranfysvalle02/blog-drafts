@@ -461,7 +461,7 @@ While the combination of Large Language Models (LLMs), MongoDB's Aggregation Fra
 
 2. **Uncertainty in Predictions:** Despite the sophistication of the analysis, there will always be a degree of uncertainty in investment predictions. The future performance of any investment is influenced by a complex interplay of various factors, some of which may be difficult to quantify or predict accurately.
 
-3. **Potential for Bias:** Both financial data and LLMs can be susceptible to biases. If the data used for training is inaccurate or incomplete, it can lead to biased models, potentially skewing the investment recommendations.
+3. **Potential for Bias:** Both financial data and LLMs can be susceptible to biases, potentially skewing the investment recommendations.
 
 To address these limitations:
 
