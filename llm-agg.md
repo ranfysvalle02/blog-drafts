@@ -267,6 +267,7 @@ In this section, we'll walk through the Python code used to perform financial an
 First, we set up a connection to MongoDB using pymongo. This is where our transaction data is stored. We'll be performing an aggregation on this data later.
 
 ```python
+import os
 import pymongo
 
 MDB_URI = "mongodb+srv://<user>:<password>@cluster0.abc123.mongodb.net/"
