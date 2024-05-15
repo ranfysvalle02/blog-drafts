@@ -222,6 +222,17 @@ The aggregation framework lays the groundwork, but we can take our analysis a st
 * **Link to External News:** Connect market trends with real-time news on companies you're invested in.
 * **Answer Complex Questions:** Ask questions about the dataset and get responses that combine the data with insights from the wider financial world.
 
+### Supercharge Investment Analysis with MongoDB and CrewAI
+
+![CrewAI Visualization](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/HighLevelChart_noBG.jpg)
+
+(_image from  [LangChain Blog | CrewAI: The Future of AI Agent Teams](https://blog.langchain.dev/crewai-unleashed-future-of-ai-agent-teams/))_
+
+
+The financial world is fueled by data analysis. The faster you can extract meaningful insights from raw data, the better your investment decisions will be. CrewAI, combined with the power of MongoDB Atlas, provides a unique automation approach that goes beyond basic number-crunching to deliver truly actionable analysis.
+
+For this example, we will create an Investment Researcher Agent. This agent is our expert, skilled in finding valuable data using tools like search engines. It's designed to hunt down financial trends, company news, and analyst insights.
+
 **Unlocking the Power of AI Collaboration: Agents, Tasks, and Tools**
 
 The realm of artificial intelligence (AI) is rapidly evolving, transforming how we approach tasks and projects in the data-driven world we live in. CrewAI takes this a step further by introducing a groundbreaking framework for collaborative AI. This framework empowers teams to achieve more than ever before by leveraging the combined strengths of specialized AI units and streamlined workflows.
@@ -251,16 +262,6 @@ To follow along, you'll need:
 
 _**note**: Python version used during development was: 3.10.10_
 
-### Supercharge Investment Analysis with MongoDB and CrewAI
-
-![CrewAI Visualization](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/HighLevelChart_noBG.jpg)
-
-(_image from  [LangChain Blog | CrewAI: The Future of AI Agent Teams](https://blog.langchain.dev/crewai-unleashed-future-of-ai-agent-teams/))_
-
-
-The financial world is fueled by data analysis. The faster you can extract meaningful insights from raw data, the better your investment decisions will be. CrewAI, combined with the power of MongoDB Atlas, provides a unique automation approach that goes beyond basic number-crunching to deliver truly actionable analysis.
-
-For this example, we will create an Investment Researcher Agent. This agent is our expert, skilled in finding valuable data using tools like search engines. It's designed to hunt down financial trends, company news, and analyst insights.
 ### The Code
 
 In this section, we'll walk through the Python code used to perform financial analysis based on transaction data stored in MongoDB, using Azure OpenAI and Google Search API for data analysis and insights.
