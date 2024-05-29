@@ -22,8 +22,7 @@ That's where MongoDB's Aggregation Framework shines, offering an efficient and p
 
 In this blog post, we’ll combine the power of the MongoDB Aggregation framework with GenAI to overcome the limitations of “Classic RAG”. We'll explore this by delving into the MongoDB Atlas Sample Dataset, specifically the `sample_analytics` database. The transaction data offers a realistic dataset that allows users to hone their skills in data analysis, querying, and aggregation, particularly in the context of financial data.
 
-### Explanation of the `sample_analytics` documents
-Collection: transactions
+### Explanation of the `sample_analytics` documents found in the `transactions` collection of the MongoDB Atlas Sample Dataset
 
 - transaction_id: This is a unique identifier that distinctly marks each transaction.
 - account_id: This field establishes a connection between the transaction and its corresponding account.
@@ -49,13 +48,6 @@ In SQL, this would require multiple subqueries, temporary tables, and joins - a 
 
 Navigating these complexities can be made more efficient by harnessing the power of MongoDB's Aggregation Framework, combined with the intelligent capabilities of AI technologies like CrewAI and Large Language Models (LLMs). This potent combination not only streamlines the process but also uncovers deeper insights from our data.
 
-**Benefits**
-
-* **Informed Decision-Making:**  ROI analysis provides a clear metric for evaluating the success of past investments. This data empowers investors, from individuals to large institutions, to make informed decisions about buying, selling, or holding specific stocks.
-* **Portfolio Optimization:**  Identifying high and low-performing stocks is crucial for adjusting your investment mix. You might shift investments towards top-performing assets or re-evaluate underperforming ones.
-* **Identifying Trends:** Analyzing ROI over time can reveal trends within individual stocks or broader market sectors. Recognizing these patterns helps investors anticipate potential opportunities or risks.
-* **Benchmarking:** Comparing your portfolio's ROI to relevant market indices helps gauge how your investments are performing relative to the overall market.
-* **Tax Implications:** In many jurisdictions, calculating the ROI of investments plays a role in determining capital gains or losses, impacting tax calculations.
 
 ### The Solution: MongoDB's Aggregation Framework
 
@@ -73,43 +65,54 @@ By moving the math and the data aggregation to MongoDB, you can leverage the LLM
  
 MongoDB's Aggregation Framework provides an efficient and straightforward solution for this complex analysis. Here's how you could write the query:
 
+### Calculating the ROI
+
+We've established the need to determine the return on investment (ROI) for each stock over a specific period. This task requires filtering transactions by stock symbol, calculating ROI, and sorting them to identify the top performers. But how do we achieve this within the database itself? That's where the power of aggregation pipelines comes in!
+
+
+Problem: we need to determine the return on investment (ROI) for each stock over a certain period. This task involves filtering the sales by product, calculating the ROI, and then sorting these to find the stocks with the highest returns
+
+Solution: First unwind the 'transactions' array, then group by `transactions.symbol` and calculate the `buyValue` and `sellValue` for each group. Project the `symbol` and `returnOnInvestment` fields  (calculated by subtracting `buyValue` from `sellValue`) fields. Sort by `returnOnInvestment` in descending order.
+
+
+
 ```javascript
 [
   {
-	"$unwind": "$transactions"
+    "$unwind": "$transactions"
   },
   {
-	"$group": {
-  	"_id": "$transactions.symbol",
-  	"buyValue": {
-    	"$sum": {
-      	"$cond": [
-        	{ "$eq": ["$transactions.transaction_code", "buy"] },
-        	{ "$toDouble": "$transactions.total" },
-        	0
-      	]
-    	}
-  	},
-  	"sellValue": {
-    	"$sum": {
-      	"$cond": [
-        	{ "$eq": ["$transactions.transaction_code", "sell"] },
-        	{ "$toDouble": "$transactions.total" },
-        	0
-      	]
-    	}
-  	}
-	}
+    "$group": {
+      "_id": "$transactions.symbol",
+      "buyValue": {
+   	 "$sum": {
+ 		 "$cond": [
+   		 { "$eq": ["$transactions.transaction_code", "buy"] },
+   		 { "$toDouble": "$transactions.total" },
+   		 0
+ 		 ]
+   	 }
+      },
+      "sellValue": {
+   	 "$sum": {
+ 		 "$cond": [
+   		 { "$eq": ["$transactions.transaction_code", "sell"] },
+   		 { "$toDouble": "$transactions.total" },
+   		 0
+ 		 ]
+   	 }
+      }
+    }
   },
   {
-	"$project": {
-  	"_id": 0,
-  	"symbol": "$_id",
-  	"returnOnInvestment": { "$subtract": ["$sellValue", "$buyValue"] }
-	}
+    "$project": {
+      "_id": 0,
+      "symbol": "$_id",
+      "returnOnInvestment": { "$subtract": ["$sellValue", "$buyValue"] }
+    }
   },
   {
-	"$sort": { "returnOnInvestment": -1 }
+    "$sort": { "returnOnInvestment": -1 }
   }
 ]
 ```
@@ -126,34 +129,70 @@ This MongoDB Aggregation Framework pipeline is composed of multiple stages, each
 
 This pipeline calculates the total buy and sell values for each stock, and then calculates the return on investment by subtracting the total buy value from the total sell value. The stocks are then sorted by return on investment in descending order, so the stocks with the highest returns are at the top.
 
-To run this query, you'll need access to a MongoDB instance with the sample data. 
+To run this query, you'll need access to a MongoDB instance with the sample data.
 
-Here's a simple way to run it using pymongo, a Python driver for MongoDB:
+This tutorial assumes you have a MongoDB Atlas cluster set up. If you're new to MongoDB Atlas, it's a cloud-based Database-as-a-Service (DBaaS) offering that simplifies MongoDB deployment and management. You can find resources to get started with creating a free cluster [here](link to mongodb atlas free tier).
+
+Once you have a cluster running, you'll need to load the sample dataset.
+
+### Loading Sample Investment Data:
+
+This tutorial leverages the sample datasets available within MongoDB Atlas for experimentation. Here's how to load the specific dataset containing sample investment transactions:
+
+1. **Log in to your MongoDB Atlas account** and navigate to your cluster.
+
+2. **Locate the cluster you want to use.**
+
+3. **Click the ellipsis (...) button** associated with your chosen cluster.
+
+4. From the dropdown menu, select **"Load Sample Dataset"**.
+
+5. A confirmation dialog will appear. Click **"Load Sample Dataset"** to proceed.
+
+This will load various sample datasets into your cluster. The dataset you're interested in is called **"sample_analytics"**. Within this dataset, focus on the collection named **"transactions"**.
+
+Now that you’ve loaded your dataset, time to run the Aggregation Pipeline from Python!
+
+### Running the Aggregation Pipeline with Python
+
+**Important:** While we're including the connection string directly in the code for demonstration purposes, it's not recommended for real-world applications. A more secure approach is to retrieve the connection string from your MongoDB Atlas cluster.
+
+Here's how to access your connection string from Atlas:
+
+* Log in to your MongoDB Atlas account and navigate to your cluster.
+* Click on "Connect" in the left-hand navigation menu.
+* Choose the driver you'll be using (e.g., Python) and its version.
+* You'll see a connection string provided. Copy this string for use in your application.
+
+Here's a simple way to run the aggregation pipeline that calculates the total buy and sell values for each stock, and then calculates the return on investment by subtracting the total buy value from the total sell value using pymongo, a Python driver for MongoDB:
 
 ```python
 import pymongo
 
-client = pymongo.MongoClient("mongodb+srv://<username>:<password>@cluster0.mongodb.net/test") 
+# Replace with your connection string retrieved from MongoDB Atlas
+client = pymongo.MongoClient("mongodb+srv://<username>:<password>@cluster0.mongodb.net/test")
+
 db = client["sample_analytics"]
 collection = db["transactions"]
 
+# Define the aggregation pipeline
 pipeline = [
   {
-	"$unwind": "$transactions"
+	"$unwind": "$transactions"  # Deconstruct the transactions array into separate documents
   },
   {
-	"$group": {
-  	"_id": "$transactions.symbol",
-  	"buyValue": {
+	"$group": {                  	# Group documents by stock symbol
+  	"_id": "$transactions.symbol",  # Use symbol as the grouping key
+  	"buyValue": {                	# Calculate total buy value
     	"$sum": {
-      	"$cond": [
-        	{ "$eq": ["$transactions.transaction_code", "buy"] },
-        	{ "$toDouble": "$transactions.total" },
-        	0
+      	"$cond": [               	# Conditional sum based on transaction type
+        	{ "$eq": ["$transactions.transaction_code", "buy"] },  # Check for "buy" transactions
+        	{ "$toDouble": "$transactions.total" },           	# Convert total to double for sum
+        	0                                              	# Default value for non-buy transactions
       	]
     	}
   	},
-  	"sellValue": {
+  	"sellValue": {               	# Calculate total sell value (similar to buyValue)
     	"$sum": {
       	"$cond": [
         	{ "$eq": ["$transactions.transaction_code", "sell"] },
@@ -165,20 +204,24 @@ pipeline = [
 	}
   },
   {
-	"$project": {
-  	"_id": 0,
-  	"symbol": "$_id",
-  	"returnOnInvestment": { "$subtract": ["$sellValue", "$buyValue"] }
+	"$project": {                 	# Project desired fields (renaming and calculating ROI)
+  	"_id": 0,                    	# Exclude original _id field
+  	"symbol": "$_id",             	# Rename _id to symbol for clarity
+  	"returnOnInvestment": { "$subtract": ["$sellValue", "$buyValue"] }  # Calculate ROI
 	}
   },
   {
-	"$sort": { "returnOnInvestment": -1 }
+	"$sort": { "returnOnInvestment": -1 }  # Sort results by ROI (descending)
   }
 ]
 
+# Execute the aggregation pipeline and get results
 results = list(collection.aggregate(pipeline))
+
+# Print each investment's details
 for result in results:
-    print(result)
+  print(result)
+
 ```
 
 The result will be a list of documents, each representing a unique stock, and containing the return on investment for that stock.
@@ -205,6 +248,14 @@ The result will be a list of documents, each representing a unique stock, and co
 ```
 
 This approach leverages MongoDB's Aggregation Framework to perform complex data analysis tasks efficiently, directly within the database, without requiring extensive data transfer or additional processing in the application code.
+
+**Benefits of using the MongoDB Aggregation Framework combined with AI**
+
+* **Informed Decision-Making:**  ROI analysis provides a clear metric for evaluating the success of past investments. This data empowers investors, from individuals to large institutions, to make informed decisions about buying, selling, or holding specific stocks.
+* **Portfolio Optimization:**  Identifying high and low-performing stocks is crucial for adjusting your investment mix. You might shift investments towards top-performing assets or re-evaluate underperforming ones.
+* **Identifying Trends:** Analyzing ROI over time can reveal trends within individual stocks or broader market sectors. Recognizing these patterns helps investors anticipate potential opportunities or risks.
+* **Benchmarking:** Comparing your portfolio's ROI to relevant market indices helps gauge how your investments are performing relative to the overall market.
+* **Tax Implications:** In many jurisdictions, calculating the ROI of investments plays a role in determining capital gains or losses, impacting tax calculations.
 
 ### Analysis
 
@@ -286,13 +337,13 @@ Next, we set up our connection to Azure OpenAI. Azure OpenAI can be replaced by 
 from langchain_openai import AzureChatOpenAI
 
 AZURE_OPENAI_ENDPOINT = "https://__DEMO__.openai.azure.com"
-AZURE_OPENAI_API_KEY = "__AZURE_OPENAI_API_KEY__" 
+AZURE_OPENAI_API_KEY = "__AZURE_OPENAI_API_KEY__"
 deployment_name = "gpt-4-32k"  # The name of your model deployment
 default_llm = AzureChatOpenAI(
-    openai_api_version=os.environ.get("AZURE_OPENAI_VERSION", "2023-07-01-preview"),
-    azure_deployment=deployment_name,
-    azure_endpoint=AZURE_OPENAI_ENDPOINT,
-    api_key=AZURE_OPENAI_API_KEY
+	openai_api_version=os.environ.get("AZURE_OPENAI_VERSION", "2023-07-01-preview"),
+	azure_deployment=deployment_name,
+	azure_endpoint=AZURE_OPENAI_ENDPOINT,
+	api_key=AZURE_OPENAI_API_KEY
 )
 ```
 
@@ -306,10 +357,10 @@ from langchain.agents import Tool
 
 search = GoogleSerperAPIWrapper(serper_api_key='__API_KEY__')
 search_tool = Tool(
-        name="Google Answer",
-        func=search.run,
-        description="useful for when you need to ask with search"
-    )
+    	name="Google Answer",
+    	func=search.run,
+    	description="useful for when you need to ask with search"
+	)
 ```
 
 ### CrewAI Setup
@@ -367,32 +418,32 @@ Next, we define our MongoDB aggregation pipeline. This pipeline is used to proce
 pipeline = [
   {"$unwind": "$transactions"},
   {"$group": {
-      "_id": "$transactions.symbol",
-      "buyValue": {
-        "$sum": {
-          "$cond": [
-            { "$eq": ["$transactions.transaction_code", "buy"] },
-            { "$toDouble": "$transactions.total" },
-            0
-          ]
-        }
-      },
-      "sellValue": {
-        "$sum": {
-          "$cond": [
-            { "$eq": ["$transactions.transaction_code", "sell"] },
-            { "$toDouble": "$transactions.total" },
-            0
-          ]
-        }
-      }
-    }
+  	"_id": "$transactions.symbol",
+  	"buyValue": {
+    	"$sum": {
+      	"$cond": [
+        	{ "$eq": ["$transactions.transaction_code", "buy"] },
+        	{ "$toDouble": "$transactions.total" },
+        	0
+      	]
+    	}
+  	},
+  	"sellValue": {
+    	"$sum": {
+      	"$cond": [
+        	{ "$eq": ["$transactions.transaction_code", "sell"] },
+        	{ "$toDouble": "$transactions.total" },
+        	0
+      	]
+    	}
+  	}
+	}
   },
   {"$project": {
-      "_id": 0,
-      "symbol": "$_id",
-      "returnOnInvestment": { "$subtract": ["$sellValue", "$buyValue"] }
-    }
+  	"_id": 0,
+  	"symbol": "$_id",
+  	"returnOnInvestment": { "$subtract": ["$sellValue", "$buyValue"] }
+	}
   },
   {"$sort": { "returnOnInvestment": -1 }}
 ]
@@ -479,8 +530,3 @@ The future of investment analysis belongs to those who embrace the power of data
 Don't just analyze the market – shape it. Start harnessing the potential of MongoDB and AI today, and transform your investment decision-making process.
 
 The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ranfysvalle02/mdb-agg-crewai/blob/main/investment_analysis.py)
-
-
-
-
-
