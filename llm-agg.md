@@ -22,6 +22,8 @@ That's where MongoDB's Aggregation Framework shines, offering an efficient and p
 
 In this blog post, we’ll combine the power of the MongoDB Aggregation framework with GenAI to overcome the limitations of “Classic RAG”. We'll explore this by delving into the MongoDB Atlas Sample Dataset, specifically the `sample_analytics` database. The transaction data offers a realistic dataset that allows users to hone their skills in data analysis, querying, and aggregation, particularly in the context of financial data.
 
+The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ranfysvalle02/mdb-agg-crewai/blob/main/investment_analysis.py)
+
 ### Explanation of the `sample_analytics` documents found in the `transactions` collection of the MongoDB Atlas Sample Dataset
 
 - transaction_id: This is a unique identifier that distinctly marks each transaction.
