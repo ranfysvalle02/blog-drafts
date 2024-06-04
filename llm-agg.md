@@ -32,7 +32,7 @@ Stock transaction data offers a wealth of information for investment researchers
 * **Uncover Hidden Opportunities:** Discover undervalued stocks or sectors poised for growth.
 * **Manage Risk:** Assess the volatility of specific holdings and make informed decisions about asset allocation for optimal risk-return balance.
 
-### `sample_analytics` > `transactions` ([MongoDB Atlas Sample Dataset](https://www.mongodb.com/docs/atlas/sample-data/sample-analytics/#std-label-analytics-transactions))
+### The Data: **sample_analytics > transactions** ([MongoDB Atlas Sample Dataset](https://www.mongodb.com/docs/atlas/sample-data/sample-analytics/#std-label-analytics-transactions))
 This collection contains transactions details for users. Each document contains an account id, a count of how many transactions are in this set, the start and end dates for transactions covered by this document, and a list of sub documents. Each sub document represents a single transaction and the related information for that transaction.
 
 - transaction_id: This is a unique identifier that distinctly marks each transaction.
