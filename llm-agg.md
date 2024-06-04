@@ -150,21 +150,40 @@ default_llm = AzureChatOpenAI(
 )
 ```
 
-### Google Search API Setup
+### Firecrawl API Setup
 
-We're also going to use the Google Search API. This will be used by our "researcher" agent to find relevant financial data and news articles.
+We're also going to use the Firecrawl Search API. This will be used by our "researcher" agent to find relevant financial data and news articles.
 
 #### **file: investment_analysis.py**
 ```python
-from langchain_community.utilities import GoogleSerperAPIWrapper
 from langchain.agents import Tool
+from firecrawl import FirecrawlApp
+firecrawler = FirecrawlApp(api_key='fc-<API-KEY-GOES-HERE>')
 
-search = GoogleSerperAPIWrapper(serper_api_key='__API_KEY__')
+# to avoid context window limitations, its best to summarize the web content
+def summarize_webscrape(text):
+    return default_llm.invoke("Write a detailed executive summary in bullet points from the following text:" + text).content
+def search_function(query: str):
+    results = firecrawler.search(query,{
+      'pageOptions': {
+          'onlyMainContent': True,
+          'fetchPageContent': True,
+          'includeHtml': False,
+      },
+      'searchOptions': {
+          'limit': 3
+      }
+    })
+    search_text = ""
+    for result in results:
+        search_text += summarize_webscrape(str("[search_result:"+result["metadata"]["sourceURL"]+"]\n" + result["markdown"]+"\n\n\n\n"))
+    return str(search_text)
 search_tool = Tool(
-    	name="Google Answer",
-    	func=search.run,
-    	description="useful for when you need to ask with search"
-	)
+        name="Google Answer",
+        func=search_function,
+        description="useful for when you need to ask with search"
+)
+
 ```
 
 ### CrewAI Setup
