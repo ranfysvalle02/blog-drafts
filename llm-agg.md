@@ -166,6 +166,8 @@ Here's how to access your connection string from Atlas:
 * Choose the driver you'll be using (e.g., Python) and its version.
 * You'll see a connection string provided. Copy this string for use in your application.
 
+If you need more information on how to find your connection string, [check out this guide](https://www.mongodb.com/resources/products/fundamentals/mongodb-connection-string#:~:text=How%20to%20get%20your%20MongoDB,connection%20string%20for%20your%20cluster)
+
 Here's a simple way to run the aggregation pipeline that calculates the total buy and sell values for each stock, and then calculates the return on investment by subtracting the total buy value from the total sell value using [pymongo, a Python driver for MongoDB](https://pymongo.readthedocs.io/en/stable/):
 
 ```python
