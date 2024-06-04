@@ -55,28 +55,11 @@ Navigating these complexities can be made more efficient by harnessing the power
 
 ![MongoDB Aggregation Pipeline Visualization](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/xa1.png)
 
-The MongoDB Aggregation Framework provides a powerful data processing pipeline where documents are transformed to produce aggregated results. By executing complex calculations and data manipulations directly on the server-side, it significantly reduces the volume of data that needs to be transferred across the network. This optimization is crucial when working with Large Language Models (LLMs) - specially those that are hosted remotely like OpenAI.
+The aggregation pipeline we will be building calculates the total buy and sell values for each stock, and then calculates the return on investment by subtracting the total buy value from the total sell value. The stocks are then sorted by return on investment in descending order, so the stocks with the highest returns are at the top. If you’re new to MongoDB, I suggest you build this aggregation pipeline using the aggregation builder in compass, then export it to Python. 
 
-LLMs excel at understanding and generating human-like text, but they can be constrained by the size of their context window (the amount of input text they can process at once). Preprocessing and aggregating data with MongoDB's Aggregation Framework effectively shrinks the dataset that needs to be fed to the LLM.
+To achieve this, we first unwind the 'transactions' array, then group by `transactions.symbol` and calculate the `buyValue` and `sellValue` for each group. Project the `symbol` and `returnOnInvestment` fields  (calculated by subtracting `buyValue` from `sellValue`) fields. Sort by `returnOnInvestment` in descending order.
 
-By moving the math and the data aggregation to MongoDB, you can leverage the LLM's language capabilities for high-value tasks like:
-
-* **Generating insightful summaries and interpretations:** Summarizing pre-aggregated trends identified by MongoDB.
-* **Crafting compelling narratives:**  Turning  data points into engaging business reports.
-* **Answering complex questions about the data:**  The LLM can combine its understanding of the processed data with external knowledge to provide richer answers.
- 
-MongoDB's Aggregation Framework provides an efficient and straightforward solution for this complex analysis. Here's how you could write the query:
-
-### Calculating the ROI
-
-We've established the need to determine the return on investment (ROI) for each stock over a specific period. This task requires filtering transactions by stock symbol, calculating ROI, and sorting them to identify the top performers. But how do we achieve this within the database itself? That's where the power of aggregation pipelines comes in!
-
-
-Problem: we need to determine the return on investment (ROI) for each stock over a certain period. This task involves filtering the sales by product, calculating the ROI, and then sorting these to find the stocks with the highest returns
-
-Solution: First unwind the 'transactions' array, then group by `transactions.symbol` and calculate the `buyValue` and `sellValue` for each group. Project the `symbol` and `returnOnInvestment` fields  (calculated by subtracting `buyValue` from `sellValue`) fields. Sort by `returnOnInvestment` in descending order.
-
-
+Here's how you could write the query:
 
 ```javascript
 [
@@ -472,6 +455,122 @@ Finally, we kick off our task execution. The researcher agent will use the data 
 ```python
 tech_crew.kickoff(inputs={'agg_data': str(results)})
 ```
+
+### Complete Source Code
+#### **file: investment_analysis.py**
+```
+import os
+import pymongo
+
+MDB_URI = "mongodb+srv://<user>:<password>@cluster0.abc123.mongodb.net/"
+client = pymongo.MongoClient(MDB_URI)
+db = client["sample_analytics"]
+collection = db["transactions"]
+
+from langchain_openai import AzureChatOpenAI
+
+AZURE_OPENAI_ENDPOINT = "https://__DEMO__.openai.azure.com"
+AZURE_OPENAI_API_KEY = "__AZURE_OPENAI_API_KEY__"
+deployment_name = "gpt-4-32k"  # The name of your model deployment
+default_llm = AzureChatOpenAI(
+	openai_api_version=os.environ.get("AZURE_OPENAI_VERSION", "2023-07-01-preview"),
+	azure_deployment=deployment_name,
+	azure_endpoint=AZURE_OPENAI_ENDPOINT,
+	api_key=AZURE_OPENAI_API_KEY
+)
+
+from langchain_community.utilities import GoogleSerperAPIWrapper
+from langchain.agents import Tool
+
+search = GoogleSerperAPIWrapper(serper_api_key='__API_KEY__')
+search_tool = Tool(
+    	name="Google Answer",
+    	func=search.run,
+    	description="useful for when you need to ask with search"
+	)
+
+from crewai import Crew, Process, Task, Agent
+
+researcher = Agent(
+  role='Investment Researcher',
+  goal="""
+  Research market trends, company news, and analyst reports to identify potential investment opportunities.
+  """,
+  verbose=True,
+  llm=default_llm,
+  backstory='Expert in using search engines to uncover relevant financial data, news articles, and industry analysis.',
+  tools=[search_tool]
+)
+
+analysis_task = Task(
+  description="""
+Using the following information:
+
+[VERIFIED DATA]
+{agg_data}
+
+*note*
+The data represents the average price of each stock symbol for each transaction type (buy/sell),
+and the total amount of transactions for each type. This would give us insight into the average costs and proceeds from each stock,
+as well as the volume of transactions for each stock.
+[END VERIFIED DATA]
+
+[TASK]
+- Provide a financial summary of the VERIFIED DATA
+- Research current events and trends, and provide actionable insights and recommendations
+  """,
+  agent=researcher,
+  expected_output='concise markdown financial summary and list of actionable insights and recommendations',
+  tools=[search_tool],
+)
+
+tech_crew = Crew(
+  agents=[researcher],
+  tasks=[analysis_task],
+  process=Process.sequential
+)
+
+pipeline = [
+  {"$unwind": "$transactions"},
+  {"$group": {
+  	"_id": "$transactions.symbol",
+  	"buyValue": {
+    	"$sum": {
+      	"$cond": [
+        	{ "$eq": ["$transactions.transaction_code", "buy"] },
+        	{ "$toDouble": "$transactions.total" },
+        	0
+      	]
+    	}
+  	},
+  	"sellValue": {
+    	"$sum": {
+      	"$cond": [
+        	{ "$eq": ["$transactions.transaction_code", "sell"] },
+        	{ "$toDouble": "$transactions.total" },
+        	0
+      	]
+    	}
+  	}
+	}
+  },
+  {"$project": {
+  	"_id": 0,
+  	"symbol": "$_id",
+  	"returnOnInvestment": { "$subtract": ["$sellValue", "$buyValue"] }
+	}
+  },
+  {"$sort": { "returnOnInvestment": -1 }}
+]
+results = list(collection.aggregate(pipeline))
+client.close()
+
+print("MongoDB Aggregation Pipeline Results:")
+print(results)
+
+tech_crew.kickoff(inputs={'agg_data': str(results)})
+```
+
 
 ### Example OUTPUT
 
