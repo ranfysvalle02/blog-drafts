@@ -71,13 +71,7 @@ This MongoDB Aggregation Framework pipeline is composed of multiple stages, each
 
 
 
-**Supercharging Insights with AI**
 
-The aggregation framework lays the groundwork, but we can take our analysis a step further with AI. Imagine an AI assistant that can:
-
-* **Summarize Trends:**  Get concise summaries of complex data patterns calculated by MongoDB.
-* **Link to External News:** Connect market trends with real-time news on companies you're invested in.
-* **Answer Complex Questions:** Ask questions about the dataset and get responses that combine the data with insights from the wider financial world.
 
 ### Supercharge Investment Analysis with MongoDB and CrewAI
 
