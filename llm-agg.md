@@ -150,9 +150,21 @@ default_llm = AzureChatOpenAI(
 )
 ```
 
-### Google Search API Setup
+### Initial Setup
 
-We're also going to use the Google Search API. This will be used by our "researcher" agent to find relevant financial data and news articles.
+Then let's set the agent role and the agent goal as a variable so that it can be accessed throughout the script.
+
+```
+# Initial Setup
+AGENT_ROLE = "Investment Researcher"
+AGENT_GOAL = """
+  Research stock market trends, company news, and analyst reports to identify potential investment opportunities.
+"""
+```
+
+### Firecrawl Search API Setup
+
+We're also going to need the [Firecrawl Search API](https://docs.firecrawl.dev/api-reference/endpoint/search). This will be used by our "researcher" agent to find relevant financial data and news articles.
 
 #### **file: investment_analysis.py**
 ```python
