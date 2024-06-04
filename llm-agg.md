@@ -269,6 +269,23 @@ print("MongoDB Aggregation Pipeline Results:")
 print(results)
 ```
 
+
+Here's a breakdown of what the MongoDB pipeline does:
+
+1. **Unwinding Transactions:** First, it uses the `$unwind` operator to unpack an array field named "transactions" within each document. Imagine each document has information about multiple stock purchases and sales. Unwinding separates these transactions into individual documents, making calculations easier.
+
+2. **Grouping by Symbol:** Next, the `$group` operator takes over. It groups the unwound documents based on the value in the "transactions.symbol" field. This essentially combines all transactions for a specific stock (represented by the symbol) into a single group.
+
+3. **Calculating Buy and Sell Values:** Within each symbol group, the pipeline calculates two crucial values:
+   - **buyValue:** This uses the `$sum` accumulator along with a conditional statement (`$cond`). The `$cond` checks if the "transaction_code" within the "transactions" object is "buy". If it is, it converts the "total" field (the transaction amount) to a double using `$toDouble` and adds it to the running total for buyValue. If it's not a buy transaction, it contributes nothing (0) to the sum. This effectively calculates the total amount spent buying shares of that specific symbol.
+   - **sellValue:** Similar to buyValue, this calculates the total amount received by selling shares of the same symbol. It uses the same logic but checks for "transaction_code" equal to "sell" and sums those "total" values.
+
+4. **Projecting Results:** Now, the `$project` operator steps in to define the final output format. It discards the automatically generated grouping identifier (`_id`) by setting it to 0. It then renames the grouping field (`_id` which held the "transactions.symbol") to a clearer name, "symbol". Finally, it calculates the return on investment for each symbol using the `$subtract` operator. This subtracts the `buyValue` from the `sellValue` to determine the profit or loss for that symbol.
+
+5. **Sorting by Return:** Lastly, the `$sort` operator organizes the results. It sorts the documents based on the "returnOnInvestment" field in descending order (-1). This means symbols with the highest return on investment (most profitable) will appear first in the final output.
+
+
+
 ### Task Execution
 
 Finally, we kick off our task execution. The researcher agent will use the data from our MongoDB aggregation, as well as any other tools at their disposal, to analyze the data and provide insights.
