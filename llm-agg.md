@@ -24,16 +24,7 @@ In this blog post, we’ll combine the power of the MongoDB Aggregation framewor
 
 The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ranfysvalle02/mdb-agg-crewai/blob/main/investment_analysis.py)
 
-**The Power of Transactional Data**
-
-Stock transaction data offers a wealth of information for investment researchers and analysts. By carefully examining patterns within this data, you can:
-
-* **Identify Trends:** Spot emerging market movements and potential shifts in investor sentiment.
-* **Uncover Hidden Opportunities:** Discover undervalued stocks or sectors poised for growth.
-* **Manage Risk:** Assess the volatility of specific holdings and make informed decisions about asset allocation for optimal risk-return balance.
-
-### The Data: **sample_analytics > transactions** ([MongoDB Atlas Sample Dataset](https://www.mongodb.com/docs/atlas/sample-data/sample-analytics/#std-label-analytics-transactions))
-This collection contains transactions details for users. Each document contains an account id, a count of how many transactions are in this set, the start and end dates for transactions covered by this document, and a list of sub documents. Each sub document represents a single transaction and the related information for that transaction.
+### Explanation of the `sample_analytics` documents found in the `transactions` collection of the MongoDB Atlas Sample Dataset
 
 - transaction_id: This is a unique identifier that distinctly marks each transaction.
 - account_id: This field establishes a connection between the transaction and its corresponding account.
@@ -42,6 +33,14 @@ This collection contains transactions details for users. Each document contains 
 - symbol: If relevant, this field denotes the symbol of the stock or investment involved in the transaction.
 - amount: This reflects the value of the transaction.
 - total: This captures the comprehensive transacted amount, inclusive of quantities, fees, and any additional charges associated with the transaction.
+
+**The Power of Transactional Data**
+
+Stock transaction data offers a wealth of information for investment researchers and analysts. By carefully examining patterns within this data, you can:
+
+* **Identify Trends:** Spot emerging market movements and potential shifts in investor sentiment.
+* **Uncover Hidden Opportunities:** Discover undervalued stocks or sectors poised for growth.
+* **Manage Risk:** Assess the volatility of specific holdings and make informed decisions about asset allocation for optimal risk-return balance.
 
 ### The Task: Investment Performance Analysis
 
@@ -60,7 +59,7 @@ The aggregation pipeline we will be building calculates the total buy and sell v
 
 To achieve this, the pipeline will first unwind the 'transactions' array, then group by `transactions.symbol` and calculate the `buyValue` and `sellValue` for each group. Project the `symbol` and `returnOnInvestment` fields  (calculated by subtracting `buyValue` from `sellValue`) fields. Sort by `returnOnInvestment` in descending order.
 
-This MongoDB Aggregation Framework pipeline is composed of multiple stages, each performing a specific operation on the data:
+This MongoDB Aggregation Framework pipeline will be composed of multiple stages, each performing a specific operation on the data:
 
 1. `$unwind`: This stage deconstructs an array field from the input documents to output a document for each element. Here we're unwinding the `transactions` array.
 
@@ -81,7 +80,7 @@ This MongoDB Aggregation Framework pipeline is composed of multiple stages, each
 (_image from  [LangChain Blog | CrewAI: The Future of AI Agent Teams](https://blog.langchain.dev/crewai-unleashed-future-of-ai-agent-teams/))_
 
 
-The MongoDB Aggregation Pipeline gives us the data we need to analyze. The faster you can extract meaningful insights from raw data, the better your investment decisions will be. CrewAI, combined with the power of MongoDB Atlas, provides a unique automation approach that goes beyond basic number-crunching to deliver truly actionable analysis.
+The MongoDB Aggregation Pipeline gives us the data we need to analyze. The faster you can extract meaningful insights from raw data, the better your investment decisions will be. CrewAI, combined with the power of MongoDB Atlas, provides a unique approach that goes beyond basic number-crunching to deliver truly actionable analysis.
 
 For this example, we will create an Investment Researcher Agent. This agent is our expert, skilled in finding valuable data using tools like search engines. It's designed to hunt down financial trends, company news, and analyst insights. To learn more about creating agents using CrewAI [click here](https://learn.crewai.com/)
 
@@ -109,7 +108,7 @@ To follow along, you'll need:
 
 2. **LLM Resource:** CrewAI supports various LLM connections, including local models (Ollama), APIs like Azure, and all LangChain LLM components for customizable AI solutions. [Click here to learn more about CrewAI LLM Support](https://docs.crewai.com/how-to/LLM-Connections/)
 
-3. **Firecrawl:** Our Investment Researcher Agent will need the ability to crawl the web doing research. I chose Firecrawl for this example because it takes care of the hard stuff involved when scraping the web like proxies, caching, rate limits, parsing HTML, js-blocked content and more. You can get your firecrawl API token by [signing up here](https://www.firecrawl.dev/signin/signup).
+3. **Firecrawl:** Our Investment Researcher Agent will need the ability to crawl the web doing research. I chose Firecrawl for this example because it takes care of the hard stuff involved when scraping the web like proxies, caching, rate limits, parsing HTML, js-blocked content and more. With Firecrawl you can crawl and convert any website into clean markdown or structured data. You can get your firecrawl API token by [signing up here](https://www.firecrawl.dev/signin/signup).
 
 
 ### The Code
@@ -119,17 +118,6 @@ In this section, we'll walk through the Python code used to perform financial an
 ### MongoDB Setup
 
 First, we set up a connection to MongoDB using pymongo. This is where our transaction data is stored. We'll be performing an aggregation on this data later.
-
-**Important:** While we're including the connection string directly in the code for demonstration purposes, it's not recommended for real-world applications. A more secure approach is to retrieve the connection string from your MongoDB Atlas cluster.
-
-Here's how to access your connection string from Atlas:
-
-* Log in to your MongoDB Atlas account and navigate to your cluster.
-* Click on "Connect" in the left-hand navigation menu.
-* Choose the driver you'll be using (e.g., Python) and its version.
-* You'll see a connection string provided. Copy this string for use in your application.
-
-If you need more information on how to find your connection string, [check out this guide](https://www.mongodb.com/resources/products/fundamentals/mongodb-connection-string#:~:text=How%20to%20get%20your%20MongoDB,connection%20string%20for%20your%20cluster)
 
 #### **file: investment_analysis.py**
 ```python
@@ -162,40 +150,21 @@ default_llm = AzureChatOpenAI(
 )
 ```
 
-### Firecrawl API Setup
+### Google Search API Setup
 
-We're also going to use the Firecrawl Search API. This will be used by our "researcher" agent to find relevant financial data and news articles.
+We're also going to use the Google Search API. This will be used by our "researcher" agent to find relevant financial data and news articles.
 
 #### **file: investment_analysis.py**
 ```python
+from langchain_community.utilities import GoogleSerperAPIWrapper
 from langchain.agents import Tool
-from firecrawl import FirecrawlApp
-firecrawler = FirecrawlApp(api_key='fc-<API-KEY-GOES-HERE>')
 
-# to avoid context window limitations, its best to summarize the web content
-def summarize_webscrape(text):
-    return default_llm.invoke("Write a detailed executive summary in bullet points from the following text:" + text).content
-def search_function(query: str):
-    results = firecrawler.search(query,{
-      'pageOptions': {
-          'onlyMainContent': True,
-          'fetchPageContent': True,
-          'includeHtml': False,
-      },
-      'searchOptions': {
-          'limit': 3
-      }
-    })
-    search_text = ""
-    for result in results:
-        search_text += summarize_webscrape(str("[search_result:"+result["metadata"]["sourceURL"]+"]\n" + result["markdown"]+"\n\n\n\n"))
-    return str(search_text)
+search = GoogleSerperAPIWrapper(serper_api_key='__API_KEY__')
 search_tool = Tool(
-        name="Google Answer",
-        func=search_function,
-        description="useful for when you need to ask with search"
-)
-
+    	name="Google Answer",
+    	func=search.run,
+    	description="useful for when you need to ask with search"
+	)
 ```
 
 ### CrewAI Setup
@@ -510,11 +479,3 @@ The future of investment analysis belongs to those who embrace the power of data
 Don't just analyze the market – shape it. Start harnessing the potential of MongoDB and AI today, and transform your investment decision-making process.
 
 The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ranfysvalle02/mdb-agg-crewai/blob/main/investment_analysis.py)
-
-
-
-
-
-
-
-
