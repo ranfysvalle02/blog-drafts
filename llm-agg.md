@@ -154,7 +154,7 @@ default_llm = AzureChatOpenAI(
 
 Then let's set the agent role and the agent goal as a variable so that it can be accessed throughout the script.
 
-```
+```python
 # Initial Setup
 AGENT_ROLE = "Investment Researcher"
 AGENT_GOAL = """
@@ -219,6 +219,7 @@ We'll be using CrewAI to manage our agents and tasks. In this case, we have one 
 
 #### **file: investment_analysis.py**
 ```python
+# Research Agent Setup
 from crewai import Crew, Process, Task, Agent
 
 researcher = Agent(
@@ -346,14 +347,14 @@ tech_crew.kickoff(inputs={'agg_data': str(results)})
 ```
 import os
 import pymongo
-
+# MongoDB Setup
 MDB_URI = "mongodb+srv://<user>:<password>@cluster0.abc123.mongodb.net/"
 client = pymongo.MongoClient(MDB_URI)
 db = client["sample_analytics"]
 collection = db["transactions"]
 
+# Azure OpenAI Setup
 from langchain_openai import AzureChatOpenAI
-
 AZURE_OPENAI_ENDPOINT = "https://__DEMO__.openai.azure.com"
 AZURE_OPENAI_API_KEY = "__AZURE_OPENAI_API_KEY__"
 deployment_name = "gpt-4-32k"  # The name of your model deployment
@@ -364,26 +365,66 @@ default_llm = AzureChatOpenAI(
 	api_key=AZURE_OPENAI_API_KEY
 )
 
-from langchain_community.utilities import GoogleSerperAPIWrapper
+
+# Initial Setup
+AGENT_ROLE = "Investment Researcher"
+AGENT_GOAL = """
+  Research stock market trends, company news, and analyst reports to identify potential investment opportunities.
+"""
+
+# FireCrawl Setup
 from langchain.agents import Tool
+from firecrawl import FirecrawlApp
+firecrawler = FirecrawlApp(api_key='fc-__API_KEY_GOES_HERE__')
 
-search = GoogleSerperAPIWrapper(serper_api_key='__API_KEY__')
+# Search Tool - Summarize Web Search
+def summarize_websearch(text,q,site):
+    print("Summarizing:" +site)
+    print("search query:"+q)
+    prompt = "You are an experienced:" + AGENT_ROLE + " who is researching: " + str(q)
+    prompt += "\n\nGOAL:" + AGENT_GOAL
+    prompt += "\n\nTASK:" + "Write a detailed executive summary in bullet points (*) from the following text:" + text
+    print(prompt)
+    return default_llm.invoke(prompt).content
+
+# Search Tool - Web Search
+def search_function(query: str):
+    results = firecrawler.search(query,{
+      'pageOptions': {
+          'onlyMainContent': True,
+          'fetchPageContent': True,
+          'includeHtml': False,
+      },
+      'searchOptions': {
+          'limit': 1 # Limit to 1 search result, adjust as desired
+      }
+    })
+    search_text = ""
+    print("Search Results:")
+    for result in results:
+        print(search_text)
+        search_text += summarize_websearch(
+            str("[search_result:"+result["metadata"]["sourceURL"]+"]\n" + result["markdown"]+"\n\n\n\n"),
+            query,
+            result["metadata"]["sourceURL"]
+        )
+    return str(search_text)
+
 search_tool = Tool(
-    	name="Google Answer",
-    	func=search.run,
-    	description="useful for when you need to ask with search"
-	)
+        name="Web Search",
+        func=search_function,
+        description="Always use this tool to search for information on the web."
+)
 
+# Research Agent Setup
 from crewai import Crew, Process, Task, Agent
 
 researcher = Agent(
-  role='Investment Researcher',
-  goal="""
-  Research market trends, company news, and analyst reports to identify potential investment opportunities.
-  """,
+  role=AGENT_ROLE,
+  goal=AGENT_GOAL,
   verbose=True,
   llm=default_llm,
-  backstory='Expert in using search engines to uncover relevant financial data, news articles, and industry analysis.',
+  backstory='Expert stock researcher with decades of experience.',
   tools=[search_tool]
 )
 
@@ -409,50 +450,54 @@ as well as the volume of transactions for each stock.
   tools=[search_tool],
 )
 
+# Crew Creation
 tech_crew = Crew(
   agents=[researcher],
   tasks=[analysis_task],
   process=Process.sequential
 )
 
+# MongoDB Aggregation Pipeline
 pipeline = [
   {"$unwind": "$transactions"},
   {"$group": {
-  	"_id": "$transactions.symbol",
-  	"buyValue": {
-    	"$sum": {
-      	"$cond": [
-        	{ "$eq": ["$transactions.transaction_code", "buy"] },
-        	{ "$toDouble": "$transactions.total" },
-        	0
-      	]
-    	}
-  	},
-  	"sellValue": {
-    	"$sum": {
-      	"$cond": [
-        	{ "$eq": ["$transactions.transaction_code", "sell"] },
-        	{ "$toDouble": "$transactions.total" },
-        	0
-      	]
-    	}
-  	}
-	}
+      "_id": "$transactions.symbol",
+      "buyValue": {
+        "$sum": {
+          "$cond": [
+            { "$eq": ["$transactions.transaction_code", "buy"] },
+            { "$toDouble": "$transactions.total" },
+            0
+          ]
+        }
+      },
+      "sellValue": {
+        "$sum": {
+          "$cond": [
+            { "$eq": ["$transactions.transaction_code", "sell"] },
+            { "$toDouble": "$transactions.total" },
+            0
+          ]
+        }
+      }
+    }
   },
   {"$project": {
-  	"_id": 0,
-  	"symbol": "$_id",
-  	"returnOnInvestment": { "$subtract": ["$sellValue", "$buyValue"] }
-	}
+      "_id": 0,
+      "symbol": "$_id",
+      "returnOnInvestment": { "$subtract": ["$sellValue", "$buyValue"] }
+    }
   },
   {"$sort": { "returnOnInvestment": -1 }}
 ]
 results = list(collection.aggregate(pipeline))
 client.close()
 
+# Print MongoDB Aggregation Pipeline Results
 print("MongoDB Aggregation Pipeline Results:")
 print(results)
 
+# Start the task execution
 tech_crew.kickoff(inputs={'agg_data': str(results)})
 ```
 
