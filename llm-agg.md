@@ -119,6 +119,17 @@ In this section, we'll walk through the Python code used to perform financial an
 
 First, we set up a connection to MongoDB using pymongo. This is where our transaction data is stored. We'll be performing an aggregation on this data later.
 
+**Important:** While we're including the connection string directly in the code for demonstration purposes, it's not recommended for real-world applications. A more secure approach is to retrieve the connection string from your MongoDB Atlas cluster.
+
+Here's how to access your connection string from Atlas:
+
+* Log in to your MongoDB Atlas account and navigate to your cluster.
+* Click on "Connect" in the left-hand navigation menu.
+* Choose the driver you'll be using (e.g., Python) and its version.
+* You'll see a connection string provided. Copy this string for use in your application.
+
+Once you have your connection string, you are ready to start.
+
 #### **file: investment_analysis.py**
 ```python
 import os
