@@ -24,7 +24,16 @@ In this blog post, we’ll combine the power of the MongoDB Aggregation framewor
 
 The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ranfysvalle02/mdb-agg-crewai/blob/main/investment_analysis.py)
 
-### Explanation of the `sample_analytics` documents found in the `transactions` collection of the MongoDB Atlas Sample Dataset
+**The Power of Transactional Data**
+
+Stock transaction data offers a wealth of information for investment researchers and analysts. By carefully examining patterns within this data, you can:
+
+* **Identify Trends:** Spot emerging market movements and potential shifts in investor sentiment.
+* **Uncover Hidden Opportunities:** Discover undervalued stocks or sectors poised for growth.
+* **Manage Risk:** Assess the volatility of specific holdings and make informed decisions about asset allocation for optimal risk-return balance.
+
+### `sample_analytics` > `transactions` ([MongoDB Atlas Sample Dataset](https://www.mongodb.com/docs/atlas/sample-data/sample-analytics/#std-label-analytics-transactions))
+This collection contains transactions details for users. Each document contains an account id, a count of how many transactions are in this set, the start and end dates for transactions covered by this document, and a list of sub documents. Each sub document represents a single transaction and the related information for that transaction.
 
 - transaction_id: This is a unique identifier that distinctly marks each transaction.
 - account_id: This field establishes a connection between the transaction and its corresponding account.
@@ -33,14 +42,6 @@ The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ran
 - symbol: If relevant, this field denotes the symbol of the stock or investment involved in the transaction.
 - amount: This reflects the value of the transaction.
 - total: This captures the comprehensive transacted amount, inclusive of quantities, fees, and any additional charges associated with the transaction.
-
-**The Power of Transactional Data**
-
-Stock transaction data offers a wealth of information for investment researchers and analysts. By carefully examining patterns within this data, you can:
-
-* **Identify Trends:** Spot emerging market movements and potential shifts in investor sentiment.
-* **Uncover Hidden Opportunities:** Discover undervalued stocks or sectors poised for growth.
-* **Manage Risk:** Assess the volatility of specific holdings and make informed decisions about asset allocation for optimal risk-return balance.
 
 ### The Task: Investment Performance Analysis
 
