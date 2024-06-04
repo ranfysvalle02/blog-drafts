@@ -113,6 +113,8 @@ To follow along, you'll need:
 
 ### The Code
 
+![MongoDB + Crew AI + Firecrawl in Action!](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/blog-flow.png)
+
 In this section, we'll walk through the Python code used to perform financial analysis based on transaction data stored in MongoDB, using GenAI for data analysis and insights. The Python version used during development was: `3.10.10`
 
 ### MongoDB Setup
