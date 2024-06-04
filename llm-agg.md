@@ -80,9 +80,9 @@ This MongoDB Aggregation Framework pipeline is composed of multiple stages, each
 (_image from  [LangChain Blog | CrewAI: The Future of AI Agent Teams](https://blog.langchain.dev/crewai-unleashed-future-of-ai-agent-teams/))_
 
 
-The financial world is fueled by data analysis. The faster you can extract meaningful insights from raw data, the better your investment decisions will be. CrewAI, combined with the power of MongoDB Atlas, provides a unique automation approach that goes beyond basic number-crunching to deliver truly actionable analysis.
+The MongoDB Aggregation Pipeline gives us the data we need to analyze. The faster you can extract meaningful insights from raw data, the better your investment decisions will be. CrewAI, combined with the power of MongoDB Atlas, provides a unique automation approach that goes beyond basic number-crunching to deliver truly actionable analysis.
 
-For this example, we will create an Investment Researcher Agent. This agent is our expert, skilled in finding valuable data using tools like search engines. It's designed to hunt down financial trends, company news, and analyst insights.
+For this example, we will create an Investment Researcher Agent. This agent is our expert, skilled in finding valuable data using tools like search engines. It's designed to hunt down financial trends, company news, and analyst insights.To learn more about creating agents using CrewAI [https://learncrewai.com/](click here)
 
 **Unlocking the Power of AI Collaboration: Agents, Tasks, and Tools**
 
@@ -106,14 +106,12 @@ To follow along, you'll need:
 
 1. **MongoDB Atlas Cluster:** [Create your free cluster](https://www.mongodb.com/docs/guides/atlas/cluster/) and [load the Sample Dataset](https://www.mongodb.com/basics/sample-database). The transaction data in the sample analytics dataset offers a realistic dataset that allows users to hone their skills in data analysis, querying, and aggregation, particularly in the context of financial data.
 
-2. **SERPER_API_KEY:** Sign up for a free account at [https://serper.dev](https://serper.dev/). Serper is a Google Search API that will grant our CrewAI setup access to real-time market data and news, enriching our analysis beyond just database calculations.
-
-3. **LLM Resource:** CrewAI supports various LLM connections, including local models (Ollama), APIs like Azure, and all LangChain LLM components for customizable AI solutions. [Click here to learn more about CrewAI LLM Support](https://docs.crewai.com/how-to/LLM-Connections/)
+2. **LLM Resource:** CrewAI supports various LLM connections, including local models (Ollama), APIs like Azure, and all LangChain LLM components for customizable AI solutions. [Click here to learn more about CrewAI LLM Support](https://docs.crewai.com/how-to/LLM-Connections/)
 
 
 ### The Code
 
-In this section, we'll walk through the Python code used to perform financial analysis based on transaction data stored in MongoDB, using Azure OpenAI and Google Search API for data analysis and insights. The Python version used during development was: 3.10.10
+In this section, we'll walk through the Python code used to perform financial analysis based on transaction data stored in MongoDB, using GenAI for data analysis and insights. The Python version used during development was: `3.10.10`
 
 ### MongoDB Setup
 
