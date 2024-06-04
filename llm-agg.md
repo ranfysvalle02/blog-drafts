@@ -57,50 +57,7 @@ Navigating these complexities can be made more efficient by harnessing the power
 
 The aggregation pipeline we will be building calculates the total buy and sell values for each stock, and then calculates the return on investment by subtracting the total buy value from the total sell value. The stocks are then sorted by return on investment in descending order, so the stocks with the highest returns are at the top. If you’re new to MongoDB, I suggest you build this aggregation pipeline using the aggregation builder in compass, then export it to Python. 
 
-To achieve this, we first unwind the 'transactions' array, then group by `transactions.symbol` and calculate the `buyValue` and `sellValue` for each group. Project the `symbol` and `returnOnInvestment` fields  (calculated by subtracting `buyValue` from `sellValue`) fields. Sort by `returnOnInvestment` in descending order.
-
-Here's how you could write the query:
-
-```javascript
-[
-  {
-    "$unwind": "$transactions"
-  },
-  {
-    "$group": {
-      "_id": "$transactions.symbol",
-      "buyValue": {
-   	 "$sum": {
- 		 "$cond": [
-   		 { "$eq": ["$transactions.transaction_code", "buy"] },
-   		 { "$toDouble": "$transactions.total" },
-   		 0
- 		 ]
-   	 }
-      },
-      "sellValue": {
-   	 "$sum": {
- 		 "$cond": [
-   		 { "$eq": ["$transactions.transaction_code", "sell"] },
-   		 { "$toDouble": "$transactions.total" },
-   		 0
- 		 ]
-   	 }
-      }
-    }
-  },
-  {
-    "$project": {
-      "_id": 0,
-      "symbol": "$_id",
-      "returnOnInvestment": { "$subtract": ["$sellValue", "$buyValue"] }
-    }
-  },
-  {
-    "$sort": { "returnOnInvestment": -1 }
-  }
-]
-```
+To achieve this, the pipeline will first unwind the 'transactions' array, then group by `transactions.symbol` and calculate the `buyValue` and `sellValue` for each group. Project the `symbol` and `returnOnInvestment` fields  (calculated by subtracting `buyValue` from `sellValue`) fields. Sort by `returnOnInvestment` in descending order.
 
 This MongoDB Aggregation Framework pipeline is composed of multiple stages, each performing a specific operation on the data:
 
@@ -112,31 +69,7 @@ This MongoDB Aggregation Framework pipeline is composed of multiple stages, each
 
 4. `$sort`: This stage reorders the document stream by a specified sort key. We're sorting the documents by `returnOnInvestment` in descending order.
 
-This pipeline calculates the total buy and sell values for each stock, and then calculates the return on investment by subtracting the total buy value from the total sell value. The stocks are then sorted by return on investment in descending order, so the stocks with the highest returns are at the top.
 
-To run this query, you'll need access to a MongoDB instance with the sample data.
-
-This tutorial assumes you have a MongoDB Atlas cluster set up. If you're new to MongoDB Atlas, it's a cloud-based Database-as-a-Service (DBaaS) offering that simplifies MongoDB deployment and management. You can find resources to get started with creating a free cluster [here](link to mongodb atlas free tier).
-
-Once you have a cluster running, you'll need to load the sample dataset.
-
-### Loading Sample Investment Data:
-
-This tutorial leverages the sample datasets available within MongoDB Atlas for experimentation. Here's how to load the specific dataset containing sample investment transactions:
-
-1. **Log in to your MongoDB Atlas account** and navigate to your cluster.
-
-2. **Locate the cluster you want to use.**
-
-3. **Click the ellipsis (...) button** associated with your chosen cluster.
-
-4. From the dropdown menu, select **"Load Sample Dataset"**.
-
-5. A confirmation dialog will appear. Click **"Load Sample Dataset"** to proceed.
-
-This will load various sample datasets into your cluster. The dataset you're interested in is called **"sample_analytics"**. Within this dataset, focus on the collection named **"transactions"**.
-
-Now that you’ve loaded your dataset, time to run the Aggregation Pipeline from Python!
 
 ### Running the Aggregation Pipeline with Python
 
@@ -408,38 +341,47 @@ Next, we define our MongoDB aggregation pipeline. This pipeline is used to proce
 
 #### **file: investment_analysis.py**
 ```python
+# Define the aggregation pipeline
 pipeline = [
-  {"$unwind": "$transactions"},
-  {"$group": {
-  	"_id": "$transactions.symbol",
-  	"buyValue": {
-    	"$sum": {
-      	"$cond": [
-        	{ "$eq": ["$transactions.transaction_code", "buy"] },
-        	{ "$toDouble": "$transactions.total" },
-        	0
-      	]
-    	}
-  	},
-  	"sellValue": {
-    	"$sum": {
-      	"$cond": [
-        	{ "$eq": ["$transactions.transaction_code", "sell"] },
-        	{ "$toDouble": "$transactions.total" },
-        	0
-      	]
-    	}
-  	}
-	}
+  {
+    "$unwind": "$transactions"  # Deconstruct the transactions array into separate documents
   },
-  {"$project": {
-  	"_id": 0,
-  	"symbol": "$_id",
-  	"returnOnInvestment": { "$subtract": ["$sellValue", "$buyValue"] }
-	}
+  {
+    "$group": {             		 # Group documents by stock symbol
+      "_id": "$transactions.symbol",  # Use symbol as the grouping key
+      "buyValue": {           		 # Calculate total buy value
+   	 "$sum": {
+ 		 "$cond": [          		 # Conditional sum based on transaction type
+   		 { "$eq": ["$transactions.transaction_code", "buy"] },  # Check for "buy" transactions
+   		 { "$toDouble": "$transactions.total" },      		 # Convert total to double for sum
+   		 0                                         		 # Default value for non-buy transactions
+ 		 ]
+   	 }
+      },
+      "sellValue": {          		 # Calculate total sell value (similar to buyValue)
+   	 "$sum": {
+ 		 "$cond": [
+   		 { "$eq": ["$transactions.transaction_code", "sell"] },
+   		 { "$toDouble": "$transactions.total" },
+   		 0
+ 		 ]
+   	 }
+      }
+    }
   },
-  {"$sort": { "returnOnInvestment": -1 }}
+  {
+    "$project": {            		 # Project desired fields (renaming and calculating ROI)
+      "_id": 0,               		 # Exclude original _id field
+      "symbol": "$_id",        		 # Rename _id to symbol for clarity
+      "returnOnInvestment": { "$subtract": ["$sellValue", "$buyValue"] }  # Calculate ROI
+    }
+  },
+  {
+    "$sort": { "returnOnInvestment": -1 }  # Sort results by ROI (descending)
+  }
 ]
+
+
 results = list(collection.aggregate(pipeline))
 client.close()
 
@@ -640,3 +582,11 @@ The future of investment analysis belongs to those who embrace the power of data
 Don't just analyze the market – shape it. Start harnessing the potential of MongoDB and AI today, and transform your investment decision-making process.
 
 The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ranfysvalle02/mdb-agg-crewai/blob/main/investment_analysis.py)
+
+
+
+
+
+
+
+
