@@ -156,15 +156,49 @@ We're also going to use the Google Search API. This will be used by our "researc
 
 #### **file: investment_analysis.py**
 ```python
-from langchain_community.utilities import GoogleSerperAPIWrapper
 from langchain.agents import Tool
+# FireCrawl Setup
+from firecrawl import FirecrawlApp
+firecrawler = FirecrawlApp(api_key='fc-__API_KEY_GOES_HERE__')
 
-search = GoogleSerperAPIWrapper(serper_api_key='__API_KEY__')
+# Search Tool - Summarize Web Search
+def summarize_websearch(text,q,site):
+    print("Summarizing:" +site)
+    print("search query:"+q)
+    prompt = "You are an experienced:" + AGENT_ROLE + " who is researching: " + str(q)
+    prompt += "\n\nGOAL:" + AGENT_GOAL
+    prompt += "\n\nTASK:" + "Write a detailed executive summary in bullet points (*) from the following text:" + text
+    print(prompt)
+    return default_llm.invoke(prompt).content
+
+# Search Tool - Web Search
+def search_function(query: str):
+    results = firecrawler.search(query,{
+      'pageOptions': {
+          'onlyMainContent': True,
+          'fetchPageContent': True,
+          'includeHtml': False,
+      },
+      'searchOptions': {
+          'limit': 1 # Limit to 1 search result, adjust as desired
+      }
+    })
+    search_text = ""
+    print("Search Results:")
+    for result in results:
+        print(search_text)
+        search_text += summarize_websearch(
+            str("[search_result:"+result["metadata"]["sourceURL"]+"]\n" + result["markdown"]+"\n\n\n\n"),
+            query,
+            result["metadata"]["sourceURL"]
+        )
+    return str(search_text)
+
 search_tool = Tool(
-    	name="Google Answer",
-    	func=search.run,
-    	description="useful for when you need to ask with search"
-	)
+        name="Web Search",
+        func=search_function,
+        description="Always use this tool to search for information on the web."
+)
 ```
 
 ### CrewAI Setup
