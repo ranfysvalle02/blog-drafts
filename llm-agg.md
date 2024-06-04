@@ -345,7 +345,7 @@ tech_crew.kickoff(inputs={'agg_data': str(results)})
 
 ### Complete Source Code
 #### **file: investment_analysis.py**
-```
+```python
 import os
 import pymongo
 # MongoDB Setup
