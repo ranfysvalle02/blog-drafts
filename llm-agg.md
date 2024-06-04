@@ -154,6 +154,7 @@ default_llm = AzureChatOpenAI(
 
 Then let's set the agent role and the agent goal as a variable so that it can be accessed throughout the script.
 
+#### **file: investment_analysis.py**
 ```python
 # Initial Setup
 AGENT_ROLE = "Investment Researcher"
