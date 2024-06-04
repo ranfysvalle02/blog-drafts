@@ -345,7 +345,7 @@ Here's a breakdown of what the MongoDB pipeline does:
 
 5. **Sorting by Return:** Lastly, the `$sort` operator organizes the results. It sorts the documents based on the "returnOnInvestment" field in descending order (-1). This means symbols with the highest return on investment (most profitable) will appear first in the final output.
 
-
+![MongoDB Aggregation Pipeline Results Screenshot](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/ll2.png)
 
 ### Task Execution
 
