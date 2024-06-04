@@ -55,7 +55,7 @@ Navigating these complexities can be made more efficient by harnessing the power
 
 ![MongoDB Aggregation Pipeline Visualization](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/xa1.png)
 
-The aggregation pipeline we will be building calculates the total buy and sell values for each stock, and then calculates the return on investment by subtracting the total buy value from the total sell value. The stocks are then sorted by return on investment in descending order, so the stocks with the highest returns are at the top. If you’re new to MongoDB, I suggest you build this aggregation pipeline using the aggregation builder in compass, then export it to Python. 
+The aggregation pipeline we will be building calculates the total buy and sell values for each stock, and then calculates the return on investment by subtracting the total buy value from the total sell value. The stocks are then sorted by return on investment in descending order, so the stocks with the highest returns are at the top. If you’re new to MongoDB, I suggest you build this aggregation pipeline using the aggregation builder in compass, then export it to Python. [The Aggregation Pipeline Builder in MongoDB Compass](https://www.mongodb.com/docs/compass/current/create-agg-pipeline/) helps you create aggregation pipelines to process documents from a collection or view and return computed results. 
 
 To achieve this, the pipeline will first unwind the 'transactions' array, then group by `transactions.symbol` and calculate the `buyValue` and `sellValue` for each group. Project the `symbol` and `returnOnInvestment` fields  (calculated by subtracting `buyValue` from `sellValue`) fields. Sort by `returnOnInvestment` in descending order.
 
