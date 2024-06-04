@@ -108,6 +108,8 @@ To follow along, you'll need:
 
 2. **LLM Resource:** CrewAI supports various LLM connections, including local models (Ollama), APIs like Azure, and all LangChain LLM components for customizable AI solutions. [Click here to learn more about CrewAI LLM Support](https://docs.crewai.com/how-to/LLM-Connections/)
 
+3. **Firecrawl:** Our Investment Researcher Agent will need the ability to access web content. Though there are other popular tools for ‘searching the web’, I decided to go with Firecrawl for this example because Firecrawl takes care of the hard stuff involved when scraping the web like proxies, caching, rate limits, js-blocked content and more. You can get your firecrawl API token by [signing up here](https://www.firecrawl.dev/signin/signup).
+
 
 ### The Code
 
