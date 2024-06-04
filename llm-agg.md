@@ -448,41 +448,55 @@ tech_crew.kickoff(inputs={'agg_data': str(results)})
 ### Example OUTPUT
 
 ```
-Thought: I now know the final answer
-Final Answer:
+Thought: 
+Based on the extensive research I have conducted, I can now summarize the financial performance of each company as well as provide actionable insights and recommendations.
 
+Final Answer: 
 Financial Summary:
 
-From the verified data, we can see that the following stocks have generated the highest returns on investment:
+1. Amazon (AMZN): The company has shown a strong ROI and is expected to improve in the next three years. Its shares are at an all-time high, indicating potential for future growth. 
 
-1. Amazon (AMZN): 72,769,230.71
-2. SAP: 39,912,931.05
-3. Apple (AAPL): 25,738,882.29
-4. Adobe (ADBE): 17,975,929.73
+2. SAP (SAP): Despite strong performance in Q1 2024, SAP's returns are not growing. This, along with its exit from Russia, could potentially signal concerns for investors. 
 
-On the other hand, the following stocks have produced negative returns:
+3. Apple (AAPL): Apple is set to kick off its WWDC and is expected to focus on software offerings. Its Vision Pro mixed reality headset is due for a major overhaul to integrate AI. However, its stocks have stagnated so far this year. 
 
-1. Atlassian Corporation Plc (TEAM): -406,507.08
-2. Netflix (NFLX): -2,133,963.99
-3. Intel Corporation (INTC): -7,407,861.20
-4. Salesforce (CRM): -15,106,640.20
-5. Microsoft (MSFT): -15,665,720.74
-6. IBM: -18,356,948.23
-7. Google (GOOG): -168,114,276.92
+4. Adobe (ADBE): Adobe's stock has seen a decline but also increased interest from investors. However, the company's year-to-date return is underperforming the S&P 500. 
+
+5. BlackBerry (BB): BlackBerry has been in the news due to its involvement in the recent meme stock rally. However, experts predict that the meme stock crowd is expected to 'exit quickly', potentially leading to a drop in these companies' stock prices. 
+
+6. AMD (AMD): The company, along with Nvidia, unveiled new AI chips, driving their shares upward. However, AMD and Nvidia face competition from other companies such as Intel and Arm Holdings. 
+
+7. Cisco (CSCO): Cisco is expected to be among the key stocks defining the dividend trend in 2024. However, insider sales have been observed recently. 
+
+8. Nvidia (NVDA): Nvidia is seen as a critical player in the stock market with a bullish perspective for its future stock price movements. 
+
+9. eBay (EBAY): eBay stocks are down 33%, however, the company's dividends are seen as a long-term growth opportunity. 
+
+10. Facebook (FB), Zynga (ZNGA), Atlassian (TEAM), Netflix (NFLX), Intel (INTC), Salesforce (CRM), Microsoft (MSFT), IBM (IBM), and Google (GOOG) have shown negative ROI. 
 
 Actionable Insights and Recommendations:
 
-Based on current news and events:
+1. Amazon: Given its strong performance and future growth potential, it could be a good investment opportunity. However, investors should monitor its high share prices to determine the right time to buy. 
 
-1. Amazon (AMZN): The company's stock is performing strongly, approaching its record high of 2021. It is recommended to keep an eye on this stock for potential investment opportunities.
+2. SAP: Investors should monitor SAP's growth rates and its impact from exiting the Russian market. 
 
-2. SAP: Despite the company's plan to cut jobs, analysts have a positive outlook on the stock. It is advisable to monitor the stock closely for any changes in its performance.
+3. Apple: Investors could look out for new offerings from the WWDC and developments in the Vision Pro mixed reality headset. 
 
-3. Apple (AAPL): The recent surge in the company's stock value due to its intention to delve into AI shows promising growth. Investors may consider this stock for potential investment.
+4. Adobe: Adobe's upcoming Q2 FY2024 earnings results should be monitored for signs of potential growth. 
 
-4. Adobe (ADBE): The stock is showing a positive sentiment in relation to other stocks in the technology sector and has a high price target set by Wall Street analysts. It is recommended to watch this stock for potential growth.
+5. BlackBerry: Investors should be cautious due to the potential drop in stock prices from the meme stock rally. 
 
-It is also suggested to keep a close eye on those stocks that are currently showing negative returns. Understanding the reasons behind their poor performance could provide investment opportunities if these issues are addressed and the businesses start to turn around.
+6. AMD: The company's rivalry with Nvidia and the launch of new products could provide growth opportunities. 
+
+7. Cisco: The company's recent strategic moves and its recognition among analysts suggest potential for growth. 
+
+8. Nvidia: The company's expansion into the CPU market with ARM technology by 2025 represents a significant growth opportunity. 
+
+9. eBay: Despite its current performance being below the 52-week high, the company's dividends are seen as a long-term growth opportunity. 
+
+10. For companies with negative ROI, it's advisable to monitor their performance closely before making investment decisions. 
+
+In conclusion, it's important to consider each company's current performance, future growth potential, and market trends before making investment decisions.
 ```
 
 ### Limitations and Considerations
