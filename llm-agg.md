@@ -82,7 +82,7 @@ This MongoDB Aggregation Framework pipeline is composed of multiple stages, each
 
 The MongoDB Aggregation Pipeline gives us the data we need to analyze. The faster you can extract meaningful insights from raw data, the better your investment decisions will be. CrewAI, combined with the power of MongoDB Atlas, provides a unique automation approach that goes beyond basic number-crunching to deliver truly actionable analysis.
 
-For this example, we will create an Investment Researcher Agent. This agent is our expert, skilled in finding valuable data using tools like search engines. It's designed to hunt down financial trends, company news, and analyst insights.To learn more about creating agents using CrewAI [https://learncrewai.com/](click here)
+For this example, we will create an Investment Researcher Agent. This agent is our expert, skilled in finding valuable data using tools like search engines. It's designed to hunt down financial trends, company news, and analyst insights.To learn more about creating agents using CrewAI [click here](https://learn.crewai.com/)
 
 **Unlocking the Power of AI Collaboration: Agents, Tasks, and Tools**
 
