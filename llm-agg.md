@@ -49,8 +49,6 @@ Navigating these complexities can be made more efficient by harnessing the power
 
 ### The Solution: MongoDB's Aggregation Framework
 
-![MongoDB Aggregation Pipeline Visualization](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/xa1.png)
-
 The aggregation pipeline we will be building calculates the total buy and sell values for each stock, and then calculates the net gain or loss by subtracting the total buy value from the total sell value. The stocks are then sorted by net gain or loss in descending order, so the stocks with the highest net gains are at the top. If you’re new to MongoDB, I suggest you build this aggregation pipeline using the aggregation builder in compass, then export it to Python. [The Aggregation Pipeline Builder in MongoDB Compass](https://www.mongodb.com/docs/compass/current/create-agg-pipeline/) helps you create aggregation pipelines to process documents from a collection or view and return computed results. 
 
 In order to calculate the total buy and sell values for each stock we must first unwind the 'transactions' array, then group by `transactions.symbol` and calculate the `buyValue` and `sellValue` for each group. Project the `symbol` and `netGain` fields (calculated by subtracting `buyValue` from `sellValue`) fields. Sort by `netGain` in descending order.
@@ -65,6 +63,7 @@ This MongoDB Aggregation Framework pipeline will be composed of multiple stages,
 
 4. `$sort`: This stage reorders the document stream by a specified sort key. We're sorting the documents by `netGain` in descending order.
 
+![MongoDB Aggregation Pipeline Results](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x221.png)
 
 ### Supercharge Investment Analysis with MongoDB and CrewAI
 
@@ -137,7 +136,7 @@ collection = db["transactions"]
 
 ### Azure OpenAI Setup
 
-Next, we set up our connection to Azure OpenAI. Azure OpenAI can be replaced by your preferred LLM.
+Next, we set up our Azure OpenAI LLM resource.
 
 
 #### **file: investment_analysis.py**
@@ -155,18 +154,6 @@ default_llm = AzureChatOpenAI(
 )
 ```
 
-### Initial Setup
-
-Then let's set the agent role and the agent goal as a variable so that it can be accessed throughout the script.
-
-#### **file: investment_analysis.py**
-```python
-# Initial Setup
-AGENT_ROLE = "Investment Researcher"
-AGENT_GOAL = """
-  Research stock market trends, company news, and analyst reports to identify potential investment opportunities.
-"""
-```
 
 ### Web Search API Setup
 
@@ -187,7 +174,8 @@ def search_tool(query: str):
   """
   return duck_duck_go.run(query)
 ```
-You can implement your Search Tool with your Search API of choice - it does not have to be DuckDuckGo. I chose DuckDuckGo for this example because it:
+
+DuckDuckGo was chosen for this example because it:
 
 - **Requires NO API KEY**
 - Easy to use
@@ -203,19 +191,20 @@ We'll be using CrewAI to manage our agents and tasks. In this case, we have one 
 ```python
 # Research Agent Setup
 from crewai import Crew, Process, Task, Agent
-
+AGENT_ROLE = "Investment Researcher"
+AGENT_GOAL = """
+  Research stock market trends, company news, and analyst reports to identify potential investment opportunities.
+"""
 researcher = Agent(
-  role='Investment Researcher',
-  goal="""
-  Research market trends, company news, and analyst reports to identify potential investment opportunities.
-  """,
+  role=AGENT_ROLE,
+  goal=AGENT_GOAL,
   verbose=True,
   llm=default_llm,
-  backstory='Expert in using search engines to uncover relevant financial data, news articles, and industry analysis.',
+  backstory='Expert stock researcher with decades of experience.',
   tools=[search_tool]
 )
 
-analysis_task = Task(
+task1 = Task(
   description="""
 Using the following information:
 
@@ -223,30 +212,41 @@ Using the following information:
 {agg_data}
 
 *note*
-The data represents the average price of each stock symbol for each transaction type (buy/sell),
-and the total amount of transactions for each type. This would give us insight into the average costs and proceeds from each stock,
-as well as the volume of transactions for each stock.
+The data represents the net gain or loss of each stock symbol for each transaction type (buy/sell).
+Net gain or loss is a crucial metric used to gauge the profitability or efficiency of an investment. 
+It's computed by subtracting the total buy value from the total sell value for each stock.
 [END VERIFIED DATA]
 
 [TASK]
-- Provide a financial summary of the VERIFIED DATA
-- Research current events and trends, and provide actionable insights and recommendations
+- Generate a detailed financial report of the VERIFIED DATA.
+- Research current events and trends, and provide actionable insights and recommendations.
+
+
+[report criteria]
+  - Use all available information to prepare this final financial report
+  - Include a TLDR summary
+  - Include 'Actionable Insights'
+  - Include 'Strategic Recommendations'
+  - Include a 'Other Observations' section
+  - Include a 'Conclusion' section
+  - IMPORTANT! You are a friendly and helpful financial expert. Always provide the best possible answer using the available information.
+[end report criteria]
   """,
   agent=researcher,
-  expected_output='concise markdown financial summary and list of actionable insights and recommendations',
+  expected_output='concise markdown financial summary of the verified data and list of key points and insights from researching current events',
   tools=[search_tool],
 )
-
+# Crew Creation
 tech_crew = Crew(
   agents=[researcher],
-  tasks=[analysis_task],
+  tasks=[task1],
   process=Process.sequential
 )
 ```
 
 ### MongoDB Aggregation Pipeline
 
-Next, we define our MongoDB aggregation pipeline. This pipeline is used to process our transaction data and calculate the return on investment for each stock symbol.
+Next, we define our MongoDB aggregation pipeline. This pipeline is used to process our transaction data and calculate the net gain for each stock symbol.
 
 #### **file: investment_analysis.py**
 ```python
@@ -302,17 +302,17 @@ print(results)
 
 Here's a breakdown of what the MongoDB pipeline does:
 
-1. **Unwinding Transactions:** First, it uses the `$unwind` operator to unpack an array field named "transactions" within each document. Imagine each document has information about multiple stock purchases and sales. Unwinding separates these transactions into individual documents, making calculations easier.
+1. **Unwinding Transactions:** First, it uses the `$unwind` operator to unpack an array field named "transactions" within each document. Each document contains information about multiple stock purchases and sales. Unwinding separates these transactions into individual documents, simplifying subsequent calculations.
 
-2. **Grouping by Symbol:** Next, the `$group` operator takes over. It groups the unwound documents based on the value in the "transactions.symbol" field. This essentially combines all transactions for a specific stock (represented by the symbol) into a single group.
+2. **Grouping by Symbol:** Next, the `$group` operator groups the unwound documents based on the value in the "transactions.symbol" field. This essentially combines all transactions for a specific stock (represented by the symbol) into a single group.
 
 3. **Calculating Buy and Sell Values:** Within each symbol group, the pipeline calculates two crucial values:
    - **buyValue:** This uses the `$sum` accumulator along with a conditional statement (`$cond`). The `$cond` checks if the "transaction_code" within the "transactions" object is "buy". If it is, it converts the "total" field (the transaction amount) to a double using `$toDouble` and adds it to the running total for buyValue. If it's not a buy transaction, it contributes nothing (0) to the sum. This effectively calculates the total amount spent buying shares of that specific symbol.
    - **sellValue:** Similar to buyValue, this calculates the total amount received by selling shares of the same symbol. It uses the same logic but checks for "transaction_code" equal to "sell" and sums those "total" values.
 
-4. **Projecting Results:** Now, the `$project` operator steps in to define the final output format. It discards the automatically generated grouping identifier (`_id`) by setting it to 0. It then renames the grouping field (`_id` which held the "transactions.symbol") to a clearer name, "symbol". Finally, it calculates the return on investment for each symbol using the `$subtract` operator. This subtracts the `buyValue` from the `sellValue` to determine the profit or loss for that symbol.
+4. **Projecting Results:** Now, the `$project` operator steps in to define the final output format. It discards the automatically generated grouping identifier (`_id`) by setting it to 0. It then renames the grouping field (`_id` which held the "transactions.symbol") to a clearer name, "symbol". Finally, it calculates the net gain or loss for each symbol using the `$subtract` operator. This subtracts the `buyValue` from the `sellValue` to determine the net gain or loss for that symbol.
 
-5. **Sorting by Return:** Lastly, the `$sort` operator organizes the results. It sorts the documents based on the "returnOnInvestment" field in descending order (-1). This means symbols with the highest return on investment (most profitable) will appear first in the final output.
+5. **Sorting by Net Gain:** Lastly, the `$sort` operator organizes the results. It sorts the documents based on the "netGain" field in descending order (-1). This means symbols with the highest net gain (most profitable) will appear first in the final output.
 
 ![MongoDB Aggregation Pipeline Results Screenshot](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/ll2.png)
 
@@ -464,37 +464,47 @@ tech_crew.kickoff(inputs={'agg_data': str(results)})
 ### Example OUTPUT
 
 ```
-Final Answer:
-# Detailed Financial Report
+Thought: 
+The recent news for Apple indicates that the company's stock has reached a $3 trillion valuation, largely due to the hype surrounding the introduction of AI to iPhones. This could be a significant catalyst for Apple's future growth. Now, I have enough information to generate a detailed financial report of the verified data, including a TLDR summary, actionable insights, strategic recommendations, other observations, and a conclusion. 
 
-## TLDR Summary
+Final Answer: 
 
-Based on the net gain data and recent news trends, all three stocks – Amazon (AMZN), SAP (SAP), and Apple (AAPL) – show promising prospects. Amazon and Apple are experiencing growth and their stocks are hitting new highs. SAP has recently acquired WalkMe, indicating potential future growth.
+**Financial Report**
 
-## Key Insights and Recommendations
+**TLDR Summary**
 
-### Amazon (AMZN)
-- Net Gain: $72,769,230.71
-- Recent News: Amazon is poised for its next decade of growth after delivering a return of around 1,000% over the last decade. Its stock price recently hit a new all-time high.
-- Recommendation: With its stock hitting an all-time high and positive future growth outlook, Amazon presents a solid investment opportunity for long-term investors.
+Based on the verified data, the net gains for the three stocks are as follows: 
 
-### SAP (SAP)
-- Net Gain: $39,912,931.04
-- Recent News: SAP recently announced an agreement to acquire WalkMe, a digital adoption platform, in an all-cash deal valued at about $1.5 billion. The acquisition is expected to close in the third quarter of 2024.
-- Recommendation: The recent acquisition of WalkMe indicates potential for future growth. Investors should keep a close eye on SAP's performance post-acquisition.
+1. Amazon (AMZN) - $72,769,230.71
+2. SAP - $39,912,931.04
+3. Apple (AAPL) - $25,738,882.29
 
-### Apple (AAPL)
-- Net Gain: $25,738,882.29
-- Recent News: Apple's stock has risen substantially since releasing its fiscal Q2 earnings. It is predicted to still be undervalued based on its powerful free cash flow.
-- Recommendation: Given the powerful free cash flow and the potential for an AI-driven growth cycle, Apple appears to be a good investment opportunity.
+Amazon has the highest net gain, followed by SAP and Apple. 
 
-## Other Observations
+**Actionable Insights**
 
-While all three stocks show promising prospects, it's important for investors to consider their own risk tolerance and investment goals before making investment decisions. It's also important to keep an eye on the market trends and news, as they can greatly impact the stock prices.
+- **Amazon (AMZN):** The company's stock is seen as a good buy due to its attractive valuation and significant dominance in the e-commerce market.
+- **SAP:** The company is making a significant acquisition of WalkMe Ltd., which could potentially boost its value and market position.
+- **Apple (AAPL):** The company's stock has reached a $3 trillion valuation, largely due to the hype surrounding the introduction of AI to iPhones. This could be a significant catalyst for Apple's future growth.
 
-## Conclusion
+**Strategic Recommendations**
 
-In conclusion, Amazon, SAP, and Apple present promising investment opportunities based on their recent news and net gain data. However, as with all investments, potential investors should conduct thorough research and consider their own investment goals and risk tolerance.
+- **Amazon (AMZN):** Given its dominant position in e-commerce and attractive valuation, it might be a good idea to consider increasing investments in Amazon.
+- **SAP:** Considering the potential value boost from the recent acquisition, investors might want to keep a close watch on SAP's performance and consider it for their portfolio.
+- **Apple (AAPL):** With the hype around the introduction of AI to iPhones, Apple's stock could see significant growth. It might be a good time to invest or increase existing investments. 
+
+**Other Observations**
+
+The companies have seen fluctuations in their stock prices but generally perform well. The current trends and developments indicate potential for further growth.
+
+**Conclusion**
+
+Given the net gains and recent developments, Amazon, SAP, and Apple seem to be promising investments. However, as with any investment decision, it's important to consider individual financial goals, risk tolerance, and market conditions. It's always recommended to conduct further research or consult with a financial advisor before making investment decisions. 
+
+This report provides a high-level overview of the current events and trends impacting these stocks, but the rapidly changing market environment necessitates regular monitoring and analysis of investment portfolios.
+
+> Finished chain.
+
 ```
 
 ### Limitations and Considerations
@@ -503,9 +513,11 @@ While the combination of MongoDB's Aggregation Framework and GenAI represents a 
 
 1. **Dependence on Historical Data:** Past performance may not always predict future results, especially in unpredictable markets where unforeseen events can significantly impact investment outcomes.
 
-2. **Uncertainty in Predictions:** Despite the sophistication of the analysis, there will always be an inherent degree of uncertainty in investment predictions. Future outcomes are inherently unknowable, and factors beyond the scope of historical data can influence results.
+2. **Dependence on Search Result Snippets:** The snippets provided by DuckDuckGo may not always provide enough information. You could take this a step further by scraping the search result URL using something like [Firecrawl](https://www.firecrawl.dev/) - which can crawl and convert any website into clean markdown or structured data.
 
-3. **LLM Limitations:** LLMs are still evolving, and their ability to research, interpret and analyze data is continually improving. However, biases in training data or limitations in the model's architecture could lead to inaccurate or misleading insights.
+3. **Uncertainty in Predictions:** Despite the sophistication of the analysis, there will always be an inherent degree of uncertainty in investment predictions. Future outcomes are inherently unknowable, and factors beyond the scope of historical data can influence results.
+
+4. **LLM Limitations:** LLMs are still evolving, and their ability to research, interpret and analyze data is continually improving. However, biases in training data or limitations in the model's architecture could lead to inaccurate or misleading insights.
 
 By being aware of these limitations and taking steps to mitigate them, you can ensure a more responsible and well-rounded approach to investment analysis.
 
