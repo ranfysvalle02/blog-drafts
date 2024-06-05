@@ -63,6 +63,18 @@ This MongoDB Aggregation Framework pipeline will be composed of multiple stages,
 
 4. `$sort`: This stage reorders the document stream by a specified sort key. We're sorting the documents by `netGain` in descending order.
 
+5. `$limit`: This MongoDB Aggregation Framework pipeline will be composed of multiple stages, each performing a specific operation on the data:
+
+1. `$unwind`: This stage deconstructs an array field from the input documents to output a document for each element. Here we're unwinding the `transactions` array.
+
+2. `$group`: This stage groups input documents by a specified identifier expression and applies the accumulator expression(s) to each group. We're grouping by `transactions.symbol` and calculating the `buyValue` and `sellValue` for each group.
+
+3. `$project`: This stage reshapes each document in the stream by renaming, adding, or removing fields, as well as creating computed values and sub-documents. We're projecting the `symbol` and `netGain` (calculated by subtracting `buyValue` from `sellValue`) fields.
+
+4. `$sort`: This stage reorders the document stream by a specified sort key. We're sorting the documents by `netGain` in descending order.
+
+5. `$limit`: This stage limits the number of documents passed to the next stage in the pipeline.
+
 ![MongoDB Aggregation Pipeline Results](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x221.png)
 
 ### Supercharge Investment Analysis with MongoDB and CrewAI
@@ -312,7 +324,9 @@ Here's a breakdown of what the MongoDB pipeline does:
 
 4. **Projecting Results:** Now, the `$project` operator steps in to define the final output format. It discards the automatically generated grouping identifier (`_id`) by setting it to 0. It then renames the grouping field (`_id` which held the "transactions.symbol") to a clearer name, "symbol". Finally, it calculates the net gain or loss for each symbol using the `$subtract` operator. This subtracts the `buyValue` from the `sellValue` to determine the net gain or loss for that symbol.
 
-5. **Sorting by Net Gain:** Lastly, the `$sort` operator organizes the results. It sorts the documents based on the "netGain" field in descending order (-1). This means symbols with the highest net gain (most profitable) will appear first in the final output.
+5. **Sorting by Net Gain:** The `$sort` operator organizes the results. It sorts the documents based on the "netGain" field in descending order (-1). This means symbols with the highest net gain (most profitable) will appear first in the final output.
+
+6. **Limiting Results:** Lastly, the `$limit` operator is used to limit the number of documents passed to the next stage in the pipeline. In this case, it's set to 3, meaning only the top three documents (stocks with the highest net gain) will be included in the final output.
 
 ![MongoDB Aggregation Pipeline Results Screenshot](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x221.png)
 
