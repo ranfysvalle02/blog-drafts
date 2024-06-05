@@ -108,6 +108,21 @@ In essence, CrewAI's powerful combination of agents, tasks, and tools empowers y
 
 In this section, we'll walk through the Python code used to perform financial analysis based on transaction data stored in MongoDB, using GenAI for data analysis and insights. The Python version used during development was: `3.10.10`
 
+Here are the required packages to run the code. Make sure they are installed properly before continuing.
+
+#### **file:requirements.txt**
+```
+pymongo==4.7.2
+crewai==0.22.5
+langchain==0.2.1
+langchain-community==0.2.1
+langchain-openai==0.0.5
+duckduckgo-search==6.1.5
+```
+
+You can install all the packages at once by running `pip install -r requirements.txt`
+
+
 ### MongoDB Setup
 
 First, we set up a connection to MongoDB using [pymongo](https://pymongo.readthedocs.io/en/stable/). This is where our transaction data is stored. We'll be performing an aggregation on this data later.
@@ -191,17 +206,16 @@ We'll be using CrewAI to manage our agents and tasks. In this case, we have one 
 
 We'll be using CrewAI to manage our agents and tasks. In this case, we have one agent - a researcher who is tasked with analyzing the data and providing actionable insights. ​​In CrewAI, tasks are the individual steps that make up a larger workflow.
 
+**Agents & Tasks: Working Together as a Crew**
 
-**Agents & Tasks: Working Together**
-
-CrewAI orchestrates the execution of tasks by agents.
+CrewAI orchestrates the execution of tasks by agents. In CrewAI, a Crew represents a collaborative group of agents working together to achieve a set of tasks. While our example is a single-agent Crew for simplicity, CrewAI's power truly shines when you create multi-agent Crews for complex workflows.
 
 * **Tasks:** These are the individual steps that make up your investment research workflow. Each task represents a specific action the agent needs to take to achieve the overall goal.
 * **Agents:** Think of these as the workers who execute the tasks. We'll have a dedicated "Investment Researcher" agent equipped with the necessary tools and knowledge to complete the assigned tasks.
 
 **Fine-Tuning Your Investment Researcher**
 
-CrewAI allows you to customize your agent's behavior through various parameters:
+CrewAI allows you to customize your agent's behavior through various parameters: 
 
 * **Role & Goal (AGENT_ROLE & AGENT_GOAL):** These define the agent's purpose.  Here, we set the role to "Investment Researcher" with a goal of "identifying investment opportunities." This guides the agent towards relevant data sources and analysis methods (e.g., market trends, company news, analyst reports).
 * **Backstory:** Craft a backstory like "Expert stock researcher with decades of experience" to add context and potentially influence the agent's communication style and interpretation of information.
