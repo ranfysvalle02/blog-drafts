@@ -154,18 +154,6 @@ default_llm = AzureChatOpenAI(
 )
 ```
 
-### Initial Setup
-
-Then let's set the agent role and the agent goal as a variable so that it can be accessed throughout the script.
-
-#### **file: investment_analysis.py**
-```python
-# Initial Setup
-AGENT_ROLE = "Investment Researcher"
-AGENT_GOAL = """
-  Research stock market trends, company news, and analyst reports to identify potential investment opportunities.
-"""
-```
 
 ### Web Search API Setup
 
@@ -202,19 +190,20 @@ We'll be using CrewAI to manage our agents and tasks. In this case, we have one 
 ```python
 # Research Agent Setup
 from crewai import Crew, Process, Task, Agent
-
+AGENT_ROLE = "Investment Researcher"
+AGENT_GOAL = """
+  Research stock market trends, company news, and analyst reports to identify potential investment opportunities.
+"""
 researcher = Agent(
-  role='Investment Researcher',
-  goal="""
-  Research market trends, company news, and analyst reports to identify potential investment opportunities.
-  """,
+  role=AGENT_ROLE,
+  goal=AGENT_GOAL,
   verbose=True,
   llm=default_llm,
-  backstory='Expert in using search engines to uncover relevant financial data, news articles, and industry analysis.',
+  backstory='Expert stock researcher with decades of experience.',
   tools=[search_tool]
 )
 
-analysis_task = Task(
+task1 = Task(
   description="""
 Using the following information:
 
@@ -222,23 +211,34 @@ Using the following information:
 {agg_data}
 
 *note*
-The data represents the average price of each stock symbol for each transaction type (buy/sell),
-and the total amount of transactions for each type. This would give us insight into the average costs and proceeds from each stock,
-as well as the volume of transactions for each stock.
+The data represents the net gain or loss of each stock symbol for each transaction type (buy/sell).
+Net gain or loss is a crucial metric used to gauge the profitability or efficiency of an investment. 
+It's computed by subtracting the total buy value from the total sell value for each stock.
 [END VERIFIED DATA]
 
 [TASK]
-- Provide a financial summary of the VERIFIED DATA
-- Research current events and trends, and provide actionable insights and recommendations
+- Generate a detailed financial report of the VERIFIED DATA.
+- Research current events and trends, and provide actionable insights and recommendations.
+
+
+[report criteria]
+  - Include a TLDR summary
+  - Use all available information to prepare this final financial report
+  - Include Key Insights
+  - Provide Strategic Recommendations
+  - Include a 'Other Observations' section
+  - Include a 'Conclusion' section
+  - IMPORTANT! You are a friendly and helpful financial expert. Always provide the best possible answer using the available information.
+[end report criteria]
   """,
   agent=researcher,
-  expected_output='concise markdown financial summary and list of actionable insights and recommendations',
+  expected_output='concise markdown financial summary of the verified data and list of key points and insights from researching current events',
   tools=[search_tool],
 )
-
+# Crew Creation
 tech_crew = Crew(
   agents=[researcher],
-  tasks=[analysis_task],
+  tasks=[task1],
   process=Process.sequential
 )
 ```
