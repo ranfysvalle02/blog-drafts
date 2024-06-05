@@ -38,7 +38,7 @@ This collection contains transactions details for users. Each document contains 
 
 ### The Task: Uncover Hidden Opportunities
 
-Picture this: You're running a company with a standard financial services application. Your objective? To spot hidden opportunities in the market by scrutinizing all transaction data and identifying the top three stocks based on Return on Investment (ROI). 
+Picture this: You're running a company with a standard financial services application. Your objective? To spot hidden opportunities in the market by scrutinizing all transaction data and identifying the top three stocks based on Return on Investment (ROI). By identifying which stocks are yielding the highest ROI, we can then delve into current events and market trends to uncover potential opportunities in the stocks that have historically delivered the best ROI, according to our transaction data.
 
 ROI is a crucial metric used to gauge the profitability or efficiency of an investment. It's computed by dividing the net profit of an investment by its cost, typically expressed as a percentage. By determining which stocks are delivering the highest ROI, we can then delve into current events and market trends to uncover potential opportunities in the stocks that have historically shown the best ROI, according to our transaction data.
 
