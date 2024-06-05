@@ -63,16 +63,6 @@ This MongoDB Aggregation Framework pipeline will be composed of multiple stages,
 
 4. `$sort`: This stage reorders the document stream by a specified sort key. We're sorting the documents by `netGain` in descending order.
 
-5. `$limit`: This MongoDB Aggregation Framework pipeline will be composed of multiple stages, each performing a specific operation on the data:
-
-1. `$unwind`: This stage deconstructs an array field from the input documents to output a document for each element. Here we're unwinding the `transactions` array.
-
-2. `$group`: This stage groups input documents by a specified identifier expression and applies the accumulator expression(s) to each group. We're grouping by `transactions.symbol` and calculating the `buyValue` and `sellValue` for each group.
-
-3. `$project`: This stage reshapes each document in the stream by renaming, adding, or removing fields, as well as creating computed values and sub-documents. We're projecting the `symbol` and `netGain` (calculated by subtracting `buyValue` from `sellValue`) fields.
-
-4. `$sort`: This stage reorders the document stream by a specified sort key. We're sorting the documents by `netGain` in descending order.
-
 5. `$limit`: This stage limits the number of documents passed to the next stage in the pipeline.
 
 ![MongoDB Aggregation Pipeline Results](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x221.png)
