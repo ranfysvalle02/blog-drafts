@@ -31,7 +31,7 @@ This collection contains transactions details for users. Each document contains 
 - account_id: This field establishes a connection between the transaction and its corresponding account.
 - date: This represents the precise date and time at which the transaction took place.
 - transaction_code: This indicates the nature of the transaction, such as a deposit, withdrawal, buy, or sell.
-- symbol: If relevant, this field denotes the symbol of the stock or investment involved in the transaction.
+- symbol: This field denotes the symbol of the stock or investment involved in the transaction.
 - amount: This reflects the value of the transaction.
 - total: This captures the comprehensive transacted amount, inclusive of quantities, fees, and any additional charges associated with the transaction.
 
