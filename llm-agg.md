@@ -169,55 +169,24 @@ AGENT_GOAL = """
 """
 ```
 
-### Firecrawl Search API Setup
+### Web Search API Setup
 
-We're also going to need the [Firecrawl Search API](https://docs.firecrawl.dev/api-reference/endpoint/search). This will be used by our "researcher" agent to find relevant financial data and news articles.
+For this example, we will be using the [The DuckDuckGo Search Langchain Integration](https://python.langchain.com/v0.2/docs/integrations/tools/ddg/). The DuckDuckGo Search is a component that allows users to search the web using DuckDuckGo. You can implement your Search Tool with your Search API of choice - it does not have to be DuckDuckGo. 
 
 #### **file: investment_analysis.py**
 ```python
-from langchain.agents import Tool
-# FireCrawl Setup
-from firecrawl import FirecrawlApp
-firecrawler = FirecrawlApp(api_key='fc-__API_KEY_GOES_HERE__')
-
-# Search Tool - Summarize Web Search
-def summarize_websearch(text,q,site):
-    print("Summarizing:" +site)
-    print("search query:"+q)
-    prompt = "You are an experienced:" + AGENT_ROLE + " who is researching: " + str(q)
-    prompt += "\n\nGOAL:" + AGENT_GOAL
-    prompt += "\n\nTASK:" + "Write a detailed executive summary in bullet points (*) from the following text:" + text
-    print(prompt)
-    return default_llm.invoke(prompt).content
+# Web Search Setup
+from langchain.tools import tool
+from langchain_community.tools import DuckDuckGoSearchResults
+duck_duck_go = DuckDuckGoSearchResults(backend="news")
 
 # Search Tool - Web Search
-def search_function(query: str):
-    results = firecrawler.search(query,{
-      'pageOptions': {
-          'onlyMainContent': True,
-          'fetchPageContent': True,
-          'includeHtml': False,
-      },
-      'searchOptions': {
-          'limit': 1 # Limit to 1 search result, adjust as desired
-      }
-    })
-    search_text = ""
-    print("Search Results:")
-    for result in results:
-        print(search_text)
-        search_text += summarize_websearch(
-            str("[search_result:"+result["metadata"]["sourceURL"]+"]\n" + result["markdown"]+"\n\n\n\n"),
-            query,
-            result["metadata"]["sourceURL"]
-        )
-    return str(search_text)
-
-search_tool = Tool(
-        name="Web Search",
-        func=search_function,
-        description="Always use this tool to search for information on the web."
-)
+@tool
+def search_tool(query: str):
+  """
+  Perform online research on a particular stock.
+  """
+  return duck_duck_go.run(query)
 ```
 
 ### CrewAI Setup
@@ -380,49 +349,18 @@ AGENT_GOAL = """
   Research stock market trends, company news, and analyst reports to identify potential investment opportunities.
 """
 
-# FireCrawl Setup
-from langchain.agents import Tool
-from firecrawl import FirecrawlApp
-firecrawler = FirecrawlApp(api_key='fc-__API_KEY_GOES_HERE__')
-
-# Search Tool - Summarize Web Search
-def summarize_websearch(text,q,site):
-    print("Summarizing:" +site)
-    print("search query:"+q)
-    prompt = "You are an experienced:" + AGENT_ROLE + " who is researching: " + str(q)
-    prompt += "\n\nGOAL:" + AGENT_GOAL
-    prompt += "\n\nTASK:" + "Write a detailed executive summary in bullet points (*) from the following text:" + text
-    print(prompt)
-    return default_llm.invoke(prompt).content
+# Web Search Setup
+from langchain.tools import tool
+from langchain_community.tools import DuckDuckGoSearchResults
+duck_duck_go = DuckDuckGoSearchResults(backend="news",max_results=10)
 
 # Search Tool - Web Search
-def search_function(query: str):
-    results = firecrawler.search(query,{
-      'pageOptions': {
-          'onlyMainContent': True,
-          'fetchPageContent': True,
-          'includeHtml': False,
-      },
-      'searchOptions': {
-          'limit': 1 # Limit to 1 search result, adjust as desired
-      }
-    })
-    search_text = ""
-    print("Search Results:")
-    for result in results:
-        print(search_text)
-        search_text += summarize_websearch(
-            str("[search_result:"+result["metadata"]["sourceURL"]+"]\n" + result["markdown"]+"\n\n\n\n"),
-            query,
-            result["metadata"]["sourceURL"]
-        )
-    return str(search_text)
-
-search_tool = Tool(
-        name="Web Search",
-        func=search_function,
-        description="Always use this tool to search for information on the web."
-)
+@tool
+def search_tool(query: str):
+  """
+  Perform online research on a particular stock.
+  """
+  return duck_duck_go.run(query)
 
 # Research Agent Setup
 from crewai import Crew, Process, Task, Agent
@@ -520,55 +458,37 @@ tech_crew.kickoff(inputs={'agg_data': str(results)})
 ### Example OUTPUT
 
 ```
-Thought: 
-Based on the extensive research I have conducted, I can now summarize the financial performance of each company as well as provide actionable insights and recommendations.
+Final Answer:
+# Detailed Financial Report
 
-Final Answer: 
-Financial Summary:
+## TLDR Summary
 
-1. Amazon (AMZN): The company has shown a strong ROI and is expected to improve in the next three years. Its shares are at an all-time high, indicating potential for future growth. 
+Based on the net gain data and recent news trends, all three stocks – Amazon (AMZN), SAP (SAP), and Apple (AAPL) – show promising prospects. Amazon and Apple are experiencing growth and their stocks are hitting new highs. SAP has recently acquired WalkMe, indicating potential future growth.
 
-2. SAP (SAP): Despite strong performance in Q1 2024, SAP's returns are not growing. This, along with its exit from Russia, could potentially signal concerns for investors. 
+## Key Insights and Recommendations
 
-3. Apple (AAPL): Apple is set to kick off its WWDC and is expected to focus on software offerings. Its Vision Pro mixed reality headset is due for a major overhaul to integrate AI. However, its stocks have stagnated so far this year. 
+### Amazon (AMZN)
+- Net Gain: $72,769,230.71
+- Recent News: Amazon is poised for its next decade of growth after delivering a return of around 1,000% over the last decade. Its stock price recently hit a new all-time high.
+- Recommendation: With its stock hitting an all-time high and positive future growth outlook, Amazon presents a solid investment opportunity for long-term investors.
 
-4. Adobe (ADBE): Adobe's stock has seen a decline but also increased interest from investors. However, the company's year-to-date return is underperforming the S&P 500. 
+### SAP (SAP)
+- Net Gain: $39,912,931.04
+- Recent News: SAP recently announced an agreement to acquire WalkMe, a digital adoption platform, in an all-cash deal valued at about $1.5 billion. The acquisition is expected to close in the third quarter of 2024.
+- Recommendation: The recent acquisition of WalkMe indicates potential for future growth. Investors should keep a close eye on SAP's performance post-acquisition.
 
-5. BlackBerry (BB): BlackBerry has been in the news due to its involvement in the recent meme stock rally. However, experts predict that the meme stock crowd is expected to 'exit quickly', potentially leading to a drop in these companies' stock prices. 
+### Apple (AAPL)
+- Net Gain: $25,738,882.29
+- Recent News: Apple's stock has risen substantially since releasing its fiscal Q2 earnings. It is predicted to still be undervalued based on its powerful free cash flow.
+- Recommendation: Given the powerful free cash flow and the potential for an AI-driven growth cycle, Apple appears to be a good investment opportunity.
 
-6. AMD (AMD): The company, along with Nvidia, unveiled new AI chips, driving their shares upward. However, AMD and Nvidia face competition from other companies such as Intel and Arm Holdings. 
+## Other Observations
 
-7. Cisco (CSCO): Cisco is expected to be among the key stocks defining the dividend trend in 2024. However, insider sales have been observed recently. 
+While all three stocks show promising prospects, it's important for investors to consider their own risk tolerance and investment goals before making investment decisions. It's also important to keep an eye on the market trends and news, as they can greatly impact the stock prices.
 
-8. Nvidia (NVDA): Nvidia is seen as a critical player in the stock market with a bullish perspective for its future stock price movements. 
+## Conclusion
 
-9. eBay (EBAY): eBay stocks are down 33%, however, the company's dividends are seen as a long-term growth opportunity. 
-
-10. Facebook (FB), Zynga (ZNGA), Atlassian (TEAM), Netflix (NFLX), Intel (INTC), Salesforce (CRM), Microsoft (MSFT), IBM (IBM), and Google (GOOG) have shown negative ROI. 
-
-Actionable Insights and Recommendations:
-
-1. Amazon: Given its strong performance and future growth potential, it could be a good investment opportunity. However, investors should monitor its high share prices to determine the right time to buy. 
-
-2. SAP: Investors should monitor SAP's growth rates and its impact from exiting the Russian market. 
-
-3. Apple: Investors could look out for new offerings from the WWDC and developments in the Vision Pro mixed reality headset. 
-
-4. Adobe: Adobe's upcoming Q2 FY2024 earnings results should be monitored for signs of potential growth. 
-
-5. BlackBerry: Investors should be cautious due to the potential drop in stock prices from the meme stock rally. 
-
-6. AMD: The company's rivalry with Nvidia and the launch of new products could provide growth opportunities. 
-
-7. Cisco: The company's recent strategic moves and its recognition among analysts suggest potential for growth. 
-
-8. Nvidia: The company's expansion into the CPU market with ARM technology by 2025 represents a significant growth opportunity. 
-
-9. eBay: Despite its current performance being below the 52-week high, the company's dividends are seen as a long-term growth opportunity. 
-
-10. For companies with negative ROI, it's advisable to monitor their performance closely before making investment decisions. 
-
-In conclusion, it's important to consider each company's current performance, future growth potential, and market trends before making investment decisions.
+In conclusion, Amazon, SAP, and Apple present promising investment opportunities based on their recent news and net gain data. However, as with all investments, potential investors should conduct thorough research and consider their own investment goals and risk tolerance.
 ```
 
 ### Limitations and Considerations
