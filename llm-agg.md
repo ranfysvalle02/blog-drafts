@@ -25,7 +25,8 @@ In this blog post, we’ll combine the power of the MongoDB Aggregation framewor
 The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ranfysvalle02/mdb-agg-crewai/blob/main/investment_analysis.py)
 
 ### `sample_analytics.transactions`
-This collection contains transactions details for users. Each document contains an account id, a count of how many transactions are in this set, the start and end dates for transactions covered by this document, and a list of sub documents. Each sub document represents a single transaction and the related information for that transaction.
+
+The [sample_analytics database](https://www.mongodb.com/docs/atlas/sample-data/sample-analytics/) contains three collections (customers, accounts, transactions) for a typical finanacial services application. The transactions collection contains transactions details for users. Each document contains an account id, a count of how many transactions are in this set, the start and end dates for transactions covered by this document, and a list of sub documents. Each sub document represents a single transaction and the related information for that transaction.
 
 - `transaction_id`: This is a unique identifier that distinctly marks each transaction.
 - `account_id`: This field establishes a connection between the transaction and its corresponding account.
@@ -244,6 +245,7 @@ tech_crew = Crew(
   tasks=[task1],
   process=Process.sequential
 )
+
 ```
 
 ### MongoDB Aggregation Pipeline
@@ -334,6 +336,8 @@ tech_crew.kickoff(inputs={'agg_data': str(results)})
 ```python
 import os
 import pymongo
+import pprint 
+
 # MongoDB Setup
 MDB_URI = "mongodb+srv://<user>:<password>@cluster0.abc123.mongodb.net/"
 client = pymongo.MongoClient(MDB_URI)
@@ -352,13 +356,6 @@ default_llm = AzureChatOpenAI(
 	api_key=AZURE_OPENAI_API_KEY
 )
 
-
-# Initial Setup
-AGENT_ROLE = "Investment Researcher"
-AGENT_GOAL = """
-  Research stock market trends, company news, and analyst reports to identify potential investment opportunities.
-"""
-
 # Web Search Setup
 from langchain.tools import tool
 from langchain_community.tools import DuckDuckGoSearchResults
@@ -369,12 +366,20 @@ duck_duck_go = DuckDuckGoSearchResults(backend="news",max_results=10)
 def search_tool(query: str):
   """
   Perform online research on a particular stock.
+  Will return search results along with snippets of each result.
   """
-  return duck_duck_go.run(query)
+  print("\n\nSearching DuckDuckGo for:", query)
+  search_results = duck_duck_go.run(query)
+  search_results_str =  "[recent news for: " + query + "]\n" + str(search_results)
+  return search_results_str
+
 
 # Research Agent Setup
 from crewai import Crew, Process, Task, Agent
-
+AGENT_ROLE = "Investment Researcher"
+AGENT_GOAL = """
+  Research stock market trends, company news, and analyst reports to identify potential investment opportunities.
+"""
 researcher = Agent(
   role=AGENT_ROLE,
   goal=AGENT_GOAL,
@@ -384,7 +389,7 @@ researcher = Agent(
   tools=[search_tool]
 )
 
-analysis_task = Task(
+task1 = Task(
   description="""
 Using the following information:
 
@@ -392,24 +397,34 @@ Using the following information:
 {agg_data}
 
 *note*
-The data represents the average price of each stock symbol for each transaction type (buy/sell),
-and the total amount of transactions for each type. This would give us insight into the average costs and proceeds from each stock,
-as well as the volume of transactions for each stock.
+The data represents the net gain or loss of each stock symbol for each transaction type (buy/sell).
+Net gain or loss is a crucial metric used to gauge the profitability or efficiency of an investment. 
+It's computed by subtracting the total buy value from the total sell value for each stock.
 [END VERIFIED DATA]
 
 [TASK]
-- Provide a financial summary of the VERIFIED DATA
-- Research current events and trends, and provide actionable insights and recommendations
+- Generate a detailed financial report of the VERIFIED DATA.
+- Research current events and trends, and provide actionable insights and recommendations.
+
+
+[report criteria]
+  - Use all available information to prepare this final financial report
+  - Include a TLDR summary
+  - Include 'Actionable Insights'
+  - Include 'Strategic Recommendations'
+  - Include a 'Other Observations' section
+  - Include a 'Conclusion' section
+  - IMPORTANT! You are a friendly and helpful financial expert. Always provide the best possible answer using the available information.
+[end report criteria]
   """,
   agent=researcher,
-  expected_output='concise markdown financial summary and list of actionable insights and recommendations',
+  expected_output='concise markdown financial summary of the verified data and list of key points and insights from researching current events',
   tools=[search_tool],
 )
-
 # Crew Creation
 tech_crew = Crew(
   agents=[researcher],
-  tasks=[analysis_task],
+  tasks=[task1],
   process=Process.sequential
 )
 
@@ -458,7 +473,8 @@ client.close()
 
 # Print MongoDB Aggregation Pipeline Results
 print("MongoDB Aggregation Pipeline Results:")
-print(results)
+
+pprint.pprint(results) #pprint is used to  to “pretty-print” arbitrary Python data structures
 
 # Start the task execution
 tech_crew.kickoff(inputs={'agg_data': str(results)})
