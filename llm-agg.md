@@ -49,7 +49,7 @@ Navigating these complexities can be made more efficient by harnessing the power
 
 ### The Solution: MongoDB's Aggregation Framework
 
-![MongoDB Aggregation Pipeline Visualization](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/xa1.png)
+![MongoDB Aggregation Pipeline Visualization](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x221.png)
 
 The aggregation pipeline we will be building calculates the total buy and sell values for each stock, and then calculates the net gain or loss by subtracting the total buy value from the total sell value. The stocks are then sorted by net gain or loss in descending order, so the stocks with the highest net gains are at the top. If you’re new to MongoDB, I suggest you build this aggregation pipeline using the aggregation builder in compass, then export it to Python. [The Aggregation Pipeline Builder in MongoDB Compass](https://www.mongodb.com/docs/compass/current/create-agg-pipeline/) helps you create aggregation pipelines to process documents from a collection or view and return computed results. 
 
