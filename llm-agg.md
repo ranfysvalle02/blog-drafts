@@ -23,6 +23,16 @@ In this blog post, we’ll combine the power of the MongoDB Aggregation framewor
 
 The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ranfysvalle02/mdb-agg-crewai/blob/main/investment_analysis.py)
 
+**Before We Start**
+
+To follow along, you'll need:
+
+1. **MongoDB Atlas Cluster:** [Create your free cluster](https://www.mongodb.com/docs/guides/atlas/cluster/) and [load the Sample Dataset](https://www.mongodb.com/basics/sample-database). The transaction data in the sample analytics dataset offers a realistic dataset that allows users to hone their skills in data analysis, querying, and aggregation, particularly in the context of financial data.
+
+2. **LLM Resource:** CrewAI supports various LLM connections, including local models (Ollama), APIs like Azure, and all LangChain LLM components for customizable AI solutions. [Click here to learn more about CrewAI LLM Support](https://docs.crewai.com/how-to/LLM-Connections/)
+
+**note:** _The source code in the example uses Azure OpenAI. To follow along, you’ll need a valid [Azure OpenAI deployment](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource?pivots=web-portal)_
+
 ### `sample_analytics.transactions`
 
 The [sample_analytics database](https://www.mongodb.com/docs/atlas/sample-data/sample-analytics/) contains three collections (customers, accounts, transactions) for a typical financial services application. The transactions collection contains transaction details for users. Each document contains an account id, a count of how many transactions are in this set, the start and end dates for transactions covered by this document, and a list of sub documents. Each sub document represents a single transaction and the related information for that transaction.
@@ -66,22 +76,6 @@ Navigating these complexities can be made more efficient by harnessing the power
 
 The aggregation pipeline we will be building calculates the total buy and sell values for each stock, and then calculates the net gain or loss by subtracting the total buy value from the total sell value. The stocks are then sorted by net gain or loss in descending order, so the stocks with the highest net gains are at the top. If you’re new to MongoDB, I suggest you build this aggregation pipeline using the aggregation builder in compass, then export it to Python. [The Aggregation Pipeline Builder in MongoDB Compass](https://www.mongodb.com/docs/compass/current/create-agg-pipeline/) helps you create aggregation pipelines to process documents from a collection or view and return computed results.
 
-In order to calculate the total buy and sell values for each stock we must first unwind the 'transactions' array, then group by `transactions.symbol` and calculate the `buyValue` and `sellValue` for each group. Project the `symbol` and `netGain` fields (calculated by subtracting `buyValue` from `sellValue`) fields. Sort by `netGain` in descending order.
-
-This MongoDB Aggregation Framework pipeline will be composed of multiple stages, each performing a specific operation on the data:
-
-1. `$unwind`: This stage deconstructs an array field from the input documents to output a document for each element. Here we're unwinding the `transactions` array.
-
-2. `$group`: This stage groups input documents by a specified identifier expression and applies the accumulator expression(s) to each group. We're grouping by `transactions.symbol` and calculating the `buyValue` and `sellValue` for each group.
-
-3. `$project`: This stage reshapes each document in the stream by renaming, adding, or removing fields, as well as creating computed values and sub-documents. We're projecting the `symbol` and `netGain` (calculated by subtracting `buyValue` from `sellValue`) fields.
-
-4. `$sort`: This stage reorders the document stream by a specified sort key. We're sorting the documents by `netGain` in descending order.
-
-5. `$limit`: This stage limits the number of documents passed to the next stage in the pipeline.
-
-![MongoDB Aggregation Pipeline Results](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x221.png)
-
 ### Supercharge Investment Analysis with MongoDB and CrewAI
 
 ![CrewAI Visualization](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/HighLevelChart_noBG.jpg)
@@ -109,25 +103,14 @@ In essence, CrewAI's powerful combination of agents, tasks, and tools empowers y
 * **Streamline workflows:** Design efficient workflows that leverage the strengths of AI collaboration.
 * **Unlock the true potential of AI:** Move beyond basic AI functionalities and harness the power of collaborative AI for complex projects.
 
-**Before We Start**
-
-To follow along, you'll need:
-
-1. **MongoDB Atlas Cluster:** [Create your free cluster](https://www.mongodb.com/docs/guides/atlas/cluster/) and [load the Sample Dataset](https://www.mongodb.com/basics/sample-database). The transaction data in the sample analytics dataset offers a realistic dataset that allows users to hone their skills in data analysis, querying, and aggregation, particularly in the context of financial data.
-
-2. **LLM Resource:** CrewAI supports various LLM connections, including local models (Ollama), APIs like Azure, and all LangChain LLM components for customizable AI solutions. [Click here to learn more about CrewAI LLM Support](https://docs.crewai.com/how-to/LLM-Connections/)
-
-
 
 ### The Code
-
-![MongoDB + CrewAI](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x222.png)
 
 In this section, we'll walk through the Python code used to perform financial analysis based on transaction data stored in MongoDB, using GenAI for data analysis and insights. The Python version used during development was: `3.10.10`
 
 ### MongoDB Setup
 
-First, we set up a connection to MongoDB using pymongo. This is where our transaction data is stored. We'll be performing an aggregation on this data later.
+First, we set up a connection to MongoDB using [pymongo](https://pymongo.readthedocs.io/en/stable/). This is where our transaction data is stored. We'll be performing an aggregation on this data later.
 
 **Important:** While we're including the connection string directly in the code for demonstration purposes, it's not recommended for real-world applications. A more secure approach is to retrieve the connection string from your MongoDB Atlas cluster.
 
@@ -153,7 +136,7 @@ collection = db["transactions"]
 
 ### Azure OpenAI Setup
 
-Next, we set up our Azure OpenAI LLM resource.
+Next, we set up our Azure OpenAI LLM resource. The code in the example uses Azure OpenAI. To follow along, you’ll need a valid [Azure OpenAI deployment](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource?pivots=web-portal)
 
 
 #### **file: investment_analysis.py**
@@ -203,6 +186,26 @@ DuckDuckGo was chosen for this example because it:
 ### CrewAI Setup
 
 We'll be using CrewAI to manage our agents and tasks. In this case, we have one agent - a researcher who is tasked with analyzing the data and providing actionable insights.
+
+### CrewAI Setup
+
+We'll be using CrewAI to manage our agents and tasks. In this case, we have one agent - a researcher who is tasked with analyzing the data and providing actionable insights.
+
+* **Agent Design:** You define individual agents using the `Agent` class. Each agent has several attributes that can be adjusted to fine-tune its behavior:
+
+  * **Role (`AGENT_ROLE`):** This specifies the agent's function within the team (e.g., "Investment Researcher"). Changing the role will steer the agent towards different data sources and analysis methods.
+
+  * **Goal (`AGENT_GOAL`):** This describes the objective the agent is trying to achieve (e.g., "identify investment opportunities"). Changing the goal will also influence the information the agent seeks and the actions it takes.
+
+  * **Backstory (`backstory`):** While not strictly affecting functionality, you can provide a backstory to give the agent context and potentially influence its communication style and the way it interprets information.
+
+  * **Tools (`tools`):** You assign tools (functions or classes) that the agent can use to complete its tasks. The available tools will determine the methods the agent uses to achieve its goal. Adding or removing tools can drastically change the type of data it gathers and the analysis it performs.
+
+  * **Large Language Model (`llm`):** This is the underlying AI model that the agent uses for tasks like text processing and generation. Choosing a different LLM can significantly impact the agent's output. Different LLMs have varying strengths and weaknesses in areas like information retrieval, reasoning, and text generation.
+
+  * **Verbose (`verbose`):** Setting `verbose=True` provides more detailed output during the agent's operation, helping you understand its thought process and identify potential issues.
+
+By adjusting these parameters, you can fine-tune your investment research agent to focus on specific aspects of the market, prioritize certain information sources, and potentially even influence its risk tolerance or investment style (through the `backstory`).
 
 #### **file: investment_analysis.py**
 ```python
@@ -571,4 +574,3 @@ The future of investment analysis belongs to those who embrace the power of data
 Don't just analyze the market – shape it. Start harnessing the potential of MongoDB and AI today, and transform your investment decision-making process.
 
 The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ranfysvalle02/mdb-agg-crewai/blob/main/investment_analysis.py)
-
