@@ -170,9 +170,7 @@ AGENT_GOAL = """
 
 ### Web Search API Setup
 
-For this example, we will be using the [The DuckDuckGo Search Langchain Integration](https://python.langchain.com/v0.2/docs/integrations/tools/ddg/). The DuckDuckGo Search is a component that allows users to search the web using DuckDuckGo. You can implement your Search Tool with your Search API of choice - it does not have to be DuckDuckGo. 
-
-![DuckDuckGo Search Tool](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x219.png)
+For this example, we will be using the [The DuckDuckGo Search Langchain Integration](https://python.langchain.com/v0.2/docs/integrations/tools/ddg/). The DuckDuckGo Search is a component that allows users to search the web using DuckDuckGo. 
 
 #### **file: investment_analysis.py**
 ```python
@@ -189,6 +187,13 @@ def search_tool(query: str):
   """
   return duck_duck_go.run(query)
 ```
+You can implement your Search Tool with your Search API of choice - it does not have to be DuckDuckGo. I chose DuckDuckGo for this example because it:
+
+- **Requires NO API KEY**
+- Easy to use
+- Provides `snippets` I can use to get a general sense of the content
+
+![DuckDuckGo Search Tool](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x219.png)
 
 ### CrewAI Setup
 
