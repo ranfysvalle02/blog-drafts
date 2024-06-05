@@ -20,33 +20,29 @@ While Large Language Models (LLMs) excel at language, they lack the ability to u
 
 That's where MongoDB's Aggregation Framework shines, offering an efficient and powerful solution for complex data analysis tasks. It allows you to process entire collections of data, passing it through a multi-stage data pipeline. Within these stages, you can perform calculations and transformations on entire collections. This bypasses the limitations of LLMs for numerical computations, providing a robust and reliable method for data analysis.
 
-In this blog post, we’ll combine the power of the MongoDB Aggregation framework with GenAI to overcome the limitations of “Classic RAG”. We'll explore this by delving into the MongoDB Atlas Sample Dataset, specifically the `sample_analytics` database. The transaction data offers a realistic dataset that allows users to hone their skills in data analysis, querying, and aggregation, particularly in the context of financial data.
+In this blog post, we’ll combine the power of the MongoDB Aggregation framework with GenAI to overcome the limitations of “Classic RAG”. We'll explore this by delving into the MongoDB Atlas Sample Dataset, specifically the `sample_analytics` database and the `transactions` collection. The sample_analytics database contains three collections for a typical finanacial services application. It has customers, accounts, and transactions. For this example, we'll focus on the transaction data which offers a realistic dataset that allows users to hone their skills in data analysis, querying, and aggregation, particularly in the context of financial data. 
 
 The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ranfysvalle02/mdb-agg-crewai/blob/main/investment_analysis.py)
 
-### Explanation of the `sample_analytics` documents found in the `transactions` collection of the MongoDB Atlas Sample Dataset
+### `sample_analytics.transactions`
+This collection contains transactions details for users. Each document contains an account id, a count of how many transactions are in this set, the start and end dates for transactions covered by this document, and a list of sub documents. Each sub document represents a single transaction and the related information for that transaction.
 
-- transaction_id: This is a unique identifier that distinctly marks each transaction.
-- account_id: This field establishes a connection between the transaction and its corresponding account.
-- date: This represents the precise date and time at which the transaction took place.
-- transaction_code: This indicates the nature of the transaction, such as a deposit, withdrawal, buy, or sell.
-- symbol: If relevant, this field denotes the symbol of the stock or investment involved in the transaction.
-- amount: This reflects the value of the transaction.
-- total: This captures the comprehensive transacted amount, inclusive of quantities, fees, and any additional charges associated with the transaction.
+- `transaction_id`: This is a unique identifier that distinctly marks each transaction.
+- `account_id`: This field establishes a connection between the transaction and its corresponding account.
+- `date`: This represents the precise date and time at which the transaction took place.
+- `transaction_code`: This indicates the nature of the transaction, such as a deposit, withdrawal, buy, or sell.
+- `symbol`: This field denotes the symbol of the stock or investment involved in the transaction.
+- `amount`: This reflects the value of the transaction.
+- `total`: This captures the comprehensive transacted amount, inclusive of quantities, fees, and any additional charges associated with the transaction.
 
-**The Power of Transactional Data**
 
-Stock transaction data offers a wealth of information for investment researchers and analysts. By carefully examining patterns within this data, you can:
+### The Task: Uncover Hidden Opportunities
 
-* **Identify Trends:** Spot emerging market movements and potential shifts in investor sentiment.
-* **Uncover Hidden Opportunities:** Discover undervalued stocks or sectors poised for growth.
-* **Manage Risk:** Assess the volatility of specific holdings and make informed decisions about asset allocation for optimal risk-return balance.
+Picture this: You're running a company with a standard financial services application. Your objective? To spot hidden opportunities in the market by scrutinizing all transaction data and identifying the top three stocks based on net gain or loss. We can then delve into current events and market trends to uncover potential opportunities in the stocks that have historically shown the best net gain, according to our transaction data.
 
-### The Task: Investment Performance Analysis
+Net gain or loss is a crucial metric used to gauge the profitability or efficiency of an investment. It's computed by subtracting the total buy value from the total sell value for each stock. 
 
-Consider a scenario where we need to determine the return on investment (ROI) for each stock over a certain period. This task involves filtering the sales by product, calculating the ROI, and then sorting these to find the stocks with the highest returns. Traditional methods like SQL or application code processing can be complex and inefficient, especially with large datasets.
-
-In SQL, this would require multiple subqueries, temporary tables, and joins - a complex and potentially inefficient process, especially with large datasets. With application code, you would need to retrieve all the data first, calculate the ROI, and then perform the sorting, which could be resource-intensive.
+In a traditional SQL environment, achieving this would require multiple subqueries, temporary tables, and joins - a complex and potentially inefficient process, especially when dealing with large datasets. If you were to use application code, you'd need to first retrieve all the data, calculate the net gain or loss, and then sort the results. This could be a resource-intensive task, demanding significant computational power and time.
 
 Navigating these complexities can be made more efficient by harnessing the power of MongoDB's Aggregation Framework, combined with the intelligent capabilities of AI technologies like CrewAI and Large Language Models (LLMs). This potent combination not only streamlines the process but also uncovers deeper insights from our data.
 
@@ -55,9 +51,9 @@ Navigating these complexities can be made more efficient by harnessing the power
 
 ![MongoDB Aggregation Pipeline Visualization](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/xa1.png)
 
-The aggregation pipeline we will be building calculates the total buy and sell values for each stock, and then calculates the return on investment by subtracting the total buy value from the total sell value. The stocks are then sorted by return on investment in descending order, so the stocks with the highest returns are at the top. If you’re new to MongoDB, I suggest you build this aggregation pipeline using the aggregation builder in compass, then export it to Python. [The Aggregation Pipeline Builder in MongoDB Compass](https://www.mongodb.com/docs/compass/current/create-agg-pipeline/) helps you create aggregation pipelines to process documents from a collection or view and return computed results. 
+The aggregation pipeline we will be building calculates the total buy and sell values for each stock, and then calculates the net gain or loss by subtracting the total buy value from the total sell value. The stocks are then sorted by net gain or loss in descending order, so the stocks with the highest net gains are at the top. If you’re new to MongoDB, I suggest you build this aggregation pipeline using the aggregation builder in compass, then export it to Python. [The Aggregation Pipeline Builder in MongoDB Compass](https://www.mongodb.com/docs/compass/current/create-agg-pipeline/) helps you create aggregation pipelines to process documents from a collection or view and return computed results. 
 
-To achieve this, the pipeline will first unwind the 'transactions' array, then group by `transactions.symbol` and calculate the `buyValue` and `sellValue` for each group. Project the `symbol` and `returnOnInvestment` fields  (calculated by subtracting `buyValue` from `sellValue`) fields. Sort by `returnOnInvestment` in descending order.
+In order to calculate the total buy and sell values for each stock we must first unwind the 'transactions' array, then group by `transactions.symbol` and calculate the `buyValue` and `sellValue` for each group. Project the `symbol` and `netGain` fields (calculated by subtracting `buyValue` from `sellValue`) fields. Sort by `netGain` in descending order.
 
 This MongoDB Aggregation Framework pipeline will be composed of multiple stages, each performing a specific operation on the data:
 
@@ -65,12 +61,9 @@ This MongoDB Aggregation Framework pipeline will be composed of multiple stages,
 
 2. `$group`: This stage groups input documents by a specified identifier expression and applies the accumulator expression(s) to each group. We're grouping by `transactions.symbol` and calculating the `buyValue` and `sellValue` for each group.
 
-3. `$project`: This stage reshapes each document in the stream by renaming, adding, or removing fields, as well as creating computed values and sub-documents. We're projecting the `symbol` and `returnOnInvestment` (calculated by subtracting `buyValue` from `sellValue`) fields.
+3. `$project`: This stage reshapes each document in the stream by renaming, adding, or removing fields, as well as creating computed values and sub-documents. We're projecting the `symbol` and `netGain` (calculated by subtracting `buyValue` from `sellValue`) fields.
 
-4. `$sort`: This stage reorders the document stream by a specified sort key. We're sorting the documents by `returnOnInvestment` in descending order.
-
-
-
+4. `$sort`: This stage reorders the document stream by a specified sort key. We're sorting the documents by `netGain` in descending order.
 
 
 ### Supercharge Investment Analysis with MongoDB and CrewAI
@@ -176,55 +169,24 @@ AGENT_GOAL = """
 """
 ```
 
-### Firecrawl Search API Setup
+### Web Search API Setup
 
-We're also going to need the [Firecrawl Search API](https://docs.firecrawl.dev/api-reference/endpoint/search). This will be used by our "researcher" agent to find relevant financial data and news articles.
+For this example, we will be using the [The DuckDuckGo Search Langchain Integration](https://python.langchain.com/v0.2/docs/integrations/tools/ddg/). The DuckDuckGo Search is a component that allows users to search the web using DuckDuckGo. You can implement your Search Tool with your Search API of choice - it does not have to be DuckDuckGo. 
 
 #### **file: investment_analysis.py**
 ```python
-from langchain.agents import Tool
-# FireCrawl Setup
-from firecrawl import FirecrawlApp
-firecrawler = FirecrawlApp(api_key='fc-__API_KEY_GOES_HERE__')
-
-# Search Tool - Summarize Web Search
-def summarize_websearch(text,q,site):
-    print("Summarizing:" +site)
-    print("search query:"+q)
-    prompt = "You are an experienced:" + AGENT_ROLE + " who is researching: " + str(q)
-    prompt += "\n\nGOAL:" + AGENT_GOAL
-    prompt += "\n\nTASK:" + "Write a detailed executive summary in bullet points (*) from the following text:" + text
-    print(prompt)
-    return default_llm.invoke(prompt).content
+# Web Search Setup
+from langchain.tools import tool
+from langchain_community.tools import DuckDuckGoSearchResults
+duck_duck_go = DuckDuckGoSearchResults(backend="news")
 
 # Search Tool - Web Search
-def search_function(query: str):
-    results = firecrawler.search(query,{
-      'pageOptions': {
-          'onlyMainContent': True,
-          'fetchPageContent': True,
-          'includeHtml': False,
-      },
-      'searchOptions': {
-          'limit': 1 # Limit to 1 search result, adjust as desired
-      }
-    })
-    search_text = ""
-    print("Search Results:")
-    for result in results:
-        print(search_text)
-        search_text += summarize_websearch(
-            str("[search_result:"+result["metadata"]["sourceURL"]+"]\n" + result["markdown"]+"\n\n\n\n"),
-            query,
-            result["metadata"]["sourceURL"]
-        )
-    return str(search_text)
-
-search_tool = Tool(
-        name="Web Search",
-        func=search_function,
-        description="Always use this tool to search for information on the web."
-)
+@tool
+def search_tool(query: str):
+  """
+  Perform online research on a particular stock.
+  """
+  return duck_duck_go.run(query)
 ```
 
 ### CrewAI Setup
@@ -282,7 +244,7 @@ Next, we define our MongoDB aggregation pipeline. This pipeline is used to proce
 
 #### **file: investment_analysis.py**
 ```python
-# Define the aggregation pipeline
+# MongoDB Aggregation Pipeline
 pipeline = [
   {
     "$unwind": "$transactions"  # Deconstruct the transactions array into separate documents
@@ -311,15 +273,16 @@ pipeline = [
     }
   },
   {
-    "$project": {            		 # Project desired fields (renaming and calculating ROI)
+    "$project": {            		 # Project desired fields (renaming and calculating net gain)
       "_id": 0,               		 # Exclude original _id field
       "symbol": "$_id",        		 # Rename _id to symbol for clarity
-      "returnOnInvestment": { "$subtract": ["$sellValue", "$buyValue"] }  # Calculate ROI
+      "netGain": { "$subtract": ["$sellValue", "$buyValue"] }  # Calculate net gain
     }
   },
   {
-    "$sort": { "returnOnInvestment": -1 }  # Sort results by ROI (descending)
-  }
+    "$sort": { "netGain": -1 }  # Sort results by net gain (descending)
+  },
+  {"$limit": 3}  # Limit results to top 3 stocks 
 ]
 
 
@@ -345,7 +308,7 @@ Here's a breakdown of what the MongoDB pipeline does:
 
 5. **Sorting by Return:** Lastly, the `$sort` operator organizes the results. It sorts the documents based on the "returnOnInvestment" field in descending order (-1). This means symbols with the highest return on investment (most profitable) will appear first in the final output.
 
-
+![MongoDB Aggregation Pipeline Results Screenshot](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/ll2.png)
 
 ### Task Execution
 
@@ -386,49 +349,18 @@ AGENT_GOAL = """
   Research stock market trends, company news, and analyst reports to identify potential investment opportunities.
 """
 
-# FireCrawl Setup
-from langchain.agents import Tool
-from firecrawl import FirecrawlApp
-firecrawler = FirecrawlApp(api_key='fc-__API_KEY_GOES_HERE__')
-
-# Search Tool - Summarize Web Search
-def summarize_websearch(text,q,site):
-    print("Summarizing:" +site)
-    print("search query:"+q)
-    prompt = "You are an experienced:" + AGENT_ROLE + " who is researching: " + str(q)
-    prompt += "\n\nGOAL:" + AGENT_GOAL
-    prompt += "\n\nTASK:" + "Write a detailed executive summary in bullet points (*) from the following text:" + text
-    print(prompt)
-    return default_llm.invoke(prompt).content
+# Web Search Setup
+from langchain.tools import tool
+from langchain_community.tools import DuckDuckGoSearchResults
+duck_duck_go = DuckDuckGoSearchResults(backend="news",max_results=10)
 
 # Search Tool - Web Search
-def search_function(query: str):
-    results = firecrawler.search(query,{
-      'pageOptions': {
-          'onlyMainContent': True,
-          'fetchPageContent': True,
-          'includeHtml': False,
-      },
-      'searchOptions': {
-          'limit': 1 # Limit to 1 search result, adjust as desired
-      }
-    })
-    search_text = ""
-    print("Search Results:")
-    for result in results:
-        print(search_text)
-        search_text += summarize_websearch(
-            str("[search_result:"+result["metadata"]["sourceURL"]+"]\n" + result["markdown"]+"\n\n\n\n"),
-            query,
-            result["metadata"]["sourceURL"]
-        )
-    return str(search_text)
-
-search_tool = Tool(
-        name="Web Search",
-        func=search_function,
-        description="Always use this tool to search for information on the web."
-)
+@tool
+def search_tool(query: str):
+  """
+  Perform online research on a particular stock.
+  """
+  return duck_duck_go.run(query)
 
 # Research Agent Setup
 from crewai import Crew, Process, Task, Agent
@@ -473,36 +405,43 @@ tech_crew = Crew(
 
 # MongoDB Aggregation Pipeline
 pipeline = [
-  {"$unwind": "$transactions"},
-  {"$group": {
-      "_id": "$transactions.symbol",
-      "buyValue": {
-        "$sum": {
-          "$cond": [
-            { "$eq": ["$transactions.transaction_code", "buy"] },
-            { "$toDouble": "$transactions.total" },
-            0
-          ]
-        }
+  {
+    "$unwind": "$transactions"  # Deconstruct the transactions array into separate documents
+  },
+  {
+    "$group": {             		 # Group documents by stock symbol
+      "_id": "$transactions.symbol",  # Use symbol as the grouping key
+      "buyValue": {           		 # Calculate total buy value
+   	 "$sum": {
+ 		 "$cond": [          		 # Conditional sum based on transaction type
+   		 { "$eq": ["$transactions.transaction_code", "buy"] },  # Check for "buy" transactions
+   		 { "$toDouble": "$transactions.total" },      		 # Convert total to double for sum
+   		 0                                         		 # Default value for non-buy transactions
+ 		 ]
+   	 }
       },
-      "sellValue": {
-        "$sum": {
-          "$cond": [
-            { "$eq": ["$transactions.transaction_code", "sell"] },
-            { "$toDouble": "$transactions.total" },
-            0
-          ]
-        }
+      "sellValue": {          		 # Calculate total sell value (similar to buyValue)
+   	 "$sum": {
+ 		 "$cond": [
+   		 { "$eq": ["$transactions.transaction_code", "sell"] },
+   		 { "$toDouble": "$transactions.total" },
+   		 0
+ 		 ]
+   	 }
       }
     }
   },
-  {"$project": {
-      "_id": 0,
-      "symbol": "$_id",
-      "returnOnInvestment": { "$subtract": ["$sellValue", "$buyValue"] }
+  {
+    "$project": {            		 # Project desired fields (renaming and calculating net gain)
+      "_id": 0,               		 # Exclude original _id field
+      "symbol": "$_id",        		 # Rename _id to symbol for clarity
+      "netGain": { "$subtract": ["$sellValue", "$buyValue"] }  # Calculate net gain
     }
   },
-  {"$sort": { "returnOnInvestment": -1 }}
+  {
+    "$sort": { "netGain": -1 }  # Sort results by net gain (descending)
+  },
+  {"$limit": 3}  # Limit results to top 3 stocks 
 ]
 results = list(collection.aggregate(pipeline))
 client.close()
@@ -519,55 +458,37 @@ tech_crew.kickoff(inputs={'agg_data': str(results)})
 ### Example OUTPUT
 
 ```
-Thought: 
-Based on the extensive research I have conducted, I can now summarize the financial performance of each company as well as provide actionable insights and recommendations.
+Final Answer:
+# Detailed Financial Report
 
-Final Answer: 
-Financial Summary:
+## TLDR Summary
 
-1. Amazon (AMZN): The company has shown a strong ROI and is expected to improve in the next three years. Its shares are at an all-time high, indicating potential for future growth. 
+Based on the net gain data and recent news trends, all three stocks – Amazon (AMZN), SAP (SAP), and Apple (AAPL) – show promising prospects. Amazon and Apple are experiencing growth and their stocks are hitting new highs. SAP has recently acquired WalkMe, indicating potential future growth.
 
-2. SAP (SAP): Despite strong performance in Q1 2024, SAP's returns are not growing. This, along with its exit from Russia, could potentially signal concerns for investors. 
+## Key Insights and Recommendations
 
-3. Apple (AAPL): Apple is set to kick off its WWDC and is expected to focus on software offerings. Its Vision Pro mixed reality headset is due for a major overhaul to integrate AI. However, its stocks have stagnated so far this year. 
+### Amazon (AMZN)
+- Net Gain: $72,769,230.71
+- Recent News: Amazon is poised for its next decade of growth after delivering a return of around 1,000% over the last decade. Its stock price recently hit a new all-time high.
+- Recommendation: With its stock hitting an all-time high and positive future growth outlook, Amazon presents a solid investment opportunity for long-term investors.
 
-4. Adobe (ADBE): Adobe's stock has seen a decline but also increased interest from investors. However, the company's year-to-date return is underperforming the S&P 500. 
+### SAP (SAP)
+- Net Gain: $39,912,931.04
+- Recent News: SAP recently announced an agreement to acquire WalkMe, a digital adoption platform, in an all-cash deal valued at about $1.5 billion. The acquisition is expected to close in the third quarter of 2024.
+- Recommendation: The recent acquisition of WalkMe indicates potential for future growth. Investors should keep a close eye on SAP's performance post-acquisition.
 
-5. BlackBerry (BB): BlackBerry has been in the news due to its involvement in the recent meme stock rally. However, experts predict that the meme stock crowd is expected to 'exit quickly', potentially leading to a drop in these companies' stock prices. 
+### Apple (AAPL)
+- Net Gain: $25,738,882.29
+- Recent News: Apple's stock has risen substantially since releasing its fiscal Q2 earnings. It is predicted to still be undervalued based on its powerful free cash flow.
+- Recommendation: Given the powerful free cash flow and the potential for an AI-driven growth cycle, Apple appears to be a good investment opportunity.
 
-6. AMD (AMD): The company, along with Nvidia, unveiled new AI chips, driving their shares upward. However, AMD and Nvidia face competition from other companies such as Intel and Arm Holdings. 
+## Other Observations
 
-7. Cisco (CSCO): Cisco is expected to be among the key stocks defining the dividend trend in 2024. However, insider sales have been observed recently. 
+While all three stocks show promising prospects, it's important for investors to consider their own risk tolerance and investment goals before making investment decisions. It's also important to keep an eye on the market trends and news, as they can greatly impact the stock prices.
 
-8. Nvidia (NVDA): Nvidia is seen as a critical player in the stock market with a bullish perspective for its future stock price movements. 
+## Conclusion
 
-9. eBay (EBAY): eBay stocks are down 33%, however, the company's dividends are seen as a long-term growth opportunity. 
-
-10. Facebook (FB), Zynga (ZNGA), Atlassian (TEAM), Netflix (NFLX), Intel (INTC), Salesforce (CRM), Microsoft (MSFT), IBM (IBM), and Google (GOOG) have shown negative ROI. 
-
-Actionable Insights and Recommendations:
-
-1. Amazon: Given its strong performance and future growth potential, it could be a good investment opportunity. However, investors should monitor its high share prices to determine the right time to buy. 
-
-2. SAP: Investors should monitor SAP's growth rates and its impact from exiting the Russian market. 
-
-3. Apple: Investors could look out for new offerings from the WWDC and developments in the Vision Pro mixed reality headset. 
-
-4. Adobe: Adobe's upcoming Q2 FY2024 earnings results should be monitored for signs of potential growth. 
-
-5. BlackBerry: Investors should be cautious due to the potential drop in stock prices from the meme stock rally. 
-
-6. AMD: The company's rivalry with Nvidia and the launch of new products could provide growth opportunities. 
-
-7. Cisco: The company's recent strategic moves and its recognition among analysts suggest potential for growth. 
-
-8. Nvidia: The company's expansion into the CPU market with ARM technology by 2025 represents a significant growth opportunity. 
-
-9. eBay: Despite its current performance being below the 52-week high, the company's dividends are seen as a long-term growth opportunity. 
-
-10. For companies with negative ROI, it's advisable to monitor their performance closely before making investment decisions. 
-
-In conclusion, it's important to consider each company's current performance, future growth potential, and market trends before making investment decisions.
+In conclusion, Amazon, SAP, and Apple present promising investment opportunities based on their recent news and net gain data. However, as with all investments, potential investors should conduct thorough research and consider their own investment goals and risk tolerance.
 ```
 
 ### Limitations and Considerations
