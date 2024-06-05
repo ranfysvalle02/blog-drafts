@@ -43,9 +43,11 @@ Stock transaction data offers a wealth of information for investment researchers
 * **Uncover Hidden Opportunities:** Discover undervalued stocks or sectors poised for growth.
 * **Manage Risk:** Assess the volatility of specific holdings and make informed decisions about asset allocation for optimal risk-return balance.
 
-### The Task: Investment Performance Analysis
+### The Task: Uncover Hidden Opportunities
 
-Consider a scenario where we need to determine the return on investment (ROI) for each stock over a certain period. This task involves filtering the sales by product, calculating the ROI, and then sorting these to find the stocks with the highest returns. Traditional methods like SQL or application code processing can be complex and inefficient, especially with large datasets.
+Picture this: You're running a company with a standard financial services application. Your objective? To spot hidden opportunities in the market by scrutinizing all transaction data and identifying the top three stocks based on Return on Investment (ROI).
+
+ROI is a crucial metric used to gauge the profitability or efficiency of an investment. It's computed by dividing the net profit of an investment by its cost, typically expressed as a percentage. By determining which stocks are delivering the highest ROI, we can then delve into current events and market trends to uncover potential opportunities in the stocks that have historically shown the best ROI, according to our transaction data.
 
 In SQL, this would require multiple subqueries, temporary tables, and joins - a complex and potentially inefficient process, especially with large datasets. With application code, you would need to retrieve all the data first, calculate the ROI, and then perform the sorting, which could be resource-intensive.
 
