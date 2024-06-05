@@ -189,23 +189,27 @@ We'll be using CrewAI to manage our agents and tasks. In this case, we have one 
 
 ### CrewAI Setup
 
-We'll be using CrewAI to manage our agents and tasks. In this case, we have one agent - a researcher who is tasked with analyzing the data and providing actionable insights.
+We'll be using CrewAI to manage our agents and tasks. In this case, we have one agent - a researcher who is tasked with analyzing the data and providing actionable insights. ​​In CrewAI, tasks are the individual steps that make up a larger workflow.
 
-* **Agent Design:** You define individual agents using the `Agent` class. Each agent has several attributes that can be adjusted to fine-tune its behavior:
 
-  * **Role (`AGENT_ROLE`):** This specifies the agent's function within the team (e.g., "Investment Researcher"). Changing the role will steer the agent towards different data sources and analysis methods.
+**Agents & Tasks: Working Together**
 
-  * **Goal (`AGENT_GOAL`):** This describes the objective the agent is trying to achieve (e.g., "identify investment opportunities"). Changing the goal will also influence the information the agent seeks and the actions it takes.
+CrewAI orchestrates the execution of tasks by agents.
 
-  * **Backstory (`backstory`):** While not strictly affecting functionality, you can provide a backstory to give the agent context and potentially influence its communication style and the way it interprets information.
+* **Tasks:** These are the individual steps that make up your investment research workflow. Each task represents a specific action the agent needs to take to achieve the overall goal.
+* **Agents:** Think of these as the workers who execute the tasks. We'll have a dedicated "Investment Researcher" agent equipped with the necessary tools and knowledge to complete the assigned tasks.
 
-  * **Tools (`tools`):** You assign tools (functions or classes) that the agent can use to complete its tasks. The available tools will determine the methods the agent uses to achieve its goal. Adding or removing tools can drastically change the type of data it gathers and the analysis it performs.
+**Fine-Tuning Your Investment Researcher**
 
-  * **Large Language Model (`llm`):** This is the underlying AI model that the agent uses for tasks like text processing and generation. Choosing a different LLM can significantly impact the agent's output. Different LLMs have varying strengths and weaknesses in areas like information retrieval, reasoning, and text generation.
+CrewAI allows you to customize your agent's behavior through various parameters:
 
-  * **Verbose (`verbose`):** Setting `verbose=True` provides more detailed output during the agent's operation, helping you understand its thought process and identify potential issues.
+* **Role & Goal (AGENT_ROLE & AGENT_GOAL):** These define the agent's purpose.  Here, we set the role to "Investment Researcher" with a goal of "identifying investment opportunities." This guides the agent towards relevant data sources and analysis methods (e.g., market trends, company news, analyst reports).
+* **Backstory:** Craft a backstory like "Expert stock researcher with decades of experience" to add context and potentially influence the agent's communication style and interpretation of information.
+* **Tools:** Equip your agent with tools (functions or classes) to complete its tasks. This could include a search tool for gathering information or an analysis tool for processing data.
+* **Large Language Model (LLM):** This is the AI engine powering the agent's tasks like text processing and generation. Choosing a different LLM can significantly impact the agent's output based on the underlying LLM’s strengths and weaknesses.
+* **Verbose (verbose):** Setting `verbose=True` provides a more detailed log of the agent's thought process for debugging purposes.
 
-By adjusting these parameters, you can fine-tune your investment research agent to focus on specific aspects of the market, prioritize certain information sources, and potentially even influence its risk tolerance or investment style (through the `backstory`).
+By adjusting these parameters, you can tailor your investment research agent to focus on specific market sectors, prioritize certain information sources, and even potentially influence its risk tolerance or investment style (through the `backstory`).
 
 #### **file: investment_analysis.py**
 ```python
@@ -574,3 +578,4 @@ The future of investment analysis belongs to those who embrace the power of data
 Don't just analyze the market – shape it. Start harnessing the potential of MongoDB and AI today, and transform your investment decision-making process.
 
 The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ranfysvalle02/mdb-agg-crewai/blob/main/investment_analysis.py)
+
