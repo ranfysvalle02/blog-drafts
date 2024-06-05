@@ -16,17 +16,16 @@ In the dynamic landscape of investment management, real-time transaction data is
 
 Large Language Models (LLMs) have revolutionized our interaction with computers, providing capabilities such as drafting emails, writing poetry, and even engaging in human-like conversations. However, when it comes to dealing with complex data processing and mathematical calculations, LLMs have their limitations.
 
-While Large Language Models (LLMs) excel at language, they lack the ability to understand and manipulate numbers or symbols in the same way. Additionally, LLMs rely on a limited context window for processing information, and cannot directly access database systems.
 
-That's where MongoDB's Aggregation Framework shines, offering an efficient and powerful solution for complex data analysis tasks. It allows you to process entire collections of data, passing it through a multi-stage data pipeline. Within these stages, you can perform calculations and transformations on entire collections. This bypasses the limitations of LLMs for numerical computations, providing a robust and reliable method for data analysis.
+While Large Language Models (LLMs) excel at language, they lack the ability to understand and manipulate numbers or symbols in the same way. That's where MongoDB's Aggregation Framework shines, offering an efficient and powerful solution for complex data analysis tasks. It allows you to process entire collections of data, passing it through a multi-stage data pipeline. Within these stages, you can perform calculations and transformations on entire collections. This bypasses the limitations of LLMs for numerical computations, providing a robust and reliable method for data analysis.
 
-In this blog post, we’ll combine the power of the MongoDB Aggregation framework with GenAI to overcome the limitations of “Classic RAG”. We'll explore this by delving into the MongoDB Atlas Sample Dataset, specifically the `sample_analytics` database and the `transactions` collection. The sample_analytics database contains three collections for a typical finanacial services application. It has customers, accounts, and transactions. For this example, we'll focus on the transaction data which offers a realistic dataset that allows users to hone their skills in data analysis, querying, and aggregation, particularly in the context of financial data. 
+In this blog post, we’ll combine the power of the MongoDB Aggregation framework with GenAI to overcome the limitations of “Classic RAG”. We'll explore this by delving into the MongoDB Atlas Sample Dataset, specifically the `sample_analytics` database and the `transactions` collection. The sample_analytics database contains three collections for a typical financial services application. It has customers, accounts, and transactions. For this example, we'll focus on the transaction data which offers a realistic dataset that allows users to hone their skills in data analysis, querying, and aggregation, particularly in the context of financial data.
 
 The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ranfysvalle02/mdb-agg-crewai/blob/main/investment_analysis.py)
 
 ### `sample_analytics.transactions`
 
-The [sample_analytics database](https://www.mongodb.com/docs/atlas/sample-data/sample-analytics/) contains three collections (customers, accounts, transactions) for a typical finanacial services application. The transactions collection contains transactions details for users. Each document contains an account id, a count of how many transactions are in this set, the start and end dates for transactions covered by this document, and a list of sub documents. Each sub document represents a single transaction and the related information for that transaction.
+The [sample_analytics database](https://www.mongodb.com/docs/atlas/sample-data/sample-analytics/) contains three collections (customers, accounts, transactions) for a typical financial services application. The transactions collection contains transaction details for users. Each document contains an account id, a count of how many transactions are in this set, the start and end dates for transactions covered by this document, and a list of sub documents. Each sub document represents a single transaction and the related information for that transaction.
 
 - `transaction_id`: This is a unique identifier that distinctly marks each transaction.
 - `account_id`: This field establishes a connection between the transaction and its corresponding account.
@@ -36,12 +35,13 @@ The [sample_analytics database](https://www.mongodb.com/docs/atlas/sample-data/s
 - `amount`: This reflects the value of the transaction.
 - `total`: This captures the comprehensive transacted amount, inclusive of quantities, fees, and any additional charges associated with the transaction.
 
+![Transaction Document Schema](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/schema.png)
 
 ### The Task: Uncover Hidden Opportunities
 
-Picture this: You're running a company with a standard financial services application. Your objective? To spot hidden opportunities in the market by scrutinizing all transaction data and identifying the top three stocks based on net gain or loss. We can then delve into current events and market trends to uncover potential opportunities in the stocks that have historically shown the best net gain, according to our transaction data.
+Picture this: You're running a company with a standard financial services application. Your objective? To spot hidden opportunities in the market by scrutinizing all transaction data and identifying the top three stocks based on net gain or loss. We can then research current events and market trends to uncover potential opportunities in the stocks that have historically shown the best net gain, according to our transaction data.
 
-Net gain is a critical metric in investment analysis as it provides a clear picture of the profitability of an investment over a certain period. It's the difference between the total amount received from selling an investment (like stocks) and the total amount spent buying it. 
+Net gain is a critical metric in investment analysis as it provides a clear picture of the profitability of an investment over a certain period. It's the difference between the total amount received from selling an investment (like stocks) and the total amount spent buying it.
 
 Here's why net gain matters:
 
@@ -64,7 +64,7 @@ Navigating these complexities can be made more efficient by harnessing the power
 
 ### The Solution: MongoDB's Aggregation Framework
 
-The aggregation pipeline we will be building calculates the total buy and sell values for each stock, and then calculates the net gain or loss by subtracting the total buy value from the total sell value. The stocks are then sorted by net gain or loss in descending order, so the stocks with the highest net gains are at the top. If you’re new to MongoDB, I suggest you build this aggregation pipeline using the aggregation builder in compass, then export it to Python. [The Aggregation Pipeline Builder in MongoDB Compass](https://www.mongodb.com/docs/compass/current/create-agg-pipeline/) helps you create aggregation pipelines to process documents from a collection or view and return computed results. 
+The aggregation pipeline we will be building calculates the total buy and sell values for each stock, and then calculates the net gain or loss by subtracting the total buy value from the total sell value. The stocks are then sorted by net gain or loss in descending order, so the stocks with the highest net gains are at the top. If you’re new to MongoDB, I suggest you build this aggregation pipeline using the aggregation builder in compass, then export it to Python. [The Aggregation Pipeline Builder in MongoDB Compass](https://www.mongodb.com/docs/compass/current/create-agg-pipeline/) helps you create aggregation pipelines to process documents from a collection or view and return computed results.
 
 In order to calculate the total buy and sell values for each stock we must first unwind the 'transactions' array, then group by `transactions.symbol` and calculate the `buyValue` and `sellValue` for each group. Project the `symbol` and `netGain` fields (calculated by subtracting `buyValue` from `sellValue`) fields. Sort by `netGain` in descending order.
 
@@ -164,17 +164,17 @@ AZURE_OPENAI_ENDPOINT = "https://__DEMO__.openai.azure.com"
 AZURE_OPENAI_API_KEY = "__AZURE_OPENAI_API_KEY__"
 deployment_name = "gpt-4-32k"  # The name of your model deployment
 default_llm = AzureChatOpenAI(
-	openai_api_version=os.environ.get("AZURE_OPENAI_VERSION", "2023-07-01-preview"),
-	azure_deployment=deployment_name,
-	azure_endpoint=AZURE_OPENAI_ENDPOINT,
-	api_key=AZURE_OPENAI_API_KEY
+    openai_api_version=os.environ.get("AZURE_OPENAI_VERSION", "2023-07-01-preview"),
+    azure_deployment=deployment_name,
+    azure_endpoint=AZURE_OPENAI_ENDPOINT,
+    api_key=AZURE_OPENAI_API_KEY
 )
 ```
 
 
 ### Web Search API Setup
 
-For this example, we will be using the [The DuckDuckGo Search Langchain Integration](https://python.langchain.com/v0.2/docs/integrations/tools/ddg/). The DuckDuckGo Search is a component that allows users to search the web using DuckDuckGo. 
+For this example, we will be using the [The DuckDuckGo Search Langchain Integration](https://python.langchain.com/v0.2/docs/integrations/tools/ddg/). The DuckDuckGo Search is a component that allows users to search the web using DuckDuckGo.
 
 #### **file: investment_analysis.py**
 ```python
@@ -230,7 +230,7 @@ Using the following information:
 
 *note*
 The data represents the net gain or loss of each stock symbol for each transaction type (buy/sell).
-Net gain or loss is a crucial metric used to gauge the profitability or efficiency of an investment. 
+Net gain or loss is a crucial metric used to gauge the profitability or efficiency of an investment.
 It's computed by subtracting the total buy value from the total sell value for each stock.
 [END VERIFIED DATA]
 
@@ -271,42 +271,42 @@ Next, we define our MongoDB aggregation pipeline. This pipeline is used to proce
 # MongoDB Aggregation Pipeline
 pipeline = [
   {
-    "$unwind": "$transactions"  # Deconstruct the transactions array into separate documents
+	"$unwind": "$transactions"  # Deconstruct the transactions array into separate documents
   },
   {
-    "$group": {             		 # Group documents by stock symbol
-      "_id": "$transactions.symbol",  # Use symbol as the grouping key
-      "buyValue": {           		 # Calculate total buy value
-   	 "$sum": {
- 		 "$cond": [          		 # Conditional sum based on transaction type
-   		 { "$eq": ["$transactions.transaction_code", "buy"] },  # Check for "buy" transactions
-   		 { "$toDouble": "$transactions.total" },      		 # Convert total to double for sum
-   		 0                                         		 # Default value for non-buy transactions
- 		 ]
-   	 }
-      },
-      "sellValue": {          		 # Calculate total sell value (similar to buyValue)
-   	 "$sum": {
- 		 "$cond": [
-   		 { "$eq": ["$transactions.transaction_code", "sell"] },
-   		 { "$toDouble": "$transactions.total" },
-   		 0
- 		 ]
-   	 }
-      }
-    }
+	"$group": {        			  # Group documents by stock symbol
+  	"_id": "$transactions.symbol",  # Use symbol as the grouping key
+  	"buyValue": {      			  # Calculate total buy value
+  	  "$sum": {
+		  "$cond": [     			  # Conditional sum based on transaction type
+  		  { "$eq": ["$transactions.transaction_code", "buy"] },  # Check for "buy" transactions
+  		  { "$toDouble": "$transactions.total" }, 			  # Convert total to double for sum
+  		  0                                    			  # Default value for non-buy transactions
+		  ]
+  	  }
+  	},
+  	"sellValue": {     			  # Calculate total sell value (similar to buyValue)
+  	  "$sum": {
+		  "$cond": [
+  		  { "$eq": ["$transactions.transaction_code", "sell"] },
+  		  { "$toDouble": "$transactions.total" },
+  		  0
+		  ]
+  	  }
+  	}
+	}
   },
   {
-    "$project": {            		 # Project desired fields (renaming and calculating net gain)
-      "_id": 0,               		 # Exclude original _id field
-      "symbol": "$_id",        		 # Rename _id to symbol for clarity
-      "netGain": { "$subtract": ["$sellValue", "$buyValue"] }  # Calculate net gain
-    }
+	"$project": {       			  # Project desired fields (renaming and calculating net gain)
+  	"_id": 0,          			  # Exclude original _id field
+  	"symbol": "$_id",   			  # Rename _id to symbol for clarity
+  	"netGain": { "$subtract": ["$sellValue", "$buyValue"] }  # Calculate net gain
+	}
   },
   {
-    "$sort": { "netGain": -1 }  # Sort results by net gain (descending)
+	"$sort": { "netGain": -1 }  # Sort results by net gain (descending)
   },
-  {"$limit": 3}  # Limit results to top 3 stocks 
+  {"$limit": 3}  # Limit results to top 3 stocks
 ]
 
 
@@ -350,7 +350,7 @@ tech_crew.kickoff(inputs={'agg_data': str(results)})
 ```python
 import os
 import pymongo
-import pprint 
+import pprint
 
 # MongoDB Setup
 MDB_URI = "mongodb+srv://<user>:<password>@cluster0.abc123.mongodb.net/"
@@ -364,10 +364,10 @@ AZURE_OPENAI_ENDPOINT = "https://__DEMO__.openai.azure.com"
 AZURE_OPENAI_API_KEY = "__AZURE_OPENAI_API_KEY__"
 deployment_name = "gpt-4-32k"  # The name of your model deployment
 default_llm = AzureChatOpenAI(
-	openai_api_version=os.environ.get("AZURE_OPENAI_VERSION", "2023-07-01-preview"),
-	azure_deployment=deployment_name,
-	azure_endpoint=AZURE_OPENAI_ENDPOINT,
-	api_key=AZURE_OPENAI_API_KEY
+    openai_api_version=os.environ.get("AZURE_OPENAI_VERSION", "2023-07-01-preview"),
+    azure_deployment=deployment_name,
+    azure_endpoint=AZURE_OPENAI_ENDPOINT,
+    api_key=AZURE_OPENAI_API_KEY
 )
 
 # Web Search Setup
@@ -412,7 +412,7 @@ Using the following information:
 
 *note*
 The data represents the net gain or loss of each stock symbol for each transaction type (buy/sell).
-Net gain or loss is a crucial metric used to gauge the profitability or efficiency of an investment. 
+Net gain or loss is a crucial metric used to gauge the profitability or efficiency of an investment.
 It's computed by subtracting the total buy value from the total sell value for each stock.
 [END VERIFIED DATA]
 
@@ -445,42 +445,42 @@ tech_crew = Crew(
 # MongoDB Aggregation Pipeline
 pipeline = [
   {
-    "$unwind": "$transactions"  # Deconstruct the transactions array into separate documents
+	"$unwind": "$transactions"  # Deconstruct the transactions array into separate documents
   },
   {
-    "$group": {             		 # Group documents by stock symbol
-      "_id": "$transactions.symbol",  # Use symbol as the grouping key
-      "buyValue": {           		 # Calculate total buy value
-   	 "$sum": {
- 		 "$cond": [          		 # Conditional sum based on transaction type
-   		 { "$eq": ["$transactions.transaction_code", "buy"] },  # Check for "buy" transactions
-   		 { "$toDouble": "$transactions.total" },      		 # Convert total to double for sum
-   		 0                                         		 # Default value for non-buy transactions
- 		 ]
-   	 }
-      },
-      "sellValue": {          		 # Calculate total sell value (similar to buyValue)
-   	 "$sum": {
- 		 "$cond": [
-   		 { "$eq": ["$transactions.transaction_code", "sell"] },
-   		 { "$toDouble": "$transactions.total" },
-   		 0
- 		 ]
-   	 }
-      }
-    }
+	"$group": {        			  # Group documents by stock symbol
+  	"_id": "$transactions.symbol",  # Use symbol as the grouping key
+  	"buyValue": {      			  # Calculate total buy value
+  	  "$sum": {
+		  "$cond": [     			  # Conditional sum based on transaction type
+  		  { "$eq": ["$transactions.transaction_code", "buy"] },  # Check for "buy" transactions
+  		  { "$toDouble": "$transactions.total" }, 			  # Convert total to double for sum
+  		  0                                    			  # Default value for non-buy transactions
+		  ]
+  	  }
+  	},
+  	"sellValue": {     			  # Calculate total sell value (similar to buyValue)
+  	  "$sum": {
+		  "$cond": [
+  		  { "$eq": ["$transactions.transaction_code", "sell"] },
+  		  { "$toDouble": "$transactions.total" },
+  		  0
+		  ]
+  	  }
+  	}
+	}
   },
   {
-    "$project": {            		 # Project desired fields (renaming and calculating net gain)
-      "_id": 0,               		 # Exclude original _id field
-      "symbol": "$_id",        		 # Rename _id to symbol for clarity
-      "netGain": { "$subtract": ["$sellValue", "$buyValue"] }  # Calculate net gain
-    }
+	"$project": {       			  # Project desired fields (renaming and calculating net gain)
+  	"_id": 0,          			  # Exclude original _id field
+  	"symbol": "$_id",   			  # Rename _id to symbol for clarity
+  	"netGain": { "$subtract": ["$sellValue", "$buyValue"] }  # Calculate net gain
+	}
   },
   {
-    "$sort": { "netGain": -1 }  # Sort results by net gain (descending)
+	"$sort": { "netGain": -1 }  # Sort results by net gain (descending)
   },
-  {"$limit": 3}  # Limit results to top 3 stocks 
+  {"$limit": 3}  # Limit results to top 3 stocks
 ]
 results = list(collection.aggregate(pipeline))
 client.close()
@@ -498,22 +498,22 @@ tech_crew.kickoff(inputs={'agg_data': str(results)})
 ### Example OUTPUT
 
 ```
-Thought: 
-The recent news for Apple indicates that the company's stock has reached a $3 trillion valuation, largely due to the hype surrounding the introduction of AI to iPhones. This could be a significant catalyst for Apple's future growth. Now, I have enough information to generate a detailed financial report of the verified data, including a TLDR summary, actionable insights, strategic recommendations, other observations, and a conclusion. 
+Thought:
+The recent news for Apple indicates that the company's stock has reached a $3 trillion valuation, largely due to the hype surrounding the introduction of AI to iPhones. This could be a significant catalyst for Apple's future growth. Now, I have enough information to generate a detailed financial report of the verified data, including a TLDR summary, actionable insights, strategic recommendations, other observations, and a conclusion.
 
-Final Answer: 
+Final Answer:
 
 **Financial Report**
 
 **TLDR Summary**
 
-Based on the verified data, the net gains for the three stocks are as follows: 
+Based on the verified data, the net gains for the three stocks are as follows:
 
 1. Amazon (AMZN) - $72,769,230.71
 2. SAP - $39,912,931.04
 3. Apple (AAPL) - $25,738,882.29
 
-Amazon has the highest net gain, followed by SAP and Apple. 
+Amazon has the highest net gain, followed by SAP and Apple.
 
 **Actionable Insights**
 
@@ -525,7 +525,7 @@ Amazon has the highest net gain, followed by SAP and Apple.
 
 - **Amazon (AMZN):** Given its dominant position in e-commerce and attractive valuation, it might be a good idea to consider increasing investments in Amazon.
 - **SAP:** Considering the potential value boost from the recent acquisition, investors might want to keep a close watch on SAP's performance and consider it for their portfolio.
-- **Apple (AAPL):** With the hype around the introduction of AI to iPhones, Apple's stock could see significant growth. It might be a good time to invest or increase existing investments. 
+- **Apple (AAPL):** With the hype around the introduction of AI to iPhones, Apple's stock could see significant growth. It might be a good time to invest or increase existing investments.
 
 **Other Observations**
 
@@ -533,7 +533,7 @@ The companies have seen fluctuations in their stock prices but generally perform
 
 **Conclusion**
 
-Given the net gains and recent developments, Amazon, SAP, and Apple seem to be promising investments. However, as with any investment decision, it's important to consider individual financial goals, risk tolerance, and market conditions. It's always recommended to conduct further research or consult with a financial advisor before making investment decisions. 
+Given the net gains and recent developments, Amazon, SAP, and Apple seem to be promising investments. However, as with any investment decision, it's important to consider individual financial goals, risk tolerance, and market conditions. It's always recommended to conduct further research or consult with a financial advisor before making investment decisions.
 
 This report provides a high-level overview of the current events and trends impacting these stocks, but the rapidly changing market environment necessitates regular monitoring and analysis of investment portfolios.
 
@@ -571,3 +571,4 @@ The future of investment analysis belongs to those who embrace the power of data
 Don't just analyze the market – shape it. Start harnessing the potential of MongoDB and AI today, and transform your investment decision-making process.
 
 The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ranfysvalle02/mdb-agg-crewai/blob/main/investment_analysis.py)
+
