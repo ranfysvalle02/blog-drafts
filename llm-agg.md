@@ -104,7 +104,7 @@ To follow along, you'll need:
 
 ### The Code
 
-![MongoDB + CrewAI](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x220.png)
+![MongoDB + CrewAI](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x222.png)
 
 In this section, we'll walk through the Python code used to perform financial analysis based on transaction data stored in MongoDB, using GenAI for data analysis and insights. The Python version used during development was: `3.10.10`
 
@@ -314,7 +314,7 @@ Here's a breakdown of what the MongoDB pipeline does:
 
 5. **Sorting by Net Gain:** Lastly, the `$sort` operator organizes the results. It sorts the documents based on the "netGain" field in descending order (-1). This means symbols with the highest net gain (most profitable) will appear first in the final output.
 
-![MongoDB Aggregation Pipeline Results Screenshot](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/ll2.png)
+![MongoDB Aggregation Pipeline Results Screenshot](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x221.png)
 
 ### Task Execution
 
