@@ -275,7 +275,7 @@ Next, we define our MongoDB aggregation pipeline. This pipeline is used to proce
 
 #### **file: investment_analysis.py**
 ```python
-# Define the aggregation pipeline
+# MongoDB Aggregation Pipeline
 pipeline = [
   {
     "$unwind": "$transactions"  # Deconstruct the transactions array into separate documents
@@ -304,15 +304,16 @@ pipeline = [
     }
   },
   {
-    "$project": {            		 # Project desired fields (renaming and calculating ROI)
+    "$project": {            		 # Project desired fields (renaming and calculating net gain)
       "_id": 0,               		 # Exclude original _id field
       "symbol": "$_id",        		 # Rename _id to symbol for clarity
-      "returnOnInvestment": { "$subtract": ["$sellValue", "$buyValue"] }  # Calculate ROI
+      "netGain": { "$subtract": ["$sellValue", "$buyValue"] }  # Calculate net gain
     }
   },
   {
-    "$sort": { "returnOnInvestment": -1 }  # Sort results by ROI (descending)
-  }
+    "$sort": { "netGain": -1 }  # Sort results by net gain (descending)
+  },
+  {"$limit": 3}  # Limit results to top 3 stocks 
 ]
 
 
@@ -493,15 +494,16 @@ pipeline = [
     }
   },
   {
-    "$project": {            		 # Project desired fields (renaming and calculating ROI)
+    "$project": {            		 # Project desired fields (renaming and calculating net gain)
       "_id": 0,               		 # Exclude original _id field
       "symbol": "$_id",        		 # Rename _id to symbol for clarity
-      "returnOnInvestment": { "$subtract": ["$sellValue", "$buyValue"] }  # Calculate ROI
+      "netGain": { "$subtract": ["$sellValue", "$buyValue"] }  # Calculate net gain
     }
   },
   {
-    "$sort": { "returnOnInvestment": -1 }  # Sort results by ROI (descending)
-  }
+    "$sort": { "netGain": -1 }  # Sort results by net gain (descending)
+  },
+  {"$limit": 3}  # Limit results to top 3 stocks 
 ]
 results = list(collection.aggregate(pipeline))
 client.close()
