@@ -25,7 +25,8 @@ In this blog post, we’ll combine the power of the MongoDB Aggregation framewor
 The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ranfysvalle02/mdb-agg-crewai/blob/main/investment_analysis.py)
 
 ### `sample_analytics.transactions`
-This collection contains transactions details for users. Each document contains an account id, a count of how many transactions are in this set, the start and end dates for transactions covered by this document, and a list of sub documents. Each sub document represents a single transaction and the related information for that transaction.
+
+The [sample_analytics database](https://www.mongodb.com/docs/atlas/sample-data/sample-analytics/) contains three collections (customers, accounts, transactions) for a typical finanacial services application. The transactions collection contains transactions details for users. Each document contains an account id, a count of how many transactions are in this set, the start and end dates for transactions covered by this document, and a list of sub documents. Each sub document represents a single transaction and the related information for that transaction.
 
 - `transaction_id`: This is a unique identifier that distinctly marks each transaction.
 - `account_id`: This field establishes a connection between the transaction and its corresponding account.
@@ -40,9 +41,23 @@ This collection contains transactions details for users. Each document contains 
 
 Picture this: You're running a company with a standard financial services application. Your objective? To spot hidden opportunities in the market by scrutinizing all transaction data and identifying the top three stocks based on net gain or loss. We can then delve into current events and market trends to uncover potential opportunities in the stocks that have historically shown the best net gain, according to our transaction data.
 
-Net gain or loss is a crucial metric used to gauge the profitability or efficiency of an investment. It's computed by subtracting the total buy value from the total sell value for each stock. 
+Net gain is a critical metric in investment analysis as it provides a clear picture of the profitability of an investment over a certain period. It's the difference between the total amount received from selling an investment (like stocks) and the total amount spent buying it. 
 
-In a traditional SQL environment, achieving this would require multiple subqueries, temporary tables, and joins - a complex and potentially inefficient process, especially when dealing with large datasets. If you were to use application code, you'd need to first retrieve all the data, calculate the net gain or loss, and then sort the results. This could be a resource-intensive task, demanding significant computational power and time.
+Here's why net gain matters:
+
+1. **Profitability Assessment:** Net gain allows investors to assess the profitability of their investments. A positive net gain indicates that the investment has generated a profit, while a negative net gain suggests a loss.
+
+2. **Performance Comparison:** It helps investors compare the performance of different investments. By calculating the net gain for each investment, investors can identify which investments are performing well and which are underperforming.
+
+3. **Investment Strategy Evaluation:** Net gain can be used to evaluate the effectiveness of an investment strategy. If an investment strategy consistently results in a positive net gain, it's likely a good strategy. Conversely, a strategy that often results in a negative net gain may need to be reevaluated.
+
+4. **Risk Management:** Understanding the net gain can help in managing investment risks. If an investment consistently results in a negative net gain, it might be too risky and may need to be sold off.
+
+5. **Decision Making:** Net gain is a crucial piece of information that can influence future investment decisions. For instance, knowing which stocks have historically shown the best net gain can guide investors towards potentially profitable opportunities.
+
+In summary, net gain is a vital metric in investment management. It provides valuable insights into the profitability of investments, aids in performance comparison, helps evaluate investment strategies, assists in risk management, and guides decision-making. It's a key piece of information that can help investors make informed decisions and maximize their returns.
+
+In a traditional SQL environment, calculating the net gain on transactional data would require multiple subqueries, temporary tables, and joins - a complex and potentially inefficient process, especially when dealing with large datasets. If you were to use application code, you'd need to first retrieve all the data, calculate the net gain or loss, and then sort the results. This could be a resource-intensive task, demanding significant computational power and time.
 
 Navigating these complexities can be made more efficient by harnessing the power of MongoDB's Aggregation Framework, combined with the intelligent capabilities of AI technologies like CrewAI and Large Language Models (LLMs). This potent combination not only streamlines the process but also uncovers deeper insights from our data.
 
@@ -62,6 +77,8 @@ This MongoDB Aggregation Framework pipeline will be composed of multiple stages,
 3. `$project`: This stage reshapes each document in the stream by renaming, adding, or removing fields, as well as creating computed values and sub-documents. We're projecting the `symbol` and `netGain` (calculated by subtracting `buyValue` from `sellValue`) fields.
 
 4. `$sort`: This stage reorders the document stream by a specified sort key. We're sorting the documents by `netGain` in descending order.
+
+5. `$limit`: This stage limits the number of documents passed to the next stage in the pipeline.
 
 ![MongoDB Aggregation Pipeline Results](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x221.png)
 
@@ -242,6 +259,7 @@ tech_crew = Crew(
   tasks=[task1],
   process=Process.sequential
 )
+
 ```
 
 ### MongoDB Aggregation Pipeline
@@ -312,7 +330,9 @@ Here's a breakdown of what the MongoDB pipeline does:
 
 4. **Projecting Results:** Now, the `$project` operator steps in to define the final output format. It discards the automatically generated grouping identifier (`_id`) by setting it to 0. It then renames the grouping field (`_id` which held the "transactions.symbol") to a clearer name, "symbol". Finally, it calculates the net gain or loss for each symbol using the `$subtract` operator. This subtracts the `buyValue` from the `sellValue` to determine the net gain or loss for that symbol.
 
-5. **Sorting by Net Gain:** Lastly, the `$sort` operator organizes the results. It sorts the documents based on the "netGain" field in descending order (-1). This means symbols with the highest net gain (most profitable) will appear first in the final output.
+5. **Sorting by Net Gain:** The `$sort` operator organizes the results. It sorts the documents based on the "netGain" field in descending order (-1). This means symbols with the highest net gain (most profitable) will appear first in the final output.
+
+6. **Limiting Results:** Lastly, the `$limit` operator is used to limit the number of documents passed to the next stage in the pipeline. In this case, it's set to 3, meaning only the top three documents (stocks with the highest net gain) will be included in the final output.
 
 ![MongoDB Aggregation Pipeline Results Screenshot](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x221.png)
 
@@ -330,6 +350,8 @@ tech_crew.kickoff(inputs={'agg_data': str(results)})
 ```python
 import os
 import pymongo
+import pprint 
+
 # MongoDB Setup
 MDB_URI = "mongodb+srv://<user>:<password>@cluster0.abc123.mongodb.net/"
 client = pymongo.MongoClient(MDB_URI)
@@ -348,13 +370,6 @@ default_llm = AzureChatOpenAI(
 	api_key=AZURE_OPENAI_API_KEY
 )
 
-
-# Initial Setup
-AGENT_ROLE = "Investment Researcher"
-AGENT_GOAL = """
-  Research stock market trends, company news, and analyst reports to identify potential investment opportunities.
-"""
-
 # Web Search Setup
 from langchain.tools import tool
 from langchain_community.tools import DuckDuckGoSearchResults
@@ -365,12 +380,20 @@ duck_duck_go = DuckDuckGoSearchResults(backend="news",max_results=10)
 def search_tool(query: str):
   """
   Perform online research on a particular stock.
+  Will return search results along with snippets of each result.
   """
-  return duck_duck_go.run(query)
+  print("\n\nSearching DuckDuckGo for:", query)
+  search_results = duck_duck_go.run(query)
+  search_results_str =  "[recent news for: " + query + "]\n" + str(search_results)
+  return search_results_str
+
 
 # Research Agent Setup
 from crewai import Crew, Process, Task, Agent
-
+AGENT_ROLE = "Investment Researcher"
+AGENT_GOAL = """
+  Research stock market trends, company news, and analyst reports to identify potential investment opportunities.
+"""
 researcher = Agent(
   role=AGENT_ROLE,
   goal=AGENT_GOAL,
@@ -380,7 +403,7 @@ researcher = Agent(
   tools=[search_tool]
 )
 
-analysis_task = Task(
+task1 = Task(
   description="""
 Using the following information:
 
@@ -388,24 +411,34 @@ Using the following information:
 {agg_data}
 
 *note*
-The data represents the average price of each stock symbol for each transaction type (buy/sell),
-and the total amount of transactions for each type. This would give us insight into the average costs and proceeds from each stock,
-as well as the volume of transactions for each stock.
+The data represents the net gain or loss of each stock symbol for each transaction type (buy/sell).
+Net gain or loss is a crucial metric used to gauge the profitability or efficiency of an investment. 
+It's computed by subtracting the total buy value from the total sell value for each stock.
 [END VERIFIED DATA]
 
 [TASK]
-- Provide a financial summary of the VERIFIED DATA
-- Research current events and trends, and provide actionable insights and recommendations
+- Generate a detailed financial report of the VERIFIED DATA.
+- Research current events and trends, and provide actionable insights and recommendations.
+
+
+[report criteria]
+  - Use all available information to prepare this final financial report
+  - Include a TLDR summary
+  - Include 'Actionable Insights'
+  - Include 'Strategic Recommendations'
+  - Include a 'Other Observations' section
+  - Include a 'Conclusion' section
+  - IMPORTANT! You are a friendly and helpful financial expert. Always provide the best possible answer using the available information.
+[end report criteria]
   """,
   agent=researcher,
-  expected_output='concise markdown financial summary and list of actionable insights and recommendations',
+  expected_output='concise markdown financial summary of the verified data and list of key points and insights from researching current events',
   tools=[search_tool],
 )
-
 # Crew Creation
 tech_crew = Crew(
   agents=[researcher],
-  tasks=[analysis_task],
+  tasks=[task1],
   process=Process.sequential
 )
 
@@ -454,7 +487,8 @@ client.close()
 
 # Print MongoDB Aggregation Pipeline Results
 print("MongoDB Aggregation Pipeline Results:")
-print(results)
+
+pprint.pprint(results) #pprint is used to  to “pretty-print” arbitrary Python data structures
 
 # Start the task execution
 tech_crew.kickoff(inputs={'agg_data': str(results)})
@@ -523,11 +557,11 @@ By being aware of these limitations and taking steps to mitigate them, you can e
 
 ### Conclusion
 
-In this blog post, we explored how MongoDB's Aggregation Framework, Large Language Models (LLMs), and CrewAI can be leveraged to transform investment analysis. The key to unlocking smarter investment decisions lies in harnessing the power of your transaction data. MongoDB's Aggregation Framework provides the tools to efficiently calculate essential metrics like ROI, trends, and volatility. When combined with AI's ability to interpret these findings, you gain a deeper understanding of the market. This empowers you to identify hidden opportunities, make informed decisions, and automate routine analysis, ultimately boosting your investment success.
+In this blog post, we explored how MongoDB's Aggregation Framework, Large Language Models (LLMs), and CrewAI can be leveraged to transform investment analysis. The key to unlocking smarter investment decisions lies in harnessing the power of your transaction data. MongoDB's Aggregation Framework provides the tools to efficiently calculate essential metrics like net gain, and more right within the Data Platform with no additional code required at the application layer. When combined with CrewAI's ability to automate research workflows, you'll gain a deeper understanding of the market and be able to identify hidden opportunities, make informed decisions, and ultimately boost your investment success.
 
 ### The Future: AI-Powered Investment Analysis
 
-The future of investment analysis belongs to those who embrace the power of data and AI. By combining MongoDB's robust data handling with the insight-generating capabilities of AI tools like CrewAI, you gain the tools to:
+The future of investment analysis belongs to those who embrace the power of data and AI. By combining MongoDB's robust data platform with the insight-generating capabilities of AI tools like CrewAI, you gain the ability to:
 
 * **Analyze trends faster** than those relying on traditional methods.
 * **Identify profitable patterns** that others miss.
