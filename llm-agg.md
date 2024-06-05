@@ -20,11 +20,12 @@ While Large Language Models (LLMs) excel at language, they lack the ability to u
 
 That's where MongoDB's Aggregation Framework shines, offering an efficient and powerful solution for complex data analysis tasks. It allows you to process entire collections of data, passing it through a multi-stage data pipeline. Within these stages, you can perform calculations and transformations on entire collections. This bypasses the limitations of LLMs for numerical computations, providing a robust and reliable method for data analysis.
 
-In this blog post, we’ll combine the power of the MongoDB Aggregation framework with GenAI to overcome the limitations of “Classic RAG”. We'll explore this by delving into the MongoDB Atlas Sample Dataset, specifically the `sample_analytics` database. The transaction data offers a realistic dataset that allows users to hone their skills in data analysis, querying, and aggregation, particularly in the context of financial data.
+In this blog post, we’ll combine the power of the MongoDB Aggregation framework with GenAI to overcome the limitations of “Classic RAG”. We'll explore this by delving into the MongoDB Atlas Sample Dataset, specifically the `sample_analytics` database and the `transactions` collection. The sample_analytics database contains three collections for a typical finanacial services application. It has customers, accounts, and transactions. For this example, we'll focus on the transaction data which offers a realistic dataset that allows users to hone their skills in data analysis, querying, and aggregation, particularly in the context of financial data. 
 
 The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ranfysvalle02/mdb-agg-crewai/blob/main/investment_analysis.py)
 
-### Explanation of the `sample_analytics` documents found in the `transactions` collection of the MongoDB Atlas Sample Dataset
+### `sample_analytics.transactions`
+This collection contains transactions details for users. Each document contains an account id, a count of how many transactions are in this set, the start and end dates for transactions covered by this document, and a list of sub documents. Each sub document represents a single transaction and the related information for that transaction.
 
 - transaction_id: This is a unique identifier that distinctly marks each transaction.
 - account_id: This field establishes a connection between the transaction and its corresponding account.
