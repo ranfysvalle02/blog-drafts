@@ -527,11 +527,11 @@ By being aware of these limitations and taking steps to mitigate them, you can e
 
 ### Conclusion
 
-In this blog post, we explored how MongoDB's Aggregation Framework, Large Language Models (LLMs), and CrewAI can be leveraged to transform investment analysis. The key to unlocking smarter investment decisions lies in harnessing the power of your transaction data. MongoDB's Aggregation Framework provides the tools to efficiently calculate essential metrics like ROI, trends, and volatility. When combined with AI's ability to interpret these findings, you gain a deeper understanding of the market. This empowers you to identify hidden opportunities, make informed decisions, and automate routine analysis, ultimately boosting your investment success.
+In this blog post, we explored how MongoDB's Aggregation Framework, Large Language Models (LLMs), and CrewAI can be leveraged to transform investment analysis. The key to unlocking smarter investment decisions lies in harnessing the power of your transaction data. MongoDB's Aggregation Framework provides the tools to efficiently calculate essential metrics like net gain, and more right within the Data Platform with no additional code required at the application layer. When combined with CrewAI's ability to automate research workflows, you'll gain a deeper understanding of the market and be able to identify hidden opportunities, make informed decisions, and ultimately boost your investment success.
 
 ### The Future: AI-Powered Investment Analysis
 
-The future of investment analysis belongs to those who embrace the power of data and AI. By combining MongoDB's robust data handling with the insight-generating capabilities of AI tools like CrewAI, you gain the tools to:
+The future of investment analysis belongs to those who embrace the power of data and AI. By combining MongoDB's robust data platform with the insight-generating capabilities of AI tools like CrewAI, you gain the ability to:
 
 * **Analyze trends faster** than those relying on traditional methods.
 * **Identify profitable patterns** that others miss.
