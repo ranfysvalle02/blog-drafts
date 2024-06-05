@@ -101,12 +101,11 @@ To follow along, you'll need:
 
 2. **LLM Resource:** CrewAI supports various LLM connections, including local models (Ollama), APIs like Azure, and all LangChain LLM components for customizable AI solutions. [Click here to learn more about CrewAI LLM Support](https://docs.crewai.com/how-to/LLM-Connections/)
 
-3. **Firecrawl:** Our Investment Researcher Agent will need the ability to crawl the web doing research. I chose Firecrawl for this example because it takes care of the hard stuff involved when scraping the web like proxies, caching, rate limits, parsing HTML, js-blocked content and more. With Firecrawl you can crawl and convert any website into clean markdown or structured data. You can get your firecrawl API token by [signing up here](https://www.firecrawl.dev/signin/signup).
 
 
 ### The Code
 
-![MongoDB + Crew AI + Firecrawl in Action!](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/ll.png)
+![MongoDB + Crew AI in Action!](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x220.png)
 
 In this section, we'll walk through the Python code used to perform financial analysis based on transaction data stored in MongoDB, using GenAI for data analysis and insights. The Python version used during development was: `3.10.10`
 
@@ -172,6 +171,8 @@ AGENT_GOAL = """
 ### Web Search API Setup
 
 For this example, we will be using the [The DuckDuckGo Search Langchain Integration](https://python.langchain.com/v0.2/docs/integrations/tools/ddg/). The DuckDuckGo Search is a component that allows users to search the web using DuckDuckGo. You can implement your Search Tool with your Search API of choice - it does not have to be DuckDuckGo. 
+
+![DuckDuckGo Search Tool](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x219.png)
 
 #### **file: investment_analysis.py**
 ```python
