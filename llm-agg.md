@@ -27,25 +27,18 @@ The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ran
 ### `sample_analytics.transactions`
 This collection contains transactions details for users. Each document contains an account id, a count of how many transactions are in this set, the start and end dates for transactions covered by this document, and a list of sub documents. Each sub document represents a single transaction and the related information for that transaction.
 
-- transaction_id: This is a unique identifier that distinctly marks each transaction.
-- account_id: This field establishes a connection between the transaction and its corresponding account.
-- date: This represents the precise date and time at which the transaction took place.
-- transaction_code: This indicates the nature of the transaction, such as a deposit, withdrawal, buy, or sell.
-- symbol: This field denotes the symbol of the stock or investment involved in the transaction.
-- amount: This reflects the value of the transaction.
-- total: This captures the comprehensive transacted amount, inclusive of quantities, fees, and any additional charges associated with the transaction.
+- `transaction_id`: This is a unique identifier that distinctly marks each transaction.
+- `account_id`: This field establishes a connection between the transaction and its corresponding account.
+- `date`: This represents the precise date and time at which the transaction took place.
+- `transaction_code`: This indicates the nature of the transaction, such as a deposit, withdrawal, buy, or sell.
+- `symbol`: This field denotes the symbol of the stock or investment involved in the transaction.
+- `amount`: This reflects the value of the transaction.
+- `total`: This captures the comprehensive transacted amount, inclusive of quantities, fees, and any additional charges associated with the transaction.
 
-**The Power of Transactional Data**
-
-Stock transaction data offers a wealth of information for investment researchers and analysts. By carefully examining patterns within this data, you can:
-
-* **Identify Trends:** Spot emerging market movements and potential shifts in investor sentiment.
-* **Uncover Hidden Opportunities:** Discover undervalued stocks or sectors poised for growth.
-* **Manage Risk:** Assess the volatility of specific holdings and make informed decisions about asset allocation for optimal risk-return balance.
 
 ### The Task: Uncover Hidden Opportunities
 
-Picture this: You're running a company with a standard financial services application. Your objective? To spot hidden opportunities in the market by scrutinizing all transaction data and identifying the top three stocks based on Return on Investment (ROI).
+Picture this: You're running a company with a standard financial services application. Your objective? To spot hidden opportunities in the market by scrutinizing all transaction data and identifying the top three stocks based on Return on Investment (ROI). 
 
 ROI is a crucial metric used to gauge the profitability or efficiency of an investment. It's computed by dividing the net profit of an investment by its cost, typically expressed as a percentage. By determining which stocks are delivering the highest ROI, we can then delve into current events and market trends to uncover potential opportunities in the stocks that have historically shown the best ROI, according to our transaction data.
 
