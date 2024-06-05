@@ -174,7 +174,8 @@ def search_tool(query: str):
   """
   return duck_duck_go.run(query)
 ```
-You can implement your Search Tool with your Search API of choice - it does not have to be DuckDuckGo. I chose DuckDuckGo for this example because it:
+
+DuckDuckGo was chosen for this example because it:
 
 - **Requires NO API KEY**
 - Easy to use
