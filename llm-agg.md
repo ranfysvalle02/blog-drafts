@@ -38,11 +38,11 @@ This collection contains transactions details for users. Each document contains 
 
 ### The Task: Uncover Hidden Opportunities
 
-Picture this: You're running a company with a standard financial services application. Your objective? To spot hidden opportunities in the market by scrutinizing all transaction data and identifying the top three stocks based on Return on Investment (ROI). By identifying which stocks are yielding the highest ROI, we can then delve into current events and market trends to uncover potential opportunities in the stocks that have historically delivered the best ROI, according to our transaction data.
+Picture this: You're running a company with a standard financial services application. Your objective? To spot hidden opportunities in the market by scrutinizing all transaction data and identifying the top three stocks based on net gain or loss. We can then delve into current events and market trends to uncover potential opportunities in the stocks that have historically shown the best net gain, according to our transaction data.
 
-ROI is a crucial metric used to gauge the profitability or efficiency of an investment. It's computed by dividing the net profit of an investment by its cost, typically expressed as a percentage. By determining which stocks are delivering the highest ROI, we can then delve into current events and market trends to uncover potential opportunities in the stocks that have historically shown the best ROI, according to our transaction data.
+Net gain or loss is a crucial metric used to gauge the profitability or efficiency of an investment. It's computed by subtracting the total buy value from the total sell value for each stock. 
 
-In SQL, this would require multiple subqueries, temporary tables, and joins - a complex and potentially inefficient process, especially with large datasets. With application code, you would need to retrieve all the data first, calculate the ROI, and then perform the sorting, which could be resource-intensive.
+In a traditional SQL environment, achieving this would require multiple subqueries, temporary tables, and joins - a complex and potentially inefficient process, especially when dealing with large datasets. If you were to use application code, you'd need to first retrieve all the data, calculate the net gain or loss, and then sort the results. This could be a resource-intensive task, demanding significant computational power and time.
 
 Navigating these complexities can be made more efficient by harnessing the power of MongoDB's Aggregation Framework, combined with the intelligent capabilities of AI technologies like CrewAI and Large Language Models (LLMs). This potent combination not only streamlines the process but also uncovers deeper insights from our data.
 
@@ -51,9 +51,9 @@ Navigating these complexities can be made more efficient by harnessing the power
 
 ![MongoDB Aggregation Pipeline Visualization](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/xa1.png)
 
-The aggregation pipeline we will be building calculates the total buy and sell values for each stock, and then calculates the return on investment by subtracting the total buy value from the total sell value. The stocks are then sorted by return on investment in descending order, so the stocks with the highest returns are at the top. If you’re new to MongoDB, I suggest you build this aggregation pipeline using the aggregation builder in compass, then export it to Python. [The Aggregation Pipeline Builder in MongoDB Compass](https://www.mongodb.com/docs/compass/current/create-agg-pipeline/) helps you create aggregation pipelines to process documents from a collection or view and return computed results. 
+The aggregation pipeline we will be building calculates the total buy and sell values for each stock, and then calculates the net gain or loss by subtracting the total buy value from the total sell value. The stocks are then sorted by net gain or loss in descending order, so the stocks with the highest net gains are at the top. If you’re new to MongoDB, I suggest you build this aggregation pipeline using the aggregation builder in compass, then export it to Python. [The Aggregation Pipeline Builder in MongoDB Compass](https://www.mongodb.com/docs/compass/current/create-agg-pipeline/) helps you create aggregation pipelines to process documents from a collection or view and return computed results. 
 
-To achieve this, the pipeline will first unwind the 'transactions' array, then group by `transactions.symbol` and calculate the `buyValue` and `sellValue` for each group. Project the `symbol` and `returnOnInvestment` fields  (calculated by subtracting `buyValue` from `sellValue`) fields. Sort by `returnOnInvestment` in descending order.
+To achieve this, the pipeline will first unwind the 'transactions' array, then group by `transactions.symbol` and calculate the `buyValue` and `sellValue` for each group. Project the `symbol` and `netGain` fields (calculated by subtracting `buyValue` from `sellValue`) fields. Sort by `netGain` in descending order.
 
 This MongoDB Aggregation Framework pipeline will be composed of multiple stages, each performing a specific operation on the data:
 
@@ -61,12 +61,9 @@ This MongoDB Aggregation Framework pipeline will be composed of multiple stages,
 
 2. `$group`: This stage groups input documents by a specified identifier expression and applies the accumulator expression(s) to each group. We're grouping by `transactions.symbol` and calculating the `buyValue` and `sellValue` for each group.
 
-3. `$project`: This stage reshapes each document in the stream by renaming, adding, or removing fields, as well as creating computed values and sub-documents. We're projecting the `symbol` and `returnOnInvestment` (calculated by subtracting `buyValue` from `sellValue`) fields.
+3. `$project`: This stage reshapes each document in the stream by renaming, adding, or removing fields, as well as creating computed values and sub-documents. We're projecting the `symbol` and `netGain` (calculated by subtracting `buyValue` from `sellValue`) fields.
 
-4. `$sort`: This stage reorders the document stream by a specified sort key. We're sorting the documents by `returnOnInvestment` in descending order.
-
-
-
+4. `$sort`: This stage reorders the document stream by a specified sort key. We're sorting the documents by `netGain` in descending order.
 
 
 ### Supercharge Investment Analysis with MongoDB and CrewAI
