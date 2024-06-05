@@ -473,36 +473,42 @@ tech_crew = Crew(
 
 # MongoDB Aggregation Pipeline
 pipeline = [
-  {"$unwind": "$transactions"},
-  {"$group": {
-      "_id": "$transactions.symbol",
-      "buyValue": {
-        "$sum": {
-          "$cond": [
-            { "$eq": ["$transactions.transaction_code", "buy"] },
-            { "$toDouble": "$transactions.total" },
-            0
-          ]
-        }
+  {
+    "$unwind": "$transactions"  # Deconstruct the transactions array into separate documents
+  },
+  {
+    "$group": {             		 # Group documents by stock symbol
+      "_id": "$transactions.symbol",  # Use symbol as the grouping key
+      "buyValue": {           		 # Calculate total buy value
+   	 "$sum": {
+ 		 "$cond": [          		 # Conditional sum based on transaction type
+   		 { "$eq": ["$transactions.transaction_code", "buy"] },  # Check for "buy" transactions
+   		 { "$toDouble": "$transactions.total" },      		 # Convert total to double for sum
+   		 0                                         		 # Default value for non-buy transactions
+ 		 ]
+   	 }
       },
-      "sellValue": {
-        "$sum": {
-          "$cond": [
-            { "$eq": ["$transactions.transaction_code", "sell"] },
-            { "$toDouble": "$transactions.total" },
-            0
-          ]
-        }
+      "sellValue": {          		 # Calculate total sell value (similar to buyValue)
+   	 "$sum": {
+ 		 "$cond": [
+   		 { "$eq": ["$transactions.transaction_code", "sell"] },
+   		 { "$toDouble": "$transactions.total" },
+   		 0
+ 		 ]
+   	 }
       }
     }
   },
-  {"$project": {
-      "_id": 0,
-      "symbol": "$_id",
-      "returnOnInvestment": { "$subtract": ["$sellValue", "$buyValue"] }
+  {
+    "$project": {            		 # Project desired fields (renaming and calculating ROI)
+      "_id": 0,               		 # Exclude original _id field
+      "symbol": "$_id",        		 # Rename _id to symbol for clarity
+      "returnOnInvestment": { "$subtract": ["$sellValue", "$buyValue"] }  # Calculate ROI
     }
   },
-  {"$sort": { "returnOnInvestment": -1 }}
+  {
+    "$sort": { "returnOnInvestment": -1 }  # Sort results by ROI (descending)
+  }
 ]
 results = list(collection.aggregate(pipeline))
 client.close()
