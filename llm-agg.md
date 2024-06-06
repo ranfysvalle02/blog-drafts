@@ -194,7 +194,7 @@ DuckDuckGo was chosen for this example because it:
 
 - **Requires NO API KEY**
 - Easy to use
-- Provides `snippets` 
+- Provides `snippets`
 
 ![DuckDuckGo Search Tool](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x219.png)
 
@@ -215,7 +215,7 @@ CrewAI orchestrates the execution of tasks by agents. In CrewAI, a Crew represen
 
 **Fine-Tuning Your Investment Researcher**
 
-CrewAI allows you to customize your agent's behavior through various parameters: 
+CrewAI allows you to customize your agent's behavior through various parameters:
 
 * **Role & Goal (AGENT_ROLE & AGENT_GOAL):** These define the agent's purpose.  Here, we set the role to "Investment Researcher" with a goal of "identifying investment opportunities." This guides the agent towards relevant data sources and analysis methods (e.g., market trends, company news, analyst reports).
 * **Backstory:** Craft a backstory like "Expert stock researcher with decades of experience" to add context and potentially influence the agent's communication style and interpretation of information.
@@ -295,32 +295,32 @@ pipeline = [
 	"$unwind": "$transactions"  # Deconstruct the transactions array into separate documents
   },
   {
-	"$group": {        			  # Group documents by stock symbol
+	"$group": {  					# Group documents by stock symbol
   	"_id": "$transactions.symbol",  # Use symbol as the grouping key
-  	"buyValue": {      			  # Calculate total buy value
-  	  "$sum": {
-		  "$cond": [     			  # Conditional sum based on transaction type
-  		  { "$eq": ["$transactions.transaction_code", "buy"] },  # Check for "buy" transactions
-  		  { "$toDouble": "$transactions.total" }, 			  # Convert total to double for sum
-  		  0                                    			  # Default value for non-buy transactions
-		  ]
-  	  }
+  	"buyValue": {    				# Calculate total buy value
+    	"$sum": {
+  		"$cond": [   				# Conditional sum based on transaction type
+			{ "$eq": ["$transactions.transaction_code", "buy"] },  # Check for "buy" transactions
+			{ "$toDouble": "$transactions.total" },   			# Convert total to double for sum
+			0                          						# Default value for non-buy transactions
+  		]
+    	}
   	},
-  	"sellValue": {     			  # Calculate total sell value (similar to buyValue)
-  	  "$sum": {
-		  "$cond": [
-  		  { "$eq": ["$transactions.transaction_code", "sell"] },
-  		  { "$toDouble": "$transactions.total" },
-  		  0
-		  ]
-  	  }
+  	"sellValue": {   				# Calculate total sell value (similar to buyValue)
+    	"$sum": {
+  		"$cond": [
+			{ "$eq": ["$transactions.transaction_code", "sell"] },
+			{ "$toDouble": "$transactions.total" },
+			0
+  		]
+    	}
   	}
 	}
   },
   {
-	"$project": {       			  # Project desired fields (renaming and calculating net gain)
-  	"_id": 0,          			  # Exclude original _id field
-  	"symbol": "$_id",   			  # Rename _id to symbol for clarity
+	"$project": { 					# Project desired fields (renaming and calculating net gain)
+  	"_id": 0,						# Exclude original _id field
+  	"symbol": "$_id", 				# Rename _id to symbol for clarity
   	"netGain": { "$subtract": ["$sellValue", "$buyValue"] }  # Calculate net gain
 	}
   },
@@ -355,8 +355,6 @@ Here's a breakdown of what the MongoDB pipeline does:
 
 6. **Limiting Results:** Lastly, the `$limit` operator is used to limit the number of documents passed to the next stage in the pipeline. In this case, it's set to 3, meaning only the top three documents (stocks with the highest net gain) will be included in the final output.
 
-![MongoDB Aggregation Pipeline Results Screenshot](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x221.png)
-
 ### Preliminary Check: Ensuring Error-Free Execution
 
 Before we initiate our automated agent workflow, it's crucial to ensure that the code executed so far is error-free. Run the code up to this point and verify that there are no errors before proceeding to the next step.
@@ -378,6 +376,8 @@ With the preliminary checks complete, we can now kick off our task execution. Th
 ```python
 tech_crew.kickoff(inputs={'agg_data': str(results)})
 ```
+
+![MongoDB Aggregation Pipeline Results Screenshot](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x221.png)
 
 ### Complete Source Code
 #### **file: investment_analysis.py**
@@ -482,32 +482,32 @@ pipeline = [
 	"$unwind": "$transactions"  # Deconstruct the transactions array into separate documents
   },
   {
-	"$group": {        			  # Group documents by stock symbol
+	"$group": {  					# Group documents by stock symbol
   	"_id": "$transactions.symbol",  # Use symbol as the grouping key
-  	"buyValue": {      			  # Calculate total buy value
-  	  "$sum": {
-		  "$cond": [     			  # Conditional sum based on transaction type
-  		  { "$eq": ["$transactions.transaction_code", "buy"] },  # Check for "buy" transactions
-  		  { "$toDouble": "$transactions.total" }, 			  # Convert total to double for sum
-  		  0                                    			  # Default value for non-buy transactions
-		  ]
-  	  }
+  	"buyValue": {    				# Calculate total buy value
+    	"$sum": {
+  		"$cond": [   				# Conditional sum based on transaction type
+			{ "$eq": ["$transactions.transaction_code", "buy"] },  # Check for "buy" transactions
+			{ "$toDouble": "$transactions.total" },   			# Convert total to double for sum
+			0                          						# Default value for non-buy transactions
+  		]
+    	}
   	},
-  	"sellValue": {     			  # Calculate total sell value (similar to buyValue)
-  	  "$sum": {
-		  "$cond": [
-  		  { "$eq": ["$transactions.transaction_code", "sell"] },
-  		  { "$toDouble": "$transactions.total" },
-  		  0
-		  ]
-  	  }
+  	"sellValue": {   				# Calculate total sell value (similar to buyValue)
+    	"$sum": {
+  		"$cond": [
+			{ "$eq": ["$transactions.transaction_code", "sell"] },
+			{ "$toDouble": "$transactions.total" },
+			0
+  		]
+    	}
   	}
 	}
   },
   {
-	"$project": {       			  # Project desired fields (renaming and calculating net gain)
-  	"_id": 0,          			  # Exclude original _id field
-  	"symbol": "$_id",   			  # Rename _id to symbol for clarity
+	"$project": { 					# Project desired fields (renaming and calculating net gain)
+  	"_id": 0,						# Exclude original _id field
+  	"symbol": "$_id", 				# Rename _id to symbol for clarity
   	"netGain": { "$subtract": ["$sellValue", "$buyValue"] }  # Calculate net gain
 	}
   },
@@ -605,4 +605,6 @@ The future of investment analysis belongs to those who embrace the power of data
 Don't just analyze the market – shape it. Start harnessing the potential of MongoDB and AI today, and transform your investment decision-making process.
 
 The source code is available at [GitHub - mdb-agg-crewai](https://github.com/ranfysvalle02/mdb-agg-crewai/blob/main/investment_analysis.py)
+
+
 
