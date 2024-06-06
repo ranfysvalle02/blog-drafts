@@ -357,9 +357,22 @@ Here's a breakdown of what the MongoDB pipeline does:
 
 ![MongoDB Aggregation Pipeline Results Screenshot](https://raw.githubusercontent.com/ranfysvalle02/blog-drafts/main/x221.png)
 
-### Task Execution
+### Preliminary Check: Ensuring Error-Free Execution
 
-Finally, we kick off our task execution. The researcher agent will use the data from our MongoDB aggregation, as well as any other tools at their disposal, to analyze the data and provide insights.
+Before we initiate our automated agent workflow, it's crucial to ensure that the code executed so far is error-free. Run the code up to this point and verify that there are no errors before proceeding to the next step.
+
+The expected output should resemble the following:
+
+```
+MongoDB Aggregation Pipeline Results:
+[{'netGain': 72769230.71428967, 'symbol': 'amzn'},
+ {'netGain': 39912931.04990542, 'symbol': 'sap'},
+ {'netGain': 25738882.292086124, 'symbol': 'aapl'}]
+```
+
+### Initiating the Agent Task Execution
+
+With the preliminary checks complete, we can now kick off our task execution. The researcher agent will utilize the data derived from our MongoDB aggregation, along with any other tools at its disposal, to analyze the data and generate insightful conclusions.
 
 #### **file: investment_analysis.py**
 ```python
