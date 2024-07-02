@@ -129,13 +129,6 @@ The `MongoDBChatMessageHistory` integration in LangChain offers a powerful way t
 For more details, you can visit the LangChain documentation [here](https://python.langchain.com/v0.2/docs/integrations/memory/mongodb_chat_message_history/) and the API reference [here](https://api.python.langchain.com/en/latest/chat_message_histories/langchain_mongodb.chat_message_histories.MongoDBChatMessageHistory.html)【6†source】【7†source】【8†source】.
 
 #### Example 1: Change Streams / Real-Time Updates
-## Harnessing the Power of MongoDB Triggers and Change Streams
-
-**Real-Time Data Monitoring + Instantaneous Execution of Business Logic:** MongoDB Triggers can be tailored to implement predefined business logic in response to specific events captured by Change Streams as they occur. For instance:
-
-- **Automated Escalation:** Should a customer express dissatisfaction repeatedly within a brief timeframe, MongoDB triggers can automatically escalate the issue to a human agent or a superior support team.
-
-- **Dynamic Promotional Offers:** If a customer indicates interest in a product, MongoDB triggers can launch real-time promotions or discounts based on preset rules, in an attempt to boost customer engagement.
 
 Using MongoDB Atlas with Change Streams and Atlas Triggers is an excellent way to handle real-time data transformations. 
 
@@ -195,6 +188,14 @@ exports = async function(changeEvent) {
 - Check the MongoDB Atlas Trigger logs for any errors or success messages.
 
 This method ensures that every time a new document is inserted or an existing document is updated, the trigger function will automatically parse the JSON string and update the document with the parsed object.
+
+## Harnessing the Power of MongoDB Triggers and Change Streams
+
+**Real-Time Data Monitoring + Instantaneous Execution of Business Logic:** MongoDB Triggers can be tailored to implement predefined business logic in response to specific events captured by Change Streams as they occur. For instance:
+
+- **Automated Escalation:** Should a customer express dissatisfaction repeatedly within a brief timeframe, MongoDB triggers can automatically escalate the issue to a human agent or a superior support team.
+
+- **Dynamic Promotional Offers:** If a customer indicates interest in a product, MongoDB triggers can launch real-time promotions or discounts based on preset rules, in an attempt to boost customer engagement.
 
 ### Conclusion
 
