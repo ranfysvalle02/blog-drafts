@@ -72,8 +72,6 @@ chat_message_history.add_ai_message("Hi")
 
 ![Alt Text](https://apollo-fv-mneqk.mongodbstitch.com/demo2.png)
 
-This setup allows the assistant to remember previous interactions and provide contextually relevant responses.
-
 The `MongoDBChatMessageHistory` integration in LangChain offers a powerful way to store and manage chat message histories in a scalable and flexible manner. By leveraging MongoDB's strengths, developers can build robust chat applications that maintain context across sessions, enhancing user experience.
 
 For more details, you can visit the LangChain documentation [here](https://python.langchain.com/v0.2/docs/integrations/memory/mongodb_chat_message_history/) and the API reference [here](https://api.python.langchain.com/en/latest/chat_message_histories/langchain_mongodb.chat_message_histories.MongoDBChatMessageHistory.html)
