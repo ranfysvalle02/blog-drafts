@@ -15,6 +15,7 @@ One of the key functions of MongoDB in an AI agent is to store conversational hi
 In addition to conversational history, MongoDB stores vector embedding data. Vector embeddings are numerical representations of text that capture semantic meaning, allowing the AI agent to perform sophisticated natural language processing tasks. These embeddings are crucial for enabling the agent to understand and generate human-like responses. MongoDB's flexible schema design makes it easy to store and retrieve these high-dimensional vectors alongside other metadata efficiently.
 
 **Storing Operational Data**
+![Alt Text](https://apollo-fv-mneqk.mongodbstitch.com/demo.png)
 * **Document-Oriented Storage:**  Operational data often involves complex relationships between different data points.  MongoDB stores data in JSON-like documents, making it easy to embed related information within a single document. This simplifies queries that need to access data across different metrics or logs.
 
 * **Fast Queries:**  Analyzing operational data is key to optimizing your AI agent. MongoDB's indexing capabilities combined with the Aggregation Framework enable fast retrieval of specific data points or logs, allowing you to efficiently track agent performance and identify areas for improvement.
