@@ -24,8 +24,6 @@ Why juggle multiple solutions when you can seamlessly integrate your vector embe
 
 - **Contextual Awareness**: Equipped with short-term and long-term memory, agents can sustain context throughout conversations or sequences of tasks, resulting in more coherent responses. Long-term memory enables agents to gather experiences, learning from previous actions to enhance future decision-making and problem-solving abilities.
 
-![Alt Text](https://www.mongodb.com/developer/_next/image/?url=https%3A%2F%2Fimages.contentstack.io%2Fv3%2Fassets%2Fblt39790b633ee0d5a7%2Fbltf09001ac434120f7%2F6627c10e33301d39a8891e2e%2FPerception_(3).png&w=1920&q=75)
-
 **Storing Conversational History**
 
 One of the key functions of MongoDB in an AI agent is to store conversational history. This includes all interactions between the user and the agent, providing a rich dataset that can be used to understand user preferences, track the context, and improve the agent's responses over time. By maintaining a detailed record of past interactions, the AI agent can offer more personalized and contextually relevant responses.
