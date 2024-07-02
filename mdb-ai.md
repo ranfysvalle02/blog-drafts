@@ -83,41 +83,6 @@ print(messages)
 
 This will output a list of messages stored in MongoDB for the specified session.
 
-## Chaining with OpenAI
-
-LangChain allows chaining the message history with OpenAI to maintain context across interactions. Here’s an example setup:
-
-```python
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.runnables.history import RunnableWithMessageHistory
-from langchain_openai import ChatOpenAI
-
-prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are a helpful assistant."),
-    MessagesPlaceholder(variable_name="history"),
-    ("human", "{question}"),
-])
-
-chain = prompt | ChatOpenAI()
-
-chain_with_history = RunnableWithMessageHistory(
-    chain,
-    lambda session_id: MongoDBChatMessageHistory(
-        session_id=session_id,
-        connection_string="mongodb://mongo_user:password123@mongo:27017",
-        database_name="my_db",
-        collection_name="chat_histories",
-    ),
-    input_messages_key="question",
-    history_messages_key="history",
-)
-
-config = {"configurable": {"session_id": "<SESSION_ID>"}}
-
-response = chain_with_history.invoke({"question": "Hi! I'm Bob"}, config=config)
-print(response)
-```
-
 This setup allows the assistant to remember previous interactions and provide contextually relevant responses.
 
 The `MongoDBChatMessageHistory` integration in LangChain offers a powerful way to store and manage chat message histories in a scalable and flexible manner. By leveraging MongoDB's strengths, developers can build robust chat applications that maintain context across sessions, enhancing user experience.
