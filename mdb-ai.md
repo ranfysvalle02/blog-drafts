@@ -20,9 +20,9 @@ Why juggle multiple solutions when you can seamlessly integrate your vector embe
 
 ![Alt Text](https://y.yarn.co/1c9a5954-8775-4bf7-8223-119a0dd40898_text.gif)
 
-**Empowering Agents through Memory Systems**
+## Empowering Agents through Memory Systems**
 
-- **Contextual Awareness**: Equipped with short-term and long-term memory, agents can sustain context throughout conversations or sequences of tasks, resulting in more coherent responses. Long-term memory enables agents to gather experiences, learning from previous actions to enhance future decision-making and problem-solving abilities.
+**Contextual Awareness**: Equipped with short-term and long-term memory, agents can sustain context throughout conversations or sequences of tasks, resulting in more coherent responses. Long-term memory enables agents to gather experiences, learning from previous actions to enhance future decision-making and problem-solving abilities.
 
 **Storing Conversational History**
 
