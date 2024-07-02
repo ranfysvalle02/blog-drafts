@@ -36,9 +36,7 @@ MongoDB's vector database capabilities enable efficient information retrieval, w
 
 All of this without having to leave your MongoDB Atlas environment.
 
-### Practical Applications MongoDB Atlas + Memory Systems
-![Alt Text](https://apollo-fv-mneqk.mongodbstitch.com/demo2.png)
-# MongoDB Chat Message History Integration with LangChain
+### MongoDB Chat Message History Integration with LangChain
 
 LangChain is a framework designed to simplify the creation of applications that leverage large language models (LLMs). One of its features includes integrations for memory management, which allows for storing chat message histories. Among the various memory integrations, the `MongoDBChatMessageHistory` class offers a robust way to store and manage chat histories using MongoDB.
 
@@ -82,6 +80,9 @@ print(messages)
 ```
 
 This will output a list of messages stored in MongoDB for the specified session.
+
+
+![Alt Text](https://apollo-fv-mneqk.mongodbstitch.com/demo2.png)
 
 This setup allows the assistant to remember previous interactions and provide contextually relevant responses.
 
