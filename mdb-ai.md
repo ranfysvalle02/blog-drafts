@@ -4,19 +4,9 @@
 
 **Introduction**
 
-MongoDB Atlas isn't just a database, it's a powerful data platform that acts as a central hub for storing, managing, and retrieving various data types crucial to an AI agent's operation. This blog post dives into the core functionalities of MongoDB within an AI agent, focusing on its role in data storage and enabling information retrieval through vector search capabilities.
+MongoDB Atlas isn't just a database, it's a powerful data platform that acts as a central hub for storing, managing, and retrieving various data types crucial to an AI agent's operation. This blog post dives into the core functionalities of MongoDB within an AI agent, focusing on its role as a real-time data platform specifically designed to empower your AI agents with the agility and intelligence they need to thrive.
 
-**Storing Conversational History**
-
-One of the key functions of MongoDB in an AI agent is to store conversational history. This includes all interactions between the user and the agent, providing a rich dataset that can be used to understand user preferences, track the context, and improve the agent's responses over time. By maintaining a detailed record of past interactions, the AI agent can offer more personalized and contextually relevant responses.
-
-**Supporting Information Retrieval**
-
-MongoDB's vector database capabilities enable efficient information retrieval, which is critical for the AI agent's ability to respond accurately to user queries. By leveraging vector embeddings, MongoDB can perform semantic searches that match user queries with relevant stored data. This allows the AI agent to retrieve and present information that is contextually appropriate and semantically similar to the user's input, enhancing the overall user experience. 
-
-All of this without having to leave your MongoDB Atlas environment.
-
-## Exploring the 'Agent' and Memory Abstraction with MongoDB Aggregation Framework
+## Exploring the 'Agent' abstraction 
 
 **What is an agent?**
 An agent is an artificial computational entity with an awareness of its environment. It is equipped with faculties that enable perception through input, action through tool use, and cognitive abilities through foundation models backed by long-term and short-term memory. 
@@ -29,6 +19,19 @@ In a time when everyone is racing for a competitive edge, deciding where you sto
 Why stitch together multiple solutions when you could have your vector embeddings, your operational data, your metadata, your memory, and so much more (Data Federation, Online Archive, etc)
 
 ![Alt Text](https://y.yarn.co/1c9a5954-8775-4bf7-8223-119a0dd40898_text.gif)
+
+## Memory
+![Alt Text](https://www.mongodb.com/developer/_next/image/?url=https%3A%2F%2Fimages.contentstack.io%2Fv3%2Fassets%2Fblt39790b633ee0d5a7%2Fbltf09001ac434120f7%2F6627c10e33301d39a8891e2e%2FPerception_(3).png&w=1920&q=75)
+
+**Storing Conversational History**
+
+One of the key functions of MongoDB in an AI agent is to store conversational history. This includes all interactions between the user and the agent, providing a rich dataset that can be used to understand user preferences, track the context, and improve the agent's responses over time. By maintaining a detailed record of past interactions, the AI agent can offer more personalized and contextually relevant responses.
+
+**Supporting Information Retrieval**
+
+MongoDB's vector database capabilities enable efficient information retrieval, which is critical for the AI agent's ability to respond accurately to user queries. By leveraging vector embeddings, MongoDB can perform semantic searches that match user queries with relevant stored data. This allows the AI agent to retrieve and present information that is contextually appropriate and semantically similar to the user's input, enhancing the overall user experience. 
+
+All of this without having to leave your MongoDB Atlas environment.
 
 ### Practical Applications MongoDB Atlas + Memory Systems
 #### Example 1: Change Streams / Real-Time Updates
