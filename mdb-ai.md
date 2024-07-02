@@ -35,9 +35,104 @@ All of this without having to leave your MongoDB Atlas environment.
 
 ### Practical Applications MongoDB Atlas + Memory Systems
 ![Alt Text](https://apollo-fv-mneqk.mongodbstitch.com/demo2.png)
-#### Example 1: Change Streams / Real-Time Updates
+# MongoDB Chat Message History Integration with LangChain
 
-Using MongoDB Atlas with Change Streams and Atlas Triggers is an excellent way to handle real-time data transformations, such as converting JSON strings to objects, without requiring custom aggregation within the database. Here’s a step-by-step guide to set this up:
+LangChain is a framework designed to simplify the creation of applications that leverage large language models (LLMs). One of its features includes integrations for memory management, which allows for storing chat message histories. Among the various memory integrations, the `MongoDBChatMessageHistory` class offers a robust way to store and manage chat histories using MongoDB.
+
+## Setting Up the Integration
+
+To integrate MongoDB with LangChain for storing chat message history, you need to follow a few steps:
+
+### Installation
+
+First, you need to install the `langchain-mongodb` package:
+
+```bash
+pip install -U langchain-mongodb
+```
+
+### Usage
+
+To use the `MongoDBChatMessageHistory` class, you need to provide a session ID and a connection string to your MongoDB instance. Optionally, you can specify the database and collection names.
+
+```python
+from langchain_mongodb.chat_message_histories import MongoDBChatMessageHistory
+
+chat_message_history = MongoDBChatMessageHistory(
+    session_id="test_session",
+    connection_string="mongodb://mongo_user:password123@mongo:27017",
+    database_name="my_db",
+    collection_name="chat_histories",
+)
+
+chat_message_history.add_user_message("Hello")
+chat_message_history.add_ai_message("Hi")
+```
+
+### Retrieving Messages
+
+You can retrieve the stored messages as follows:
+
+```python
+messages = chat_message_history.messages
+print(messages)
+```
+
+This will output a list of messages stored in MongoDB for the specified session.
+
+## Chaining with OpenAI
+
+LangChain allows chaining the message history with OpenAI to maintain context across interactions. Here’s an example setup:
+
+```python
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.runnables.history import RunnableWithMessageHistory
+from langchain_openai import ChatOpenAI
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a helpful assistant."),
+    MessagesPlaceholder(variable_name="history"),
+    ("human", "{question}"),
+])
+
+chain = prompt | ChatOpenAI()
+
+chain_with_history = RunnableWithMessageHistory(
+    chain,
+    lambda session_id: MongoDBChatMessageHistory(
+        session_id=session_id,
+        connection_string="mongodb://mongo_user:password123@mongo:27017",
+        database_name="my_db",
+        collection_name="chat_histories",
+    ),
+    input_messages_key="question",
+    history_messages_key="history",
+)
+
+config = {"configurable": {"session_id": "<SESSION_ID>"}}
+
+response = chain_with_history.invoke({"question": "Hi! I'm Bob"}, config=config)
+print(response)
+```
+
+This setup allows the assistant to remember previous interactions and provide contextually relevant responses.
+
+The `MongoDBChatMessageHistory` integration in LangChain offers a powerful way to store and manage chat message histories in a scalable and flexible manner. By leveraging MongoDB's strengths, developers can build robust chat applications that maintain context across sessions, enhancing user experience.
+
+For more details, you can visit the LangChain documentation [here](https://python.langchain.com/v0.2/docs/integrations/memory/mongodb_chat_message_history/) and the API reference [here](https://api.python.langchain.com/en/latest/chat_message_histories/langchain_mongodb.chat_message_histories.MongoDBChatMessageHistory.html)【6†source】【7†source】【8†source】.
+
+#### Example 1: Change Streams / Real-Time Updates
+## Harnessing the Power of MongoDB Triggers and Change Streams
+
+**Real-Time Data Monitoring + Instantaneous Execution of Business Logic:** MongoDB Triggers can be tailored to implement predefined business logic in response to specific events captured by Change Streams as they occur. For instance:
+
+- **Automated Escalation:** Should a customer express dissatisfaction repeatedly within a brief timeframe, MongoDB triggers can automatically escalate the issue to a human agent or a superior support team.
+
+- **Dynamic Promotional Offers:** If a customer indicates interest in a product, MongoDB triggers can launch real-time promotions or discounts based on preset rules, in an attempt to boost customer engagement.
+
+Using MongoDB Atlas with Change Streams and Atlas Triggers is an excellent way to handle real-time data transformations. 
+
+Here’s a step-by-step guide to set this up:
 
 ### Step 1: Create an Atlas Trigger
 1. **Log in to MongoDB Atlas**.
