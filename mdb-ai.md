@@ -21,7 +21,7 @@ MongoDB also stores operational data, which includes information about the AI ag
 MongoDB's vector database capabilities enable efficient information retrieval, which is critical for the AI agent's ability to respond accurately to user queries. By leveraging vector embeddings, MongoDB can perform semantic searches that match user queries with relevant stored data. This allows the AI agent to retrieve and present information that is contextually appropriate and semantically similar to the user's input, enhancing the overall user experience.
 
 
-## Exploring the 'Agent' Abstraction and Memory Abstraction with MongoDB Aggregation Framework
+## Exploring the 'Agent' and Memory Abstraction with MongoDB Aggregation Framework
 
 ### Introduction
 **What is an agent?**
