@@ -78,6 +78,8 @@ For more details, you can visit the LangChain documentation [here](https://pytho
 
 #### Example 1: Change Streams / Real-Time Updates
 
+The ability to monitor data changes and instantly execute predefined business logic can significantly enhance operational efficiency and customer experience. This is where MongoDB Triggers and Change Streams come into play.
+
 Using MongoDB Atlas with Change Streams and Atlas Triggers is an excellent way to handle real-time data transformations. 
 
 Here’s a step-by-step guide to set this up:
