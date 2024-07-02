@@ -10,17 +10,6 @@ MongoDB Atlas isn't just a database, it's a powerful data platform that acts as 
 
 One of the key functions of MongoDB in an AI agent is to store conversational history. This includes all interactions between the user and the agent, providing a rich dataset that can be used to understand user preferences, track the context, and improve the agent's responses over time. By maintaining a detailed record of past interactions, the AI agent can offer more personalized and contextually relevant responses.
 
-**Storing Vector Embedding Data**
-
-In addition to conversational history, MongoDB stores vector embedding data. Vector embeddings are numerical representations of text that capture semantic meaning, allowing the AI agent to perform sophisticated natural language processing tasks. These embeddings are crucial for enabling the agent to understand and generate human-like responses. MongoDB's flexible schema design makes it easy to store and retrieve these high-dimensional vectors alongside other metadata efficiently.
-
-**Storing Operational Data**
-![Alt Text](https://apollo-fv-mneqk.mongodbstitch.com/demo.png)
-* **Document-Oriented Storage:**  Operational data often involves complex relationships between different data points.  MongoDB stores data in JSON-like documents, making it easy to embed related information within a single document. This simplifies queries that need to access data across different metrics or logs.
-
-* **Fast Queries:**  Analyzing operational data is key to optimizing your AI agent. MongoDB's indexing capabilities combined with the Aggregation Framework enable fast retrieval of specific data points or logs, allowing you to efficiently track agent performance and identify areas for improvement.
-
-
 **Supporting Information Retrieval**
 
 MongoDB's vector database capabilities enable efficient information retrieval, which is critical for the AI agent's ability to respond accurately to user queries. By leveraging vector embeddings, MongoDB can perform semantic searches that match user queries with relevant stored data. This allows the AI agent to retrieve and present information that is contextually appropriate and semantically similar to the user's input, enhancing the overall user experience. 
@@ -41,30 +30,60 @@ Why stitch together multiple solutions when you could have your vector embedding
 
 ![Alt Text](https://y.yarn.co/1c9a5954-8775-4bf7-8223-119a0dd40898_text.gif)
 
-### Practical Applications with Agent and Memory Systems
-#### Example 1: Distinct Research Topics
-Imagine you ask an agent what are the unique categories of knowledge that it has? 
-```json
-db.knowledge.aggregate([
-  {
-    $group: {
-      _id: null,
-      uniqueTopics: { $addToSet: "$categories" }
-    }
+### Practical Applications MongoDB Atlas + Memory Systems
+#### Example 1: Change Streams / Real-Time Updates
+
+Using MongoDB Atlas with Change Streams and Atlas Triggers is an excellent way to handle real-time data transformations, such as converting JSON strings to objects, without requiring custom aggregation within the database. Here’s a step-by-step guide to set this up:
+
+### Step 1: Create an Atlas Trigger
+1. **Log in to MongoDB Atlas**.
+2. **Navigate to your Cluster** and go to the **Triggers** tab.
+3. Click on **Add Trigger**.
+
+### Step 2: Configure the Trigger
+1. **Trigger Type**: Choose **Database**.
+2. **Event Source**: Select the appropriate database and collection.
+3. **Event Type**: Choose **Insert**, **Update**, or both, depending on when you want to parse the JSON strings.
+4. **Full Document**: Ensure this is selected to get the full document in the event.
+
+### Step 3: Write the Trigger Function
+In the function editor, write a function to parse the JSON string and update the document. Here's an example:
+
+```javascript
+exports = async function(changeEvent) {
+  const fullDocument = changeEvent.fullDocument;
+  const collection = context.services.get("mongodb-atlas").db("your_database").collection("your_collection");
+
+  try {
+    const parsedObject = JSON.parse(fullDocument.jsonStringField);
+    
+    // Update the document with the parsed object
+    await collection.updateOne(
+      { _id: fullDocument._id },
+      { $set: { parsedObject: parsedObject } }
+    );
+
+    console.log(`Document with _id: ${fullDocument._id} updated successfully.`);
+  } catch (e) {
+    console.error(`Failed to parse JSON string for document with _id: ${fullDocument._id}. Error: ${e}`);
   }
-])
+};
 ```
 
-### MongoDB Aggregation Framework: A Programming Language for Data
+### Explanation:
+- **Context Services**: `context.services.get("mongodb-atlas")` gets the MongoDB Atlas service.
+- **Database and Collection**: Replace `"your_database"` and `"your_collection"` with your actual database and collection names.
+- **Parsing JSON**: `JSON.parse(fullDocument.jsonStringField)` parses the JSON string.
+- **Update Document**: `collection.updateOne` updates the document with the parsed object.
 
-The MongoDB aggregation framework is a powerful tool that allows for complex data processing and transformation directly within the database. This framework comprises multiple stages, each performing a specific operation, similar to individual commands in a programming language. These stages can be chained together to form a pipeline, processing data in a highly efficient and structured manner.
+### Step 4: Save and Deploy the Trigger
+- After writing your function, click **Save** and then **Deploy** the trigger.
 
-#### Key Operators in MongoDB Aggregation Framework
+### Step 5: Test the Trigger
+- Insert or update documents in your collection to test if the trigger is working correctly.
+- Check the MongoDB Atlas Trigger logs for any errors or success messages.
 
-**$addToSet: Saving Lines of Code**
-
-The $addToSet operator is a MongoDB update operator that adds a value to an array unless the value is already present, in which case $addToSet does nothing. This operator not only ensures that there are no duplicate values in the array, but it also saves you from writing multiple lines of code to achieve the same result.
-
+This method ensures that every time a new document is inserted or an existing document is updated, the trigger function will automatically parse the JSON string and update the document with the parsed object.
 
 ### Conclusion
 
