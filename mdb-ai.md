@@ -92,7 +92,7 @@ This method ensures that every time a new document is inserted or an existing do
 
 In the ever-evolving landscape of AI, choosing the right platform to store your agent's data can be the deciding factor between success and failure. MongoDB Atlas acts as a unified data platform, eliminating the need to stitch together multiple solutions. It seamlessly stores vector embeddings, operational data, metadata, memory, and more (Data Federation, Online Archive, etc.)
 
-**Why MongoDB Atlas?**
+**Say goodbye to managing multiple systems for different data types, and say hello to MongoDB Atlas**
 
 * **Unified Data Platform:** Eliminate the complexity of managing multiple systems for different data types.
 * **Scalability and Flexibility:** Effortlessly scale your data storage as your AI agent grows and evolves.
