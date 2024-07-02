@@ -70,18 +70,6 @@ chat_message_history.add_user_message("Hello")
 chat_message_history.add_ai_message("Hi")
 ```
 
-### Retrieving Messages
-
-You can retrieve the stored messages as follows:
-
-```python
-messages = chat_message_history.messages
-print(messages)
-```
-
-This will output a list of messages stored in MongoDB for the specified session.
-
-
 ![Alt Text](https://apollo-fv-mneqk.mongodbstitch.com/demo2.png)
 
 This setup allows the assistant to remember previous interactions and provide contextually relevant responses.
