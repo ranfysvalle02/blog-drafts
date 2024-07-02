@@ -34,6 +34,7 @@ MongoDB's vector database capabilities enable efficient information retrieval, w
 All of this without having to leave your MongoDB Atlas environment.
 
 ### Practical Applications MongoDB Atlas + Memory Systems
+![Alt Text](https://apollo-fv-mneqk.mongodbstitch.com/demo2.png)
 #### Example 1: Change Streams / Real-Time Updates
 
 Using MongoDB Atlas with Change Streams and Atlas Triggers is an excellent way to handle real-time data transformations, such as converting JSON strings to objects, without requiring custom aggregation within the database. Here’s a step-by-step guide to set this up:
