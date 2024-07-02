@@ -60,7 +60,12 @@ exports = async function(changeEvent) {
 
   try {
     const parsedObject = JSON.parse(fullDocument['History']);
-    
+    if(parsedObject.type == "ai"){
+      //ai-specific real-time logic
+    }
+    else if(parseObject.type == "human"){
+      //human-specific real-time logic
+    }
     // Update the document with the parsed object
     await collection.updateOne(
       { _id: fullDocument._id },
