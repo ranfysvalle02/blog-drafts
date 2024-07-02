@@ -59,7 +59,7 @@ exports = async function(changeEvent) {
   const collection = context.services.get("mongodb-atlas").db("your_database").collection("your_collection");
 
   try {
-    const parsedObject = JSON.parse(fullDocument.jsonStringField);
+    const parsedObject = JSON.parse(fullDocument['History']);
     
     // Update the document with the parsed object
     await collection.updateOne(
