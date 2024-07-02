@@ -77,7 +77,7 @@ exports = async function(changeEvent) {
 ### Explanation:
 - **Context Services**: `context.services.get("mongodb-atlas")` gets the MongoDB Atlas service.
 - **Database and Collection**: Replace `"your_database"` and `"your_collection"` with your actual database and collection names.
-- **Parsing JSON**: `JSON.parse(fullDocument.jsonStringField)` parses the JSON string.
+- **Parsing JSON**: `JSON.parse(fullDocument['History'])` parses the JSON string.
 - **Update Document**: `collection.updateOne` updates the document with the parsed object.
 
 ### Step 4: Save and Deploy the Trigger
