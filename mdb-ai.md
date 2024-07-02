@@ -23,7 +23,6 @@ MongoDB's vector database capabilities enable efficient information retrieval, w
 
 ## Exploring the 'Agent' and Memory Abstraction with MongoDB Aggregation Framework
 
-### Introduction
 **What is an agent?**
 An agent is an artificial computational entity with an awareness of its environment. It is equipped with faculties that enable perception through input, action through tool use, and cognitive abilities through foundation models backed by long-term and short-term memory. Within AI, agents are artificial entities that can make intelligent decisions followed by actions based on environmental perception, enabled by large language models.
 
