@@ -1,5 +1,7 @@
 ## What is the Primary Function of MongoDB in the AI Agent?
 
+![Alt Text](https://www.mongodb.com/developer/_next/image/?url=https%3A%2F%2Fimages.contentstack.io%2Fv3%2Fassets%2Fblt39790b633ee0d5a7%2Fblt201d6de2fd67699f%2F6627bd57776d0c6e9424d41c%2FPerception.png&w=3840&q=75)
+
 **Introduction**
 
 MongoDB Atlas isn't just a database, it's a powerful data platform that acts as a central hub for storing, managing, and retrieving various data types crucial to an AI agent's operation. This blog post dives into the core functionalities of MongoDB within an AI agent, focusing on its role in data storage and enabling information retrieval through vector search capabilities.
