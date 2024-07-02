@@ -22,11 +22,7 @@ Why juggle multiple solutions when you can seamlessly integrate your vector embe
 
 **Empowering Agents through Memory Systems**
 
-- **Contextual Awareness**: Equipped with short-term and contextual memory, agents can sustain context throughout conversations or sequences of tasks, resulting in more coherent and pertinent responses.
-
-- **Experience Accumulation**: Long-term memory enables agents to gather experiences, learning from previous actions to enhance future decision-making and problem-solving abilities.
-
-- **Entity Understanding**: Through the maintenance of entity memory, agents can identify and retain essential entities, thereby improving their capability to comprehend and engage with intricate information.
+- **Contextual Awareness**: Equipped with short-term and long-term memory, agents can sustain context throughout conversations or sequences of tasks, resulting in more coherent responses. Long-term memory enables agents to gather experiences, learning from previous actions to enhance future decision-making and problem-solving abilities.
 
 ![Alt Text](https://www.mongodb.com/developer/_next/image/?url=https%3A%2F%2Fimages.contentstack.io%2Fv3%2Fassets%2Fblt39790b633ee0d5a7%2Fbltf09001ac434120f7%2F6627c10e33301d39a8891e2e%2FPerception_(3).png&w=1920&q=75)
 
