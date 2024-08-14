@@ -151,4 +151,118 @@ driver.close()
 **Remember:** This is a basic example. Real-world knowledge graph construction involves handling complex language patterns, ambiguity, and large-scale data processing.
 
 
+### Python Example 2
+
+```
+import openai
+from neo4j import GraphDatabase
+
+# Azure OpenAI API key and endpoint
+openai.api_key = "YOUR_AZURE_OPENAI_API_KEY"
+openai.api_base = "YOUR_AZURE_OPENAI_ENDPOINT"
+
+# Neo4j connection
+driver = GraphDatabase.driver("bolt://localhost:7687", auth=("neo4j", "password"))
+session = driver.session()
+
+
+def create_node(tx, label, name):
+    """
+    Creates a node in the Neo4j graph database with the specified label and name.
+
+    Args:
+        tx (neo4j.Transaction): A Neo4j transaction object.
+        label (str): The label of the node (e.g., "Entity").
+        name (str): The name of the node (e.g., "Apple").
+    """
+    tx.run("CREATE (n:%s {name: $name})" % label, name=name)
+
+
+def create_relationship(tx, start_node, end_node, rel_type):
+    """
+    Creates a relationship between two nodes in the Neo4j graph database.
+
+    Args:
+        tx (neo4j.Transaction): A Neo4j transaction object.
+        start_node (str): The name of the starting node.
+        end_node (str): The name of the ending node.
+        rel_type (str): The type of relationship (e.g., "FOUNDED_BY").
+    """
+    tx.run("MATCH (a {name: $start_node}), (b {name: $end_node}) CREATE (a)-[:%s]->(b)" % rel_type, start_node=start_node, end_node=end_node)
+
+
+def extract_entities_with_azure_openai(text):
+    """
+    Extracts entities from the text using Azure OpenAI's language model.
+
+    Args:
+        text (str): The text to extract entities from.
+
+    Returns:
+        list: A list of extracted entities.
+    """
+    response = openai.Completion.create(
+        engine="text-davinci-003",  # Replace with your chosen model
+        prompt=f"Extract named entities from the following text: {text}",
+        max_tokens=1024,
+        n=1,
+        stop=None,
+        temperature=0.5
+    )
+    entities = response.choices[0].text.strip().split("\n")
+    return entities
+
+
+def extract_relationships_with_azure_openai(text, entities):
+    """
+    Extracts relationships between entities using Azure OpenAI's language model.
+
+    This is a simplified approach using dependency parsing prompts. 
+
+    Args:
+        text (str): The text to extract relationships from.
+        entities (list): A list of extracted entities.
+
+    Returns:
+        list: A list of tuples representing relationships (start_entity, relationship, end_entity).
+    """
+    relationships = []
+    for entity1 in entities:
+        for entity2 in entities:
+            if entity1 != entity2:
+                prompt = f"What is the relationship between {entity1} and {entity2} in the sentence: {text}?"
+                response = openai.Completion.create(
+                    engine="text-davinci-003",  # Replace with your chosen model
+                    prompt=prompt,
+                    max_tokens=256,
+                    n=1,
+                    stop=None,
+                    temperature=0.5
+                )
+                relationship = response.choices[0].text.strip()
+                relationships.append((entity1, relationship, entity2))
+    return relationships
+
+
+def create_graph(entities, relationships):
+    """
+    Creates a graph in Neo4j with the extracted entities and relationships.
+
+    Args:
+        entities (list): A list of extracted entities.
+        relationships (list): A list of tuples representing relationships (start_entity, relationship, end_entity).
+    """
+    with session.begin_transaction() as tx:
+        for entity in entities:
+            create_node(tx, "Entity", entity)
+        for start, rel, end in relationships:
+            create_relationship(tx, start, end, rel)
+
+
+# Example usage
+text = "Apple is a technology company founded by Steve Jobs. It develops smartphones like iPhone."
+entities = extract_entities_with_azure_openai(text)
+relationships = extract_relationships
+
+```
 
