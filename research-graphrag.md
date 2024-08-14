@@ -266,3 +266,33 @@ relationships = extract_relationships
 
 ```
 
+
+
+APPENDIX:
+
+RELATIONAL.AI
+
+Based on the information from RelationalAI's website, here are their key differentiators:
+
+**Focus on Knowledge Graphs:**
+
+* **Operationalizes Knowledge:**  RelationalAI goes beyond simply storing data in a knowledge graph. They focus on using the knowledge graph to "operationalize" the rules, relationships, and decision systems that drive a business. This means they turn the knowledge graph into a tool for making decisions. 
+
+**Integration with Snowflake:**
+
+* **Native to Snowflake:**  Their solution works entirely within the Snowflake data cloud. This eliminates the need to move data or create separate silos for decision-making tools. It leverages the existing infrastructure and security of Snowflake.
+
+**Decision-Making Tools Embedded:**
+
+* **Coprocessor Approach:** Instead of just providing data, they integrate powerful decision-making tools like graph analytics, rules-based reasoning, and mathematical optimization directly into the data cloud. This allows for faster and more complex decision-making within the existing data environment.
+
+**Focus on Simplifying Decisions:**
+
+* **Knowledge Graph as a Decision Map:** They view the knowledge graph as a map for business decisions.  They focus on making it easier to navigate this map and use it to streamline decision-making processes.
+
+Here's a quick summary:
+
+* **They focus on using knowledge graphs for operational decision-making.**
+* **They work seamlessly within the Snowflake data cloud.**
+* **They integrate decision-making tools directly into the data environment.**
+* **They aim to simplify and streamline business decision-making.**
