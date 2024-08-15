@@ -296,3 +296,9 @@ Here's a quick summary:
 * **They work seamlessly within the Snowflake data cloud.**
 * **They integrate decision-making tools directly into the data environment.**
 * **They aim to simplify and streamline business decision-making.**
+
+
+
+** EXTRA **
+
+![demo](https://arxiv.org/html/2310.01061v2/x2.png)
