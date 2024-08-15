@@ -302,6 +302,8 @@ Here's a quick summary:
 ** EXTRA **
 ![](https://dist.neo4j.com/wp-content/uploads/20230615211423/1N-TVTbRffy_VQ0DPcx0JKg.png)
 
+![](https://dist.neo4j.com/wp-content/uploads/20230615211415/1mkYvs8_TmzLhUUI1CShNfw.png)
+
 ![demo](https://arxiv.org/html/2310.01061v2/x2.png)
 
 ![demo2](https://arxiv.org/html/2402.11199v1/x2.png)
