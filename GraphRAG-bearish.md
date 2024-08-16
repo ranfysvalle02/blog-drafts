@@ -1,12 +1,15 @@
-**Challenges of LLMs:**
+**Some Challenges of LLMs:**
 
-* **Hallucinations:** LLMs can generate plausible-sounding but incorrect or nonsensical information.
-* **Interpretability:** Understanding the decision-making process of an LLM is difficult, making it challenging to debug errors or ensure fairness.
-* **Energy Consumption:** Training and running LLMs requires significant computational resources, leading to high energy consumption and environmental concerns.
-* **Domain Specificity:** Adapting LLMs to specific domains requires additional training and fine-tuning.
-* **Evaluation:** Developing effective metrics to evaluate LLM performance is an ongoing area of research.
+* **Hallucinations** 
+* **Interpretability** 
+* **Energy Consumption** 
+* **Domain Specificity** 
+* **Evaluation** 
+* **Security**
+* **Privacy** 
 
 **Solutions:**
+
 * **Fine-tuning and RAG:** These are two ways to customize LLMs for specific tasks.
     * **Fine-tuning:** Improves performance for specialized tasks but can be expensive and require frequent updates.
     * **RAG:** Uses retrieval techniques to find relevant information before LLM generation, leading to:
@@ -325,6 +328,43 @@ def lookup_information_in_graph(start_entity, depth=1):
 
   return unique_results
 
+def augment_prompt_with_graph_data(query, start_entity, graph_lookup_function):
+  """
+  Augments the prompt with information retrieved from the knowledge graph.
+
+  Args:
+      query (str): The original user query.
+      start_entity (str): The starting entity for the graph lookup.
+      graph_lookup_function: The function to perform the graph lookup.
+
+  Returns:
+      str: The augmented prompt.
+  """
+  graph_data = graph_lookup_function(start_entity)
+  # Process graph_data to extract relevant information
+  augmented_prompt = f"{query}\n\nAdditional context: {graph_data}"
+  return augmented_prompt
+
+def generate_response(prompt):
+  """
+  Generates a response using the provided prompt.
+
+  Args:
+      prompt (str): The augmented prompt.
+
+  Returns:
+      str: The generated response.
+  """
+  response = openai.Completion.create(
+      engine="text-davinci-003",  # Replace with your chosen model
+      prompt=prompt,
+      max_tokens=1024,
+      n=1,
+      stop=None,
+      temperature=0.5
+  )
+  return response.choices[0].text.strip()
+
 # Example usage
 text = "Apple is a technology company founded by Steve Jobs. It develops smartphones like iPhone."
 entities = extract_entities_with_azure_openai(text)
@@ -332,9 +372,10 @@ relationships = extract_relationships_with_azure_openai(text, entities)
 
 create_knowledge_graph(entities, relationships)
 
+query = "Tell me about Apple"
 start_entity = "Apple"
-depth = 2
-results = lookup_information_in_graph(start_entity, depth)
-print(results)
+augmented_prompt = augment_prompt_with_graph_data(query, start_entity, lookup_information_in_graph)
+response = generate_response(augmented_prompt)
+print(response)
 ```
 
