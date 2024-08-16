@@ -1,27 +1,3 @@
-**Some Challenges of LLMs:**
-
-* **Hallucinations** 
-* **Interpretability** 
-* **Energy Consumption** 
-* **Domain Specificity** 
-* **Evaluation** 
-* **Security**
-* **Privacy** 
-
-**Solutions:**
-
-* **Fine-tuning and RAG:** These are two ways to customize LLMs for specific tasks.
-    * **Fine-tuning:** Improves performance for specialized tasks but can be expensive and require frequent updates.
-    * **RAG:** Uses retrieval techniques to find relevant information before LLM generation, leading to:
-        * More accurate and factual outputs.
-        * Lower costs compared to fine-tuning.
-        * Easier updates with changing data sources.
-* **The GraphRAG Stack:** A system with multiple components including:
-    * Data processing (e.g., data extraction)
-    * Vector databases (storing document representations)
-    * LLM (the generative model)
-    * Knowledge graphs (structured data about entities and relationships)
-
 ## The Unifying Goal: Context Augmentation
 
 At the core of these techniques, we find a singular objective: enriching the context available to LLMs. 
