@@ -73,6 +73,102 @@ While the concept of automatically building knowledge graphs from raw data is ap
 * **Domain Specificity:**
   * **Unique Relationships:** Industries often have specific terminology and relationship types not captured in general language models.
 
+
+## Python Example
+
+```
+import openai
+
+def extract_entities_with_azure_openai(text):
+  """
+  Extracts entities from the text using Azure OpenAI's language model.
+
+  Args:
+      text (str): The text to extract entities from.
+
+  Returns:
+      list: A list of extracted entities.
+  """
+  response = openai.Completion.create(
+      engine="text-davinci-003",  # Replace with your chosen model
+      prompt=f"Extract named entities from the following text: {text}",
+      max_tokens=1024,
+      n=1,
+      stop=None,
+      temperature=0.5
+  )
+  entities = response.choices[0].text.strip().split("\n")
+  return entities
+
+def extract_relationships_with_azure_openai(text, entities):
+  """
+  Extracts relationships between entities using Azure OpenAI's language model.
+
+  This is a simplified approach using dependency parsing prompts.
+
+  Args:
+      text (str): The text to extract relationships from.
+      entities (list): A list of extracted entities.
+
+  Returns:
+      list: A list of tuples representing relationships (start_entity, relationship, end_entity).
+  """
+  relationships = []
+  for entity1 in entities:
+    for entity2 in entities:
+      if entity1 != entity2:
+        prompt = f"What is the relationship between {entity1} and {entity2} in the sentence: {text}?"
+        response = openai.Completion.create(
+          engine="text-davinci-003",  # Replace with your chosen model
+          prompt=prompt,
+          max_tokens=256,
+          n=1,
+          stop=None,
+          temperature=0.5
+        )
+        relationship = response.choices[0].text.strip()
+        relationships.append((entity1, relationship, entity2))
+  return relationships
+
+def create_graph(entities, relationships):
+  """
+  Creates an in-memory graph representation using a dictionary.
+
+  Args:
+      entities (list): A list of extracted entities.
+      relationships (list): A list of tuples representing relationships (start_entity, relationship, end_entity).
+
+  Returns:
+      dict: A dictionary representing the graph structure.
+  """
+  graph = {}  # Initialize an empty dictionary to represent the graph
+
+  # Add nodes (entities) to the graph
+  for entity in entities:
+    graph[entity] = {}  # Each entity key points to an empty dictionary for its connections
+
+  # Add relationships (edges) to the graph
+  for start, rel, end in relationships:
+    graph[start][end] = rel  # Add the relationship as a key-value pair on the starting entity
+
+  return graph
+
+# Example usage
+text = "Apple is a technology company founded by Steve Jobs. It develops smartphones like iPhone."
+entities = extract_entities_with_azure_openai(text)
+relationships = extract_relationships_with_azure_openai(text, entities)
+
+graph = create_graph(entities, relationships)
+
+# Accessing information in the graph
+print(graph["Apple"])  # Prints connections for the "Apple" entity
+
+# Iterating through relationships
+for start_entity, connections in graph.items():
+  for end_entity, relationship in connections.items():
+    print(f"{start_entity} -> {relationship} -> {end_entity}")
+```
+
 **The Role of Human Expertise**
 
 To mitigate these challenges, human expertise is essential.
