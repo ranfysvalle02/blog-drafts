@@ -89,6 +89,7 @@ To mitigate these challenges, human expertise is essential.
 
  
 **Conclusion**
+
 While the promise of automated knowledge graph creation is enticing, a human-centric approach is essential for building high-quality, trustworthy knowledge bases. 
 By effectively combining human intelligence with AI capabilities, we can unlock the full potential of this technology.
 
