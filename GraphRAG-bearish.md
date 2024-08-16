@@ -1,3 +1,5 @@
+![demo](https://arxiv.org/html/2310.01061v2/x2.png)
+
 ## The Unifying Goal: Context Augmentation
 
 At the core of these techniques, we find a singular objective: enriching the context available to LLMs. 
