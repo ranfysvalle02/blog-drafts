@@ -192,7 +192,7 @@ By effectively combining human intelligence with AI capabilities, we can unlock 
 * **Long-term strategic moat:** Companies can leverage knowledge graphs as a core asset to exploit their domain-specific data and create a competitive advantage.
 * **GraphRAG for complex reasoning tasks:** Developing techniques for handling complex queries and reasoning chains.
 
-** What about MongoDB? **
+**What about MongoDB?**
 
 ```
 import openai
