@@ -51,7 +51,25 @@ While the concept of automatically building knowledge graphs from raw data is ap
   * **Ambiguity:** Textual data can be ambiguous, making accurate interpretation difficult.
 * **Domain Specificity:**
   * **Unique Relationships:** Industries often have specific terminology and relationship types not captured in general language models.
+## The Challenge of Automatic Relationship Extraction
 
+The prospect of constructing knowledge graphs directly from raw data using LLMs is undeniably alluring. However, this endeavor is fraught with significant challenges.
+
+### LLM Limitations
+
+* **Bias:** LLMs are trained on massive datasets that inevitably contain biases. These biases can be subtly or overtly reflected in the extracted relationships, leading to skewed and potentially harmful knowledge graphs.
+* **Hallucinations:** LLMs are prone to fabricating information, a phenomenon known as hallucination. In the context of relationship extraction, this can result in the invention of nonexistent connections, compromising the integrity of the knowledge graph.
+* **Limited Understanding:** While LLMs have shown remarkable capabilities, their comprehension of complex relationships, especially those specific to particular domains, remains limited. This hinders their ability to accurately capture nuanced connections between entities.
+
+### Controlling LLM Output
+
+A critical aspect often overlooked is the challenge of controlling LLM output to align with specific requirements. While LLMs can generate text, ensuring the output adheres to a desired structure or format is non-trivial. For instance, extracting relationships might require the LLM to produce structured outputs like tuples or dictionaries.
+
+To address this, strategies such as:
+
+* **Function Calling:** Integrating functions within the LLM's capabilities can help structure the output, ensuring it meets specific requirements.
+* **Prompt Engineering:** Carefully crafting prompts can guide the LLM towards producing the desired output format.
+* **Reinforcement Learning from Human Feedback (RLHF):** Training the LLM to follow specific guidelines through human feedback can improve output control.
 
 ## Python Example
 
