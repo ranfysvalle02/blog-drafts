@@ -53,7 +53,6 @@ While the concept of automatically building knowledge graphs from raw data is ap
   * **Ambiguity:** Textual data can be ambiguous, making accurate interpretation difficult.
 * **Domain Specificity:**
   * **Unique Relationships:** Industries often have specific terminology and relationship types not captured in general language models.
-## The Challenge of Automatic Relationship Extraction
 
 The prospect of constructing knowledge graphs directly from raw data using LLMs is undeniably alluring. However, this endeavor is fraught with significant challenges.
 
