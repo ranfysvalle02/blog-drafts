@@ -66,24 +66,215 @@ To address this, strategies such as:
 * **Prompt Engineering:** Carefully crafting prompts can guide the LLM towards producing the desired output format.
 * **Reinforcement Learning from Human Feedback (RLHF):** Training the LLM to follow specific guidelines through human feedback can improve output control.
 
-## Python Example
+## Python Example (using MongoDB)
+```
+from pymongo import MongoClient
+from openai import AzureOpenAI
+import json 
 
---COMING SOON--
+# Replace with your actual values
+AZURE_OPENAI_ENDPOINT = "https://.openai.azure.com"
+AZURE_OPENAI_API_KEY = "" 
+deployment_name = "gpt-4-32k"  # The name of your model deployment
+az_client = AzureOpenAI(azure_endpoint=AZURE_OPENAI_ENDPOINT,api_version="2023-07-01-preview",api_key=AZURE_OPENAI_API_KEY)
 
-**The Role of Human Expertise**
+# Connect to MongoDB
+client = MongoClient("")
+db = client["DEMO"]  # Replace "your_database" with your actual database name
 
-To mitigate these challenges, human expertise is essential.
+# Define people collection (replace with your collection name)
+people_collection = db["__people"]
 
-* **Context Augmentation:** Providing domain-specific context to the LLM can improve accuracy.
-* **Relationship Definition:** Explicitly defining desired relationships helps guide the model.
-* **Quality Control:** Human evaluation and validation are crucial for ensuring data accuracy.
+# Delete all documents from the collection (for a clean demo)
+people_collection.delete_many({})
+print("Deleted existing documents from people collection.")
 
-**Hybrid Approach**
+# Sample data
+sample_data = [
+    {
+        "name": "Alice",
+        "referrals": ["Bob", "Charlie"],  # Alice referred Bob and Charlie
+        "actions": [
+            {"action": "made a purchase", "outcome": "received product"},
+            {"action": "wrote a review", "outcome": "positive feedback"},
+            {"action": "referred a friend", "outcome": "earned referral bonus"},
+            {"action": "referred a friend", "outcome": "earned referral bonus"}
+        ],
+        "customer_segment": "loyal"
+    },
+    {
+        "name": "Bob",
+        "referrals": ["David"],  # Bob referred David
+        "actions": [
+            {"action": "made a purchase", "outcome": "received product"},
+            {"action": "wrote a review", "outcome": "positive feedback"},
+            {"action": "referred a friend", "outcome": "earned referral bonus"}
+        ],
+        "customer_segment": "new"
+    },
+    {
+        "name": "Charlie",
+        "referrals": ["Eve"],  # Charlie referred Eve
+        "actions": [
+            {"action": "made a purchase", "outcome": "received product"},
+            {"action": "referred a friend", "outcome": "earned referral bonus"}
+        ],
+        "customer_segment": "new"
+    },
+    {
+        "name": "David",
+        "referrals": [],  # David didn't refer anyone
+        "actions": [
+            {"action": "made a purchase", "outcome": "received product"},
+            {"action": "recommended product", "outcome": "positive feedback"}
+        ],
+        "customer_segment": "new"
+    },
+    {
+        "name": "Eve",
+        "referrals": [],  # Eve didn't refer anyone
+        "actions": [
+            {"action": "made a purchase", "outcome": "received product"},
+            {"action": "wrote a review", "outcome": "positive feedback"}
+        ],
+        "customer_segment": "new"
+    }
+]
 
-* **Human-in-the-Loop:** Humans can provide initial structure and corrections.
-* **AI-Assisted Refinement:** LLMs can suggest potential relationships based on patterns.
-* **Iterative Improvement:** Continuous refinement through feedback loops.
+# Insert sample data into the collection
+people_collection.insert_many(sample_data)
+print("Inserted sample data into people collection.")
 
+raw_text = """
+    Alice, a tech enthusiast, found a product she liked and shared it with her friends, Bob and Charlie. Alice made a purchase and was so satisfied that she wrote a positive review online. A few weeks later, Alice bought another unit of the product as a gift for a friend.
+
+    Bob, intrigued by Alice's recommendation, decided to make a purchase. He was so satisfied that he also wrote a positive review and shared it with his friend, David. A month later, Bob bought the product again for his brother. 
+
+    David, initially skeptical, read Bob's review and decided to give it a try. He made a purchase and was so impressed that he recommended the product to his colleagues at work. After using the product for a while, David decided to buy another one as a backup.
+
+    Charlie, after careful consideration and reading Alice's review, also decided to buy the product. He was so impressed that he recommended it to his friend, Frank. Frank, inspired by Charlie, decided to buy the product as well and left a positive review online. A few days later, Frank bought another unit of the product for his girlfriend.
+"""
+
+print("NEW TEXT: ", raw_text)
+print("\nExtracting customer relationships...")
+# Knowledge Graph Construction: Create a comprehensive knowledge graph from various data sources (text, structured data, etc.).
+response = az_client.chat.completions.create(
+      model=deployment_name,
+      messages=[
+          {"role": "system", "content": "You are a helpful assistant that extracts insights from text."},
+          {"role": "system", "content": """
+    [response format]
+        [{
+            "name": "A",
+            "referrals": ["B", "C"],
+            "actions": [
+                {"action": "made a purchase", "outcome": "received product"},
+                {"action": "referred a friend", "outcome": "earned referral bonus"},
+                {"action": "referred a friend", "outcome": "earned referral bonus"}
+            ],
+            "customer_segment": "new|loyal"
+        },...]   
+    [end response format]
+    ** IMPORTANT! MUST BE VALID JSON! **
+"""},
+          {"role": "user", "content": raw_text}
+    ],
+  )
+
+# Rename 'relationships' to 'customer_relationships'
+customer_relationships = json.loads(response.choices[0].message.content.strip())
+
+print("\nExtracted customer relationships:")
+print("====================================================")
+for relationship in customer_relationships:
+    print(f"{relationship}")
+
+# Insert 'customer_relationships' into the collection
+for relationship in customer_relationships:
+    people_collection.update_one(
+        {"name": relationship["name"]},  # filter
+        {"$set": relationship},  # update
+        upsert=True  # options
+    )
+print("Upserted customer relationships into people collection.")
+
+# Query Understanding: Process and understand user queries to identify relevant entities and relations.
+USER_QUESTION = "Question: Who did Alice refer (directly or indirectly) and what actions did they take? \n"
+PRE_PROCESS_PROMPT = """
+    What is the name of the person being asked about? Respond in JSON format.
+    [response criteria]
+    {
+        "name": "Bob"
+    }
+    [end response criteria]
+    ** IMPORTANT! MUST BE VALID JSON! **
+"""
+response = az_client.chat.completions.create(
+    model=deployment_name,
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant that extracts the name of the person being asked about."},
+        {"role": "user", "content": USER_QUESTION+PRE_PROCESS_PROMPT}
+    ],
+)
+# Print the answer
+print(response.choices[0].message.content.strip())
+filter2use = json.loads(response.choices[0].message.content.strip())
+
+
+# Graph Traversal: Explore the knowledge graph based on the query, retrieving relevant information.
+# Define the aggregation pipeline
+pipeline = [
+    {"$match": filter2use},
+    {"$graphLookup": {
+        "from": "__people",
+        "startWith": "$referrals",
+        "connectFromField": "referrals",
+        "connectToField": "name",
+        "depthField": "depth",
+        "as": "referral_network"
+    }},
+    {"$unwind": "$referral_network"},
+    {"$unwind": "$referral_network.actions"},
+    {"$group": {
+        "_id": {"name": "$referral_network.name", "action": "$referral_network.actions.action"},
+        "count": {"$sum": 1},
+        "outcome": {"$first": "$referral_network.actions.outcome"},
+    }},
+    {"$project": {"_id": 0, "action": "$_id.action", "count": 1, "outcome": 1, "name": "$_id.name"}}
+]
+
+# Execute the aggregation pipeline
+result = people_collection.aggregate(pipeline)
+
+# Print the question being asked
+print("Question: Who did Alice refer (directly or indirectly) and what actions did they take?")
+# Print the answer
+print("Answer:")
+first_answer = ""
+for doc in list(result):
+    first_answer += (f"- {doc['name']} performed the action '{doc['action']}' {doc['count']} time(s), resulting in the outcome: '{doc['outcome']}'\n")
+print(first_answer)
+print("====================================================")
+
+# Contextual Enrichment: Combine retrieved graph information with original text for enhanced context.
+# Construct the prompt
+prompt = "Alice referred the following people (directly or indirectly): \n" + first_answer
+prompt += "What could be their potential next actions based on their past actions and customer segment?"
+print("PROMPT:")
+print(prompt)
+# Send the prompt to the az_client
+response = az_client.chat.completions.create(
+    model=deployment_name,
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant that predicts potential next actions based on past actions and customer segment."},
+        {"role": "user", "content": prompt}
+    ],
+)
+# Response Generation: Utilize a language model to generate a comprehensive and informative response based on the enriched context.
+# Print the answer
+print("Answer:")
+print(response.choices[0].message.content.strip())
+```
  
 **Conclusion**
 
@@ -95,8 +286,3 @@ By effectively combining human intelligence with AI capabilities, we can unlock 
 * **Small graphs and multi-agent systems:** Focus on creating smaller, task-specific knowledge graphs for complex information retrieval processes.
 * **Long-term strategic moat:** Companies can leverage knowledge graphs as a core asset to exploit their domain-specific data and create a competitive advantage.
 * **GraphRAG for complex reasoning tasks:** Developing techniques for handling complex queries and reasoning chains.
-
-**What about MongoDB?**
-
---COMING SOON--
-
