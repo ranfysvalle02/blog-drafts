@@ -18,7 +18,7 @@ This pursuit is a dynamic one, with new strategies and techniques continually em
 
 While the methods may vary, the ultimate goal remains consistent: optimizing context augmentation for enhanced LLM performance.
 
-## Introduction
+## What is GraphRAG?
 
 GraphRAG, a synthesis of knowledge graphs and Retrieval-Augmented Generation (RAG), presents an ambitious approach to enhancing language model capabilities. By theoretically leveraging the structured nature of knowledge graphs, GraphRAG aims to provide richer context for LLMs. 
 
