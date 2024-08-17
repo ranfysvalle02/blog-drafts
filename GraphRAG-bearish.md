@@ -31,8 +31,6 @@ A key characteristic of GraphRAG is its heavy reliance on LLMs for two critical 
 
 While GraphRAG offers potential benefits in terms of providing structured context, its effectiveness is contingent upon the accuracy and completeness of the automatically constructed knowledge graph, as well as the LLM's ability to accurately interpret queries and traverse the graph.
 
-## GraphRAG Pipeline
-
 * Knowledge graphs can be used in two ways within RAG:
     * As a data store to retrieve information from.
     * As a data store of the semantic structure to retrieve vector chunks from.
@@ -42,7 +40,9 @@ While GraphRAG offers potential benefits in terms of providing structured contex
     * Hierarchical retrieval: Deterministic retrieval through categories.
     * Hierarchical recommendation: Improved recommendation systems.
     * Personalization/Memory: Tailoring LLM responses based on user interactions.
-    
+
+## GraphRAG Pipeline
+
 **Core Concept:** Leverage a knowledge graph to enhance Retrieval-Augmented Generation (RAG).
 
 **Pipeline:**
