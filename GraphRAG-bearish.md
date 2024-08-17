@@ -1,5 +1,15 @@
 ![demo](https://arxiv.org/html/2310.01061v2/x2.png)
 
+# **GraphRAG on MongoDB**
+
+## **Introduction**
+
+Have you ever felt like your AI just isn't getting the whole picture? You feed it data, but the outputs still seem...off. Maybe it's missing key context, or struggling to grasp the relationships between different pieces of information.
+
+This is where **context augmentation** comes in. It's the secret sauce for taking large language models (LLMs) to the next level, by providing them with richer and more relevant information to work with.
+
+In this blog post, we'll delve into the world of context augmentation, exploring a fascinating technique called **GraphRAG**. We'll break down how it works, its potential benefits, and the challenges it faces. We'll even see a practical example using Python!
+
 ## The Unifying Goal: Context Augmentation
 
 At the core of these techniques, we find a singular objective: enriching the context available to LLMs. 
