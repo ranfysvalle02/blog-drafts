@@ -20,15 +20,16 @@ While the methods may vary, the ultimate goal remains consistent: optimizing con
 
 ## What is GraphRAG?
 
-GraphRAG, a synthesis of knowledge graphs and Retrieval-Augmented Generation (RAG), presents an ambitious approach to enhancing language model capabilities. By theoretically leveraging the structured nature of knowledge graphs, GraphRAG aims to provide richer context for LLMs. 
+**GraphRAG** is a method that combines knowledge graphs with Retrieval-Augmented Generation (RAG) to enhance language model capabilities. It aims to provide richer, more structured context for LLMs by leveraging the interconnected nature of information within a knowledge graph.
 
-While GraphRAG may prove valuable in specific domains, it is essential to recognize that it represents one of many strategies for context augmentation.
+### The Core of GraphRAG
 
-The efficacy of GraphRAG is contingent upon the accuracy and comprehensiveness of the automatically constructed knowledge graphs. 
+A key characteristic of GraphRAG is its heavy reliance on LLMs for two critical tasks:
 
-Given the current limitations of LLMs in extracting complex relationships from unstructured data, the potential for error and bias in graph construction is substantial. 
+1. **Automatic Knowledge Graph Construction:** GraphRAG often employs LLMs to extract entities and relationships from textual data, automatically building a knowledge graph. This approach, while promising, introduces challenges related to LLM limitations such as bias, hallucinations, and difficulty in capturing complex relationships.
+2. **Query Understanding and Graph Traversal:** To effectively utilize the knowledge graph, GraphRAG relies on the LLM to understand user queries, identify relevant entities, and navigate the graph structure. This process can be error-prone, especially when dealing with ambiguous or complex queries.
 
-While promising in theory, the practical utility of GraphRAG remains to be fully realized, especially in complex domains characterized by intricate data interdependencies. 
+While GraphRAG offers potential benefits in terms of providing structured context, its effectiveness is contingent upon the accuracy and completeness of the automatically constructed knowledge graph, as well as the LLM's ability to accurately interpret queries and traverse the graph.
 
 ## GraphRAG Pipeline
 
