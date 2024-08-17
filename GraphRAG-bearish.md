@@ -8,7 +8,7 @@ Have you ever felt like your AI just isn't getting the whole picture? You feed i
 
 This is where **context augmentation** comes in. It's the secret sauce for taking large language models (LLMs) to the next level, by providing them with richer and more relevant information to work with.
 
-In this blog post, we'll delve into the world of context augmentation, exploring a fascinating technique called **GraphRAG**. We'll break down how it works, its potential benefits, and the challenges it faces. We'll even see a practical example using Python!
+In this blog post, we'll delve into the world of context augmentation, exploring a technique called **GraphRAG**. We'll break down how it works, its potential benefits, and the challenges it faces. We'll even see a practical example using MongoDB!
 
 ## The Unifying Goal: Context Augmentation
 
