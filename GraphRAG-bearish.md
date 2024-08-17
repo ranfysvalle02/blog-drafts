@@ -299,6 +299,67 @@ response = az_client.chat.completions.create(
 print("Answer:")
 print(response.choices[0].message.content.strip())
 ```
+
+## Output
+
+```
+Deleted existing documents from people collection.
+Inserted sample data into people collection.
+NEW TEXT:  
+    Alice, a tech enthusiast, found a product she liked and shared it with her friends, Bob and Charlie. Alice made a purchase and was so satisfied that she wrote a positive review online. A few weeks later, Alice bought another unit of the product as a gift for a friend.
+
+    Bob, intrigued by Alice's recommendation, decided to make a purchase. He was so satisfied that he also wrote a positive review and shared it with his friend, David. A month later, Bob bought the product again for his brother. 
+
+    David, initially skeptical, read Bob's review and decided to give it a try. He made a purchase and was so impressed that he recommended the product to his colleagues at work. After using the product for a while, David decided to buy another one as a backup.
+
+    Charlie, after careful consideration and reading Alice's review, also decided to buy the product. He was so impressed that he recommended it to his friend, Frank. Frank, inspired by Charlie, decided to buy the product as well and left a positive review online. A few days later, Frank bought another unit of the product for his girlfriend.
+
+
+Extracting customer relationships...
+
+Extracted customer relationships:
+====================================================
+{'name': 'Alice', 'referrals': ['Bob', 'Charlie'], 'actions': [{'action': 'made a purchase', 'outcome': 'received product'}, {'action': 'referred a friend', 'outcome': 'earned referral bonus'}, {'action': 'made a purchase', 'outcome': 'received product'}], 'customer_segment': 'loyal'}
+{'name': 'Bob', 'referrals': ['David'], 'actions': [{'action': 'made a purchase', 'outcome': 'received product'}, {'action': 'referred a friend', 'outcome': 'earned referral bonus'}, {'action': 'made a purchase', 'outcome': 'received product'}], 'customer_segment': 'loyal'}
+{'name': 'David', 'referrals': [], 'actions': [{'action': 'made a purchase', 'outcome': 'received product'}, {'action': 'made a purchase', 'outcome': 'received product'}], 'customer_segment': 'loyal'}
+{'name': 'Charlie', 'referrals': ['Frank'], 'actions': [{'action': 'made a purchase', 'outcome': 'received product'}, {'action': 'referred a friend', 'outcome': 'earned referral bonus'}], 'customer_segment': 'new'}
+{'name': 'Frank', 'referrals': [], 'actions': [{'action': 'made a purchase', 'outcome': 'received product'}, {'action': 'made a purchase', 'outcome': 'received product'}], 'customer_segment': 'new'}
+Upserted customer relationships into people collection.
+{
+    "name": "Alice"
+}
+Question: Who did Alice refer (directly or indirectly) and what actions did they take?
+Answer:
+- Bob performed the action 'made a purchase' 2 time(s), resulting in the outcome: 'received product'
+- Bob performed the action 'referred a friend' 1 time(s), resulting in the outcome: 'earned referral bonus'
+- Frank performed the action 'made a purchase' 2 time(s), resulting in the outcome: 'received product'
+- Charlie performed the action 'referred a friend' 1 time(s), resulting in the outcome: 'earned referral bonus'
+- Charlie performed the action 'made a purchase' 1 time(s), resulting in the outcome: 'received product'
+- David performed the action 'made a purchase' 2 time(s), resulting in the outcome: 'received product'
+
+====================================================
+PROMPT:
+Alice referred the following people (directly or indirectly): 
+- Bob performed the action 'made a purchase' 2 time(s), resulting in the outcome: 'received product'
+- Bob performed the action 'referred a friend' 1 time(s), resulting in the outcome: 'earned referral bonus'
+- Frank performed the action 'made a purchase' 2 time(s), resulting in the outcome: 'received product'
+- Charlie performed the action 'referred a friend' 1 time(s), resulting in the outcome: 'earned referral bonus'
+- Charlie performed the action 'made a purchase' 1 time(s), resulting in the outcome: 'received product'
+- David performed the action 'made a purchase' 2 time(s), resulting in the outcome: 'received product'
+What could be their potential next actions based on their past actions and customer segment?
+Answer:
+Based on their past actions, the customers can engage in the following potential next actions:
+
+- Bob can potentially "make another purchase" considering his past purchase history. As he has also successfully "referred a friend" before, it's possible he may undertake that action again to earn more referral bonuses. 
+
+- Frank, based on his previous purchases, he is likely to "make another purchase" in the future. If he has earned benefits from the product, he may also start "referring friends" to earn additional rewards. 
+
+- Charlie, having made a purchase and referred a friend in the past, might also be prone to "make another purchase". Given his successful referral, another potential action could be "refer another friend".
+
+- David, as a recurring customer, is expected to "make another purchase". In case he finds the referral bonus appealing, he might "refer a friend" as his next action. 
+
+Note: The above predictions are probable actions. Actual behavior can be influenced by various other factors like specific customer preferences, product liking, brand loyalty, and promotional offers.
+```
  
 ## Conclusion
 
