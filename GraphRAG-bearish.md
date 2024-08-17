@@ -12,7 +12,7 @@ In this blog post, we'll delve into the world of context augmentation, exploring
 
 ## The Unifying Goal: Context Augmentation
 
-At the core of these techniques, we find a singular objective: enriching the context available to LLMs. 
+GraphRAG, Hybrid RAG, Hybrid GraphRAG, Agentic RAG, etc. At the core of these techniques, we find a singular objective: enriching the context available to LLMs. 
 The fundamental aim is to provide models with more comprehensive and relevant information in order to improve output quality. 
 This pursuit is a dynamic one, with new strategies and techniques continually emerging. 
 
