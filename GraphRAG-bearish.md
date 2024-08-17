@@ -68,7 +68,7 @@ By integrating a knowledge graph into the RAG process, GraphRAG aims to improve 
 While the concept of automatically building knowledge graphs from raw data is appealing, the reality has many challenges.
 
 * **LLM Limitations:**
-  * **Lost in the Middle Problem:** LLMs struggle with relevant information located in the middle of long inputs (not beginning or end). The attention mechanism for focusing on important parts might not prioritize mid-sequence information effectively.
+  * **Lost in the Middle Problem:** The attention mechanism for focusing on important content in the middle of long inputs might not prioritize mid-sequence information effectively.
   * **Bias:** LLMs are trained on massive datasets that can contain biases, leading to skewed relationship extraction.
   * **Hallucinations:** They can invent relationships that don't exist, compromising data integrity.
   * **Limited Understanding:** Deep understanding of complex relationships, especially domain-specific ones, remains elusive.
