@@ -1,6 +1,6 @@
 ![demo](https://arxiv.org/html/2310.01061v2/x2.png)
 
-# **Demystifying GraphRAG: A Deep Dive into Contextual Reasoning for AI**
+# **Demystifying GraphRAG: Contextual Reasoning for AI**
 
 ## **Introduction**
 
