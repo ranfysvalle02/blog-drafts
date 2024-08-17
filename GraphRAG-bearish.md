@@ -1,6 +1,6 @@
 ![demo](https://arxiv.org/html/2310.01061v2/x2.png)
 
-# **GraphRAG on MongoDB**
+# **Demystifying GraphRAG: A Deep Dive into Contextual Reasoning for AI**
 
 ## **Introduction**
 
