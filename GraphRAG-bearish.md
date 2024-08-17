@@ -8,6 +8,18 @@ This pursuit is a dynamic one, with new strategies and techniques continually em
 
 While the methods may vary, the ultimate goal remains consistent: optimizing context augmentation for enhanced LLM performance.
 
+## Introduction
+
+GraphRAG, a synthesis of knowledge graphs and Retrieval-Augmented Generation (RAG), presents an ambitious approach to enhancing language model capabilities. By theoretically leveraging the structured nature of knowledge graphs, GraphRAG aims to provide richer context for LLMs. 
+
+While GraphRAG may prove valuable in specific domains, it is essential to recognize that it represents one of many strategies for context augmentation.
+
+The efficacy of GraphRAG is contingent upon the accuracy and comprehensiveness of the automatically constructed knowledge graphs. 
+
+Given the current limitations of LLMs in extracting complex relationships from unstructured data, the potential for error and bias in graph construction is substantial. 
+
+While promising in theory, the practical utility of GraphRAG remains to be fully realized, especially in complex domains characterized by intricate data interdependencies. 
+
 ## GraphRAG Pipeline
 
 * Knowledge graphs can be used in two ways within RAG:
@@ -279,7 +291,7 @@ print(response.choices[0].message.content.strip())
 **Conclusion**
 
 While the promise of automated knowledge graph creation is enticing, a human-centric approach is essential for building high-quality, trustworthy knowledge bases. 
-By effectively combining human intelligence with AI capabilities, we can unlock the full potential of this technology.
+By effectively combining human intelligence with AI capabilities, we can unlock the full potential of this technology. Future research should focus on developing robust methods for knowledge graph construction and integration, as well as exploring alternative approaches to enhance language model performance (fine-tuning, hybrid approaches, etc).
 
 **The Future of GraphRAG:**
 
