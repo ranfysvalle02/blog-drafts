@@ -263,6 +263,7 @@ prompt += "What could be their potential next actions based on their past action
 print("PROMPT:")
 print(prompt)
 # Send the prompt to the az_client
+# Response Generation: Utilize a language model to generate a comprehensive and informative response based on the enriched context.
 response = az_client.chat.completions.create(
     model=deployment_name,
     messages=[
@@ -270,7 +271,6 @@ response = az_client.chat.completions.create(
         {"role": "user", "content": prompt}
     ],
 )
-# Response Generation: Utilize a language model to generate a comprehensive and informative response based on the enriched context.
 # Print the answer
 print("Answer:")
 print(response.choices[0].message.content.strip())
