@@ -302,7 +302,9 @@ print(response.choices[0].message.content.strip())
 **Conclusion**
 
 While the promise of automated knowledge graph creation is enticing, a human-centric approach is essential for building high-quality, trustworthy knowledge bases. 
-By effectively combining human intelligence with AI capabilities, we can unlock the full potential of this technology. Future research should focus on developing robust methods for knowledge graph construction and integration, as well as exploring alternative approaches to enhance language model performance (fine-tuning, hybrid approaches, etc).
+It's crucial to recognize that GraphRAG is just one tool in the context augmentation toolkit. 
+
+By effectively combining human intelligence with AI capabilities, we can unlock the full potential of this technology. 
 
 **The Future of GraphRAG:**
 
