@@ -1,5 +1,3 @@
-Sure, here is a blog post about attention in transformer architecture:
-
 **Attention in Transformers: A Closer Look**
 
 
