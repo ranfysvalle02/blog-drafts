@@ -40,21 +40,16 @@ In this example, we'll be using the knowledge graph primarily as a data store fr
 
 **Pipeline:**
 
-1. **Knowledge Graph Construction:** Create a comprehensive knowledge graph from various data sources (text, structured data, etc.).
-2. **Query Understanding:** Process and understand user queries to identify relevant entities and relations.
-3. **Graph Traversal:** Explore the knowledge graph based on the query, retrieving relevant information.
-4. **Contextual Enrichment:** Combine retrieved graph information with original text for enhanced context.
-5. **Response Generation:** Utilize a language model to generate a comprehensive and informative response based on the enriched context.
+1. **Knowledge Graph Construction:** Utilize LLM's capabilities to automate the creation of a comprehensive knowledge graph. 
 
-**Key Components:**
+2. **Query Understanding:** Pre-process user queries to identify key entities and relationships.
 
-* **Knowledge Graph:** A structured representation of entities and their relationships.
-* **Query Understanding:** Interprets user queries and extracts key information.
-* **Graph Traversal Algorithm:** Efficiently navigates the knowledge graph.
-* **Contextual Fusion Module:** Combines graph information with textual context.
-* **Language Model:** Generates human-like text based on provided information.
+3. **Graph Traversal:** Navigate through the knowledge graph based on the understood query. 
 
-By integrating a knowledge graph into the RAG process, GraphRAG aims to improve response accuracy, coherence, and factuality.
+4. **Contextual Enrichment:** Merge the retrieved graph information with the original text to provide a richer context.
+
+5. **Response Generation:** Leverage an LLM to generate a detailed and informative response.
+
 
 ## The Challenge of Automatic Relationship Extraction
 
