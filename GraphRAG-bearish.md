@@ -96,22 +96,31 @@ To address this, strategies such as:
 ## Python Example (using MongoDB)
 ```
 from enum import Enum
-from typing import List, Dict, Tuple
-from openai import AzureOpenAI
+from typing import List
 import json 
 from pymongo import MongoClient
+import spacy
+from openai import AzureOpenAI
+
+# Load English tokenizer, tagger, parser, NER and word vectors
+nlp = spacy.load("en_core_web_sm")
 
 # Replace with your actual values
 MDB_URI = ""
+MDB_DATABASE = ""
+MDB_COLL = ""
 AZURE_OPENAI_ENDPOINT = ""
 AZURE_OPENAI_API_KEY = "" 
 deployment_name = "gpt-4o-mini"  # The name of your model deployment
+
+# Initialize Azure OpenAI client
 az_client = AzureOpenAI(azure_endpoint=AZURE_OPENAI_ENDPOINT,api_version="2023-07-01-preview",api_key=AZURE_OPENAI_API_KEY)
 
 class Relationship(Enum):
     WORKED_AT = "worked at"
     FOUNDED = "founded"
 
+# List of documents to create the knowledge graph
 documents = [
     "Steve Jobs founded Apple.",
     "Before Apple, Steve Jobs worked at Atari.",
@@ -161,7 +170,7 @@ class KnowledgeGraph:
         self.client = MongoClient(MDB_URI)
 
     def store_in_mongodb(self, db_name: str, collection_name: str):
-        # Connect to MongoDB
+        """Stores the knowledge graph in MongoDB."""
         db = self.client[db_name]
         collection = db[collection_name]
         collection.delete_many({})
@@ -171,7 +180,6 @@ class KnowledgeGraph:
             for edge in self.edges:
                 if edge.source_node.name == name:
                     node_data['edges'].append({'relation': edge.relation, 'target': edge.target_node.name})
-                    print(edge.source_node.name, edge.relation, edge.target_node.name)
             collection.insert_one(node_data)
     
     def create_knowledge_graph(self):
@@ -221,6 +229,7 @@ class KnowledgeGraph:
                         self.edges.append(edge)
 
     def print_knowledge_graph(self):
+        """Prints the nodes and edges of the knowledge graph."""
         print("\nNodes:")
         for node in self.nodes.values():
             print(node.name)
@@ -230,6 +239,7 @@ class KnowledgeGraph:
             print(f"{edge.source_node.name} {edge.relation} {edge.target_node.name}")
 
     def find_related_companies(self, person_name: str):
+        """Finds companies related to a person using the knowledge graph stored in MongoDB."""
         db = self.client["apollo-salesops"]
         collection = db["__kg"]
 
@@ -263,18 +273,54 @@ class KnowledgeGraph:
         return list(result)
 
 
+# Create the knowledge graph
 knowledge_graph = KnowledgeGraph(documents)
 knowledge_graph.create_knowledge_graph()
 knowledge_graph.print_knowledge_graph()
-knowledge_graph.store_in_mongodb("apollo-salesops", "__kg")
-
-# Test the function
-print('print(knowledge_graph.find_related_companies("Steve Jobs"))')
-print(knowledge_graph.find_related_companies("Steve Jobs"))
-print('print(knowledge_graph.find_related_companies("Elon Musk"))')
-print(knowledge_graph.find_related_companies("Elon Musk"))
-
-print("test")
+print("Knowledge graph created and printed.")
+print("Storing knowledge graph in MongoDB.")
+knowledge_graph.store_in_mongodb(MDB_DATABASE, MDB_COLL)
+print("Knowledge graph stored in MongoDB.")
+print("Lets begin.")
+Q = "Write a rap about Elon Musk"
+print("User Prompt: " + Q)
+print("QUERY UNDERSTANDING: Extract the name of the person in the prompt.")
+text = nlp(Q)
+person = ""
+for entity in text.ents:
+    if entity.label_ == "PERSON":
+        print("Person: ")
+        print(entity.text.strip(',.'))
+        person = entity.text.strip(',')
+        break
+print("GRAPH TRAVERSAL: Find related companies to the person.")
+context_fusion = knowledge_graph.find_related_companies(person)
+print("RELATED COMPANIES:")
+print(context_fusion)
+print("Contextual Fusion: Combines graph information with textual context.")
+msgs = [
+    {"role": "system", "content": "You are a helpful assistant that uses the provided additional context to generate more relevant responses."},
+    {"role": "user", "content": "Given this user prompt: " + Q},
+    {"role": "user", "content": "Given this additional context: ```\n" + str(context_fusion)+"\n```"},
+    {"role": "user", "content": """
+     Respond to the user prompt in JSON format.
+[response format]
+     - JSON object: { "response": "answer goes here" }
+"""
+    },
+]
+print(
+    json.dumps(msgs, indent=2)
+)
+print("Language Model: Generates human-like text based on provided information.")
+ai_response = az_client.chat.completions.create(model=deployment_name,
+    messages=msgs,
+    response_format={ "type": "json_object" }
+)
+ai_response = json.loads(ai_response.choices[0].message.content.strip())
+print(
+    ai_response.get("response")
+)
 ```
 
 ## Output
