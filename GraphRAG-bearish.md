@@ -57,7 +57,7 @@ While GraphRAG offers potential benefits in terms of providing structured contex
 **Key Components:**
 
 * **Knowledge Graph:** A structured representation of entities and their relationships.
-* **Query Understanding Module:** Interprets user queries and extracts key information.
+* **Query Understanding:** Interprets user queries and extracts key information.
 * **Graph Traversal Algorithm:** Efficiently navigates the knowledge graph.
 * **Contextual Fusion Module:** Combines graph information with textual context.
 * **Language Model:** Generates human-like text based on provided information.
