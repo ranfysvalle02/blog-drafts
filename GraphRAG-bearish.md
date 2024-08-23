@@ -310,24 +310,61 @@ Elon Musk founded PayPal
 Elon Musk founded Tesla
 Jeff Bezos founded Amazon
 Jeff Bezos founded Blue Origin
-Steve Jobs founded Apple
-Steve Jobs worked at Atari
-Steve Jobs founded NeXT
-Steve Jobs worked at Apple
-Steve Wozniak founded Apple
-Steve Wozniak worked at Apple
-Bill Gates founded Microsoft
-Bill Gates worked at Microsoft
-Elon Musk founded SpaceX
-Elon Musk founded PayPal
-Elon Musk founded Tesla
-Jeff Bezos founded Amazon
-Jeff Bezos founded Blue Origin
-print(knowledge_graph.find_related_companies("Steve Jobs"))
-[{'related_companies': [{'_id': 'Atari', 'type': 'company', 'depth': 0}, {'_id': 'NeXT', 'type': 'company', 'depth': 0}, {'_id': 'Apple', 'type': 'company', 'depth': 0}]}]
-print(knowledge_graph.find_related_companies("Elon Musk"))
-[{'related_companies': [{'_id': 'SpaceX', 'type': 'company', 'depth': 0}, {'_id': 'PayPal', 'type': 'company', 'depth': 0}, {'_id': 'Tesla', 'type': 'company', 'depth': 0}]}]
-test
+Knowledge graph created and printed.
+Storing knowledge graph in MongoDB.
+Knowledge graph stored in MongoDB.
+Lets begin.
+User Prompt: Write a rap about Elon Musk
+QUERY UNDERSTANDING: Extract the name of the person in the prompt.
+Person: 
+Elon Musk
+GRAPH TRAVERSAL: Find related companies to the person.
+RELATED COMPANIES:
+[{'related_companies': [{'_id': 'PayPal', 'type': 'company', 'depth': 0}, {'_id': 'SpaceX', 'type': 'company', 'depth': 0}, {'_id': 'Tesla', 'type': 'company', 'depth': 0}]}]
+Contextual Fusion: Combines graph information with textual context.
+[
+  {
+    "role": "system",
+    "content": "You are a helpful assistant that uses the provided additional context to generate more relevant responses."
+  },
+  {
+    "role": "user",
+    "content": "Given this user prompt: Write a rap about Elon Musk"
+  },
+  {
+    "role": "user",
+    "content": "Given this additional context: ```\n[{'related_companies': [{'_id': 'PayPal', 'type': 'company', 'depth': 0}, {'_id': 'SpaceX', 'type': 'company', 'depth': 0}, {'_id': 'Tesla', 'type': 'company', 'depth': 0}]}]\n```"
+  },
+  {
+    "role": "user",
+    "content": "\n     Respond to the user prompt in JSON format.\n[response format]\n     - JSON object: { \"response\": \"answer goes here\" }\n"
+  }
+]
+Language Model: Generates human-like text based on provided information.
+Yo, let me drop a verse about the man named Elon,
+From PayPal streets to space, he's a true phenom.
+Started with the bucks, making money on the run,
+Now he’s launching rockets, man, ain’t that some fun?
+
+SpaceX in the sky, reppin' the red, white, and blue,
+Falcon rockets soaring, making dreams come true.
+Starlink in the clouds, internet for the masses,
+Connecting all the corners, breaking all the barriers, classes.
+
+Then there's Tesla, take a ride in the future,
+Electric dreams rolling, silent like a suturer.
+Sustainable vibes, he’s changing up the game,
+With each new model, we all look on, stake our claim.
+
+Innovator in the lab, pushing limits to the edge,
+With a vision so vivid, he walks that razor's ledge.
+To Mars he wants to go, colonize the red, (hey!)
+With his mind in the stars, and the world in his thread.
+
+So here's to you, Elon, keep reaching for the sky,
+In this rap we celebrate, let your ambitions fly.
+From Earth to the stars, with a bright LED glow,
+You’re the rocket man, let the whole world know!
 ```
  
 ## Conclusion
