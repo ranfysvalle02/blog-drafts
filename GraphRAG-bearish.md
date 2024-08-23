@@ -67,6 +67,9 @@ While the concept of automatically building knowledge graphs from raw data is ap
   * **Unique Relationships:** Industries often have specific terminology and relationship types not captured in general language models.
 
 ### How does GraphRAG differ from Vector RAG?
+
+![](https://dist.neo4j.com/wp-content/uploads/20230615211423/1N-TVTbRffy_VQ0DPcx0JKg.png)
+
 * **Vector RAG** relies on vector embeddings to represent information and uses similarity search to retrieve relevant documents. It struggles with higher-order reasoning and complex queries.
 * **GraphRAG** uses a knowledge graph to represent information, capturing entities, actions, and their relationships. This allows for more complex reasoning and the ability to answer questions that require understanding underlying connections.
 
