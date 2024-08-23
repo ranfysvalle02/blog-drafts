@@ -35,15 +35,8 @@ While GraphRAG offers potential benefits in terms of providing structured contex
 * Knowledge graphs can be used in two ways within RAG:
     * As a data store to retrieve information from.
     * As a data store of the semantic structure to retrieve vector chunks from.
- 
-For this example, we will focus on Knowledge graphs as a data store to retrieve information from.
 
-* Scenarios where knowledge graphs are most relevant involve:
-    * Conceptual aggregation: Combining information from multiple sources.
-    * Conceptual alignment: Aligning information within an enterprise workflow.
-    * Hierarchical retrieval: Deterministic retrieval through categories.
-    * Hierarchical recommendation: Improved recommendation systems.
-    * Personalization/Memory: Tailoring LLM responses based on user interactions.
+In this example, we'll be using the knowledge graph primarily as a data store from which we can retrieve information. Specifically, in our Python example, we navigate through the knowledge graph to identify companies that are associated with a particular individual.
 
 ## GraphRAG Pipeline
 
