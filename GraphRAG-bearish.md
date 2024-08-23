@@ -30,11 +30,14 @@ A key characteristic of GraphRAG is its heavy reliance on LLMs for two critical 
 1. **Automatic Knowledge Graph Construction:** GraphRAG often employs LLMs to extract entities and relationships from textual data, automatically building a knowledge graph. This approach, while promising, introduces challenges related to LLM limitations such as bias, hallucinations, and difficulty in capturing complex relationships.
 2. **Query Understanding and Graph Traversal:** To effectively utilize the knowledge graph, GraphRAG relies on the LLM to understand user queries, identify relevant entities, and navigate the graph structure. This process can be error-prone, especially when dealing with ambiguous or complex queries.
 
-While GraphRAG offers potential benefits in terms of providing structured context, its effectiveness is contingent upon the accuracy and completeness of the automatically constructed knowledge graph, as well as the LLM's ability to accurately interpret queries and traverse the graph.
+While GraphRAG offers potential benefits in terms of providing structured context, its effectiveness is contingent upon the accuracy and completeness of the automatically constructed knowledge graph, as well as the LLM's ability to accurately interpret the input.
 
 * Knowledge graphs can be used in two ways within RAG:
     * As a data store to retrieve information from.
     * As a data store of the semantic structure to retrieve vector chunks from.
+ 
+For this example, we will focus on Knowledge graphs as a data store to retrieve information from.
+
 * Scenarios where knowledge graphs are most relevant involve:
     * Conceptual aggregation: Combining information from multiple sources.
     * Conceptual alignment: Aligning information within an enterprise workflow.
