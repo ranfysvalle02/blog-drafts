@@ -66,6 +66,42 @@ While the concept of automatically building knowledge graphs from raw data is ap
 * **Domain Specificity:**
   * **Unique Relationships:** Industries often have specific terminology and relationship types not captured in general language models.
 
+### How does GraphRAG differ from Vector RAG?
+* **Vector RAG** relies on vector embeddings to represent information and uses similarity search to retrieve relevant documents. It struggles with higher-order reasoning and complex queries.
+* **GraphRAG** uses a knowledge graph to represent information, capturing entities, actions, and their relationships. This allows for more complex reasoning and the ability to answer questions that require understanding underlying connections.
+
+* **Higher-order questions:** GraphRAG can handle complex questions like "Show me all Accounts, Product Groups at risk of late delivery? Explain why?" by traversing the knowledge graph to identify relevant entities and relationships.
+* **Chain of thought reasoning:** By understanding entities, actions, and outcomes, GraphRAG can mimic human-like reasoning, breaking down problems into smaller steps. For example, it can identify factors impacting product delivery, analyze inventory levels, and consider supplier performance.
+* **Leveraging private knowledge:** GraphRAG can incorporate domain-specific knowledge (like a Toyota warehouse manager's mental model) into the graph, enabling deeper understanding and better decision-making.
+
+## Red Flags to Look For
+
+* **Inaccurate or incomplete knowledge graph:** This can lead to incorrect or misleading information.
+* **Poor graph connectivity:** A sparsely connected graph can limit the ability to find relevant information.
+* **Overfitting to the knowledge graph:** The model might become too reliant on the graph, hindering its ability to handle unseen information.
+* **High computational costs:** Excessive resource consumption can limit the practicality of GraphRAG.
+* **Limited explainability:** While GraphRAG improves explainability, complex graph structures can still be difficult to interpret.
+
+## Good Data for GraphRAG
+
+Good data for GraphRAG is:
+
+* **Rich in entities and relationships:** The data should contain abundant information about entities and their connections.
+* **Consistent and accurate:** Data should be free from errors and inconsistencies to ensure the reliability of the knowledge graph.
+* **Diverse and representative:** The data should cover a wide range of topics and perspectives to avoid biases.
+* **Well-structured:** Data that is easily processed and transformed into a graph format is ideal.
+* **Domain-specific:** Data aligned with the target application domain is crucial for effective knowledge graph construction.
+
+## Bad Data for GraphRAG
+
+Bad data for GraphRAG is:
+
+* **Sparse and noisy:** Data with limited information or many errors can hinder knowledge graph construction.
+* **Inconsistent and contradictory:** Conflicting information can lead to inaccuracies in the graph.
+* **Biased and unbalanced:** Data that represents only a specific viewpoint can limit the graph's generalizability.
+* **Poorly structured:** Data that is difficult to process and extract information from can slow down development.
+* **Irrelevant:** Data unrelated to the target application domain is a waste of resources.
+
 
 ## Python Example (using MongoDB)
 ```
