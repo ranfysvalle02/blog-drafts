@@ -38,8 +38,6 @@ In this example, we'll be using the knowledge graph primarily as a data store fr
 
 **Core Concept:** Leverage a knowledge graph to enhance Retrieval-Augmented Generation (RAG).
 
-**Pipeline:**
-
 1. **Knowledge Graph Construction:** Utilize LLM's capabilities to automate the creation of a comprehensive knowledge graph. 
 
 2. **Query Understanding:** Pre-process user queries to identify key entities and relationships.
@@ -68,17 +66,6 @@ While the concept of automatically building knowledge graphs from raw data is ap
 * **Domain Specificity:**
   * **Unique Relationships:** Industries often have specific terminology and relationship types not captured in general language models.
 
-The prospect of constructing knowledge graphs directly from raw data using LLMs is undeniably alluring. However, this endeavor is fraught with significant challenges.
-
-### Controlling LLM Output
-
-A critical aspect often overlooked is the challenge of controlling LLM output to align with specific requirements. While LLMs can generate text, ensuring the output adheres to a desired structure or format is non-trivial. For instance, extracting relationships might require the LLM to produce structured outputs like tuples or dictionaries.
-
-To address this, strategies such as:
-
-* **Function Calling:** Integrating functions within the LLM's capabilities can help structure the output, ensuring it meets specific requirements.
-* **Prompt Engineering:** Carefully crafting prompts can guide the LLM towards producing the desired output format.
-* **Reinforcement Learning from Human Feedback (RLHF):** Training the LLM to follow specific guidelines through human feedback can improve output control.
 
 ## Python Example (using MongoDB)
 ```
