@@ -64,9 +64,9 @@ While GraphRAG offers potential benefits in terms of providing structured contex
 
 By integrating a knowledge graph into the RAG process, GraphRAG aims to improve response accuracy, coherence, and factuality.
 
-![](https://dist.neo4j.com/wp-content/uploads/20230615211423/1N-TVTbRffy_VQ0DPcx0JKg.png)
-
 ## The Challenge of Automatic Relationship Extraction
+
+![](https://dist.neo4j.com/wp-content/uploads/20230615211423/1N-TVTbRffy_VQ0DPcx0JKg.png)
 
 While the concept of automatically building knowledge graphs from raw data is appealing, the reality has many challenges.
 
