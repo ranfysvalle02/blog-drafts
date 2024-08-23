@@ -32,10 +32,6 @@ A key characteristic of GraphRAG is its heavy reliance on LLMs for two critical 
 
 While GraphRAG offers potential benefits in terms of providing structured context, its effectiveness is contingent upon the accuracy and completeness of the automatically constructed knowledge graph, as well as the LLM's ability to accurately interpret the input.
 
-* Knowledge graphs can be used in two ways within RAG:
-    * As a data store to retrieve information from.
-    * As a data store of the semantic structure to retrieve vector chunks from.
-
 In this example, we'll be using the knowledge graph primarily as a data store from which we can retrieve information. Specifically, in our Python example, we navigate through the knowledge graph to identify companies that are associated with a particular individual.
 
 ## GraphRAG Pipeline
