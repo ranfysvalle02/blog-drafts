@@ -1,4 +1,5 @@
-![](https://dist.neo4j.com/wp-content/uploads/20230615211423/1N-TVTbRffy_VQ0DPcx0JKg.png)
+
+![](https://dist.neo4j.com/wp-content/uploads/20230615211415/1mkYvs8_TmzLhUUI1CShNfw.png)
 
 # **Demystifying GraphRAG: Contextual Reasoning for AI**
 
@@ -62,6 +63,8 @@ While GraphRAG offers potential benefits in terms of providing structured contex
 * **Language Model:** Generates human-like text based on provided information.
 
 By integrating a knowledge graph into the RAG process, GraphRAG aims to improve response accuracy, coherence, and factuality.
+
+![](https://dist.neo4j.com/wp-content/uploads/20230615211423/1N-TVTbRffy_VQ0DPcx0JKg.png)
 
 ## The Challenge of Automatic Relationship Extraction
 
