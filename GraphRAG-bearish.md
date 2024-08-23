@@ -176,7 +176,6 @@ class KnowledgeGraph:
     
     def create_knowledge_graph(self):
         """Creates a knowledge graph from the list of documents."""
-        cache_kg = ""
         for document in self.documents:
             relationships = []
             prompt = f"Identify relationships in the text: ```{str(document)}```\n"
