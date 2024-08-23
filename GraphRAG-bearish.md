@@ -95,273 +95,240 @@ To address this, strategies such as:
 
 ## Python Example (using MongoDB)
 ```
-from pymongo import MongoClient
+from enum import Enum
+from typing import List, Dict, Tuple
 from openai import AzureOpenAI
 import json 
+from pymongo import MongoClient
 
 # Replace with your actual values
-AZURE_OPENAI_ENDPOINT = "https://.openai.azure.com"
+MDB_URI = ""
+AZURE_OPENAI_ENDPOINT = ""
 AZURE_OPENAI_API_KEY = "" 
-deployment_name = "gpt-4-32k"  # The name of your model deployment
+deployment_name = "gpt-4o-mini"  # The name of your model deployment
 az_client = AzureOpenAI(azure_endpoint=AZURE_OPENAI_ENDPOINT,api_version="2023-07-01-preview",api_key=AZURE_OPENAI_API_KEY)
 
-# Connect to MongoDB
-client = MongoClient("")
-db = client["DEMO"]  # Replace "your_database" with your actual database name
+class Relationship(Enum):
+    WORKED_AT = "worked at"
+    FOUNDED = "founded"
 
-# Define people collection (replace with your collection name)
-people_collection = db["__people"]
-
-# Delete all documents from the collection (for a clean demo)
-people_collection.delete_many({})
-print("Deleted existing documents from people collection.")
-
-# Sample data
-sample_data = [
-    {
-        "name": "Alice",
-        "referrals": ["Bob", "Charlie"],  # Alice referred Bob and Charlie
-        "actions": [
-            {"action": "made a purchase", "outcome": "received product"},
-            {"action": "wrote a review", "outcome": "positive feedback"},
-            {"action": "referred a friend", "outcome": "earned referral bonus"},
-            {"action": "referred a friend", "outcome": "earned referral bonus"}
-        ],
-        "customer_segment": "loyal"
-    },
-    {
-        "name": "Bob",
-        "referrals": ["David"],  # Bob referred David
-        "actions": [
-            {"action": "made a purchase", "outcome": "received product"},
-            {"action": "wrote a review", "outcome": "positive feedback"},
-            {"action": "referred a friend", "outcome": "earned referral bonus"}
-        ],
-        "customer_segment": "new"
-    },
-    {
-        "name": "Charlie",
-        "referrals": ["Eve"],  # Charlie referred Eve
-        "actions": [
-            {"action": "made a purchase", "outcome": "received product"},
-            {"action": "referred a friend", "outcome": "earned referral bonus"}
-        ],
-        "customer_segment": "new"
-    },
-    {
-        "name": "David",
-        "referrals": [],  # David didn't refer anyone
-        "actions": [
-            {"action": "made a purchase", "outcome": "received product"},
-            {"action": "recommended product", "outcome": "positive feedback"}
-        ],
-        "customer_segment": "new"
-    },
-    {
-        "name": "Eve",
-        "referrals": [],  # Eve didn't refer anyone
-        "actions": [
-            {"action": "made a purchase", "outcome": "received product"},
-            {"action": "wrote a review", "outcome": "positive feedback"}
-        ],
-        "customer_segment": "new"
-    }
+documents = [
+    "Steve Jobs founded Apple.",
+    "Before Apple, Steve Jobs worked at Atari.",
+    "Steve Wozniak and Steve Jobs founded Apple together.",
+    "After leaving Apple, Steve Jobs founded NeXT.",
+    "Steve Wozniak and Steve Jobs worked together at Apple.",
+    "Bill Gates founded Microsoft.",
+    "Microsoft and Apple were rivals in the early days of the personal computer market.",
+    "Bill Gates worked at Microsoft for many years before stepping down as CEO.",
+    "Elon Musk founded SpaceX.",
+    "Before SpaceX, Elon Musk founded PayPal.",
+    "Elon Musk also founded Tesla, a company that produces electric vehicles.",
+    "Jeff Bezos founded Amazon.",
+    "Amazon started as an online bookstore before expanding into other markets.",
+    "Jeff Bezos also founded Blue Origin, a space exploration company.",
+    "Blue Origin and SpaceX are competitors in the private space industry."
 ]
 
-# Insert sample data into the collection
-people_collection.insert_many(sample_data)
-print("Inserted sample data into people collection.")
+class Node:
+    """Represents a node in the knowledge graph."""
+    def __init__(self, name: str, type: str):
+        self.name = name
+        self.type = type
 
-raw_text = """
-    Alice, a tech enthusiast, found a product she liked and shared it with her friends, Bob and Charlie. Alice made a purchase and was so satisfied that she wrote a positive review online. A few weeks later, Alice bought another unit of the product as a gift for a friend.
+class Edge:
+    """Represents an edge in the knowledge graph."""
+    def __init__(self, source_node: Node, target_node: Node, relation: str):
+        self.source_node = source_node
+        self.target_node = target_node
+        self.relation = relation
 
-    Bob, intrigued by Alice's recommendation, decided to make a purchase. He was so satisfied that he also wrote a positive review and shared it with his friend, David. A month later, Bob bought the product again for his brother. 
+    def __eq__(self, other):
+        if isinstance(other, Edge):
+            return self.source_node.name == other.source_node.name and self.target_node.name == other.target_node.name and self.relation == other.relation
+        return False
 
-    David, initially skeptical, read Bob's review and decided to give it a try. He made a purchase and was so impressed that he recommended the product to his colleagues at work. After using the product for a while, David decided to buy another one as a backup.
+    def __hash__(self):
+        return hash((self.source_node.name, self.target_node.name, self.relation))
 
-    Charlie, after careful consideration and reading Alice's review, also decided to buy the product. He was so impressed that he recommended it to his friend, Frank. Frank, inspired by Charlie, decided to buy the product as well and left a positive review online. A few days later, Frank bought another unit of the product for his girlfriend.
-"""
+class KnowledgeGraph:
+    """Creates a knowledge graph from a list of documents."""
+    def __init__(self, documents: List[str]):
+        self.documents = documents
+        self.nodes = {}
+        self.edges = []
+        # Connect to MongoDB
+        self.client = MongoClient(MDB_URI)
 
-print("NEW TEXT: ", raw_text)
-print("\nExtracting customer relationships...")
-# Knowledge Graph Construction: Create a comprehensive knowledge graph from various data sources (text, structured data, etc.).
-response = az_client.chat.completions.create(
-      model=deployment_name,
-      messages=[
-          {"role": "system", "content": "You are a helpful assistant that extracts insights from text."},
-          {"role": "system", "content": """
-    [response format]
-        [{
-            "name": "A",
-            "referrals": ["B", "C"],
-            "actions": [
-                {"action": "made a purchase", "outcome": "received product"},
-                {"action": "referred a friend", "outcome": "earned referral bonus"},
-                {"action": "referred a friend", "outcome": "earned referral bonus"}
-            ],
-            "customer_segment": "new|loyal"
-        },...]   
-    [end response format]
-    ** IMPORTANT! MUST BE VALID JSON! **
-"""},
-          {"role": "user", "content": raw_text}
-    ],
-  )
+    def store_in_mongodb(self, db_name: str, collection_name: str):
+        # Connect to MongoDB
+        db = self.client[db_name]
+        collection = db[collection_name]
+        collection.delete_many({})
+        # Convert nodes and edges to a format suitable for MongoDB
+        for name, node in self.nodes.items():
+            node_data = {'_id': name, 'type': node.type, 'edges': []}
+            for edge in self.edges:
+                if edge.source_node.name == name:
+                    node_data['edges'].append({'relation': edge.relation, 'target': edge.target_node.name})
+                    print(edge.source_node.name, edge.relation, edge.target_node.name)
+            collection.insert_one(node_data)
+    
+    def create_knowledge_graph(self):
+        """Creates a knowledge graph from the list of documents."""
+        cache_kg = ""
+        for document in self.documents:
+            relationships = []
+            prompt = f"Identify relationships in the text: ```{str(document)}```\n"
+            prompt += "Following relationships are possible: ```"
+            prompt += ", ".join([rel.value for rel in Relationship])
+            prompt += """```
+    Format concise response as a JSON object with only two keys called "relationships", and "nodes". 
+    The value of the "relationships" key should be a list of objects each with these fields (source, source_type, relation, target, target_type).
+    IF NO RELATIONSHIP IS FOUND, RETURN EMPTY LIST.
+    IF NO NODES ARE FOUND, RETURN EMPTY LIST.
 
-# Rename 'relationships' to 'customer_relationships'
-customer_relationships = json.loads(response.choices[0].message.content.strip())
-
-print("\nExtracted customer relationships:")
-print("====================================================")
-for relationship in customer_relationships:
-    print(f"{relationship}")
-
-# Insert 'customer_relationships' into the collection
-for relationship in customer_relationships:
-    people_collection.update_one(
-        {"name": relationship["name"]},  # filter
-        {"$set": relationship},  # update
-        upsert=True  # options
-    )
-print("Upserted customer relationships into people collection.")
-
-# Query Understanding: Process and understand user queries to identify relevant entities and relations.
-USER_QUESTION = "Question: Who did Alice refer (directly or indirectly) and what actions did they take? \n"
-PRE_PROCESS_PROMPT = """
-    What is the name of the person being asked about? Respond in JSON format.
     [response criteria]
-    {
-        "name": "Bob"
-    }
+    - JSON object: { "relationships": [], "nodes": [] }
+    - each relationship should be of the format: { "source": "Alice", "source_type": "person", "target": "MongoDB", "relation": "worked at", "target_type": "company" }
+    - each node should be of the format: { "name": "MongoDB", "type": "company" }
     [end response criteria]
-    ** IMPORTANT! MUST BE VALID JSON! **
-"""
-response = az_client.chat.completions.create(
-    model=deployment_name,
-    messages=[
-        {"role": "system", "content": "You are a helpful assistant that extracts the name of the person being asked about."},
-        {"role": "user", "content": USER_QUESTION+PRE_PROCESS_PROMPT}
-    ],
-)
-# Print the answer
-print(response.choices[0].message.content.strip())
-filter2use = json.loads(response.choices[0].message.content.strip())
+    """
+            try:
+                response = az_client.chat.completions.create(
+                            model=deployment_name,
+                            messages=[
+                                {"role": "system", "content": "You are a helpful assistant that extracts the name of the person being asked about."},
+                                {"role": "system", "content": "You specialize in identifying these relationships: " + ", ".join([rel.value for rel in Relationship])},
+                                {"role": "user", "content": prompt},
+                            ],
+                            response_format={ "type": "json_object" }
+                )
+                completion = json.loads(response.choices[0].message.content.strip())
+                
+                # Parse the OpenAI response
+                for r in completion["relationships"]:
+                    relationships.append((r["source"],r["source_type"],r["target"], r["relation"],r["target_type"]))
+                for n in completion["nodes"]:
+                    self.nodes[n["name"]] = Node(n["name"],n["type"])
+                
+            except Exception as e:
+                print(f"Error extracting relationships: {e}")
+
+            for source, source_type, target, relation, target_type in relationships:
+                if source in self.nodes and target in self.nodes:
+                    edge = Edge(self.nodes[source], self.nodes[target], relation)
+                    if edge not in self.edges:  # Check for duplicate edges
+                        self.edges.append(edge)
+
+    def print_knowledge_graph(self):
+        print("\nNodes:")
+        for node in self.nodes.values():
+            print(node.name)
+
+        print("\nEdges:")
+        for edge in self.edges:
+            print(f"{edge.source_node.name} {edge.relation} {edge.target_node.name}")
+
+    def find_related_companies(self, person_name: str):
+        db = self.client["apollo-salesops"]
+        collection = db["__kg"]
+
+        pipeline = [
+            {
+                "$match": {
+                    "_id": person_name
+                }
+            },
+            {
+                "$graphLookup": {
+                    "from": "__kg",
+                    "startWith": "$edges.target",
+                    "connectFromField": "edges.target",
+                    "connectToField": "_id",
+                    "as": "related_companies",
+                    "depthField": "depth"
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "related_companies._id": 1,
+                    "related_companies.type": 1,
+                    "related_companies.depth": 1
+                }
+            }
+        ]
+
+        result = collection.aggregate(pipeline)
+        return list(result)
 
 
-# Graph Traversal: Explore the knowledge graph based on the query, retrieving relevant information.
-# Define the aggregation pipeline
-pipeline = [
-    {"$match": filter2use},
-    {"$graphLookup": {
-        "from": "__people",
-        "startWith": "$referrals",
-        "connectFromField": "referrals",
-        "connectToField": "name",
-        "depthField": "depth",
-        "as": "referral_network"
-    }},
-    {"$unwind": "$referral_network"},
-    {"$unwind": "$referral_network.actions"},
-    {"$group": {
-        "_id": {"name": "$referral_network.name", "action": "$referral_network.actions.action"},
-        "count": {"$sum": 1},
-        "outcome": {"$first": "$referral_network.actions.outcome"},
-    }},
-    {"$project": {"_id": 0, "action": "$_id.action", "count": 1, "outcome": 1, "name": "$_id.name"}}
-]
+knowledge_graph = KnowledgeGraph(documents)
+knowledge_graph.create_knowledge_graph()
+knowledge_graph.print_knowledge_graph()
+knowledge_graph.store_in_mongodb("apollo-salesops", "__kg")
 
-# Execute the aggregation pipeline
-result = people_collection.aggregate(pipeline)
+# Test the function
+print('print(knowledge_graph.find_related_companies("Steve Jobs"))')
+print(knowledge_graph.find_related_companies("Steve Jobs"))
+print('print(knowledge_graph.find_related_companies("Elon Musk"))')
+print(knowledge_graph.find_related_companies("Elon Musk"))
 
-# Print the question being asked
-print("Question: Who did Alice refer (directly or indirectly) and what actions did they take?")
-# Print the answer
-print("Answer:")
-first_answer = ""
-for doc in list(result):
-    first_answer += (f"- {doc['name']} performed the action '{doc['action']}' {doc['count']} time(s), resulting in the outcome: '{doc['outcome']}'\n")
-print(first_answer)
-print("====================================================")
-
-# Contextual Enrichment: Combine retrieved graph information with original text for enhanced context.
-# Construct the prompt
-prompt = "Alice referred the following people (directly or indirectly): \n" + first_answer
-prompt += "What could be their potential next actions based on their past actions and customer segment?"
-print("PROMPT:")
-print(prompt)
-# Send the prompt to the az_client
-# Response Generation: Utilize a language model to generate a comprehensive and informative response based on the enriched context.
-response = az_client.chat.completions.create(
-    model=deployment_name,
-    messages=[
-        {"role": "system", "content": "You are a helpful assistant that predicts potential next actions based on past actions and customer segment."},
-        {"role": "user", "content": prompt}
-    ],
-)
-# Print the answer
-print("Answer:")
-print(response.choices[0].message.content.strip())
+print("test")
 ```
 
 ## Output
 
 ```
-Deleted existing documents from people collection.
-Inserted sample data into people collection.
-NEW TEXT:  
-    Alice, a tech enthusiast, found a product she liked and shared it with her friends, Bob and Charlie. Alice made a purchase and was so satisfied that she wrote a positive review online. A few weeks later, Alice bought another unit of the product as a gift for a friend.
+Nodes:
+Steve Jobs
+Apple
+Atari
+Steve Wozniak
+NeXT
+Bill Gates
+Microsoft
+Elon Musk
+SpaceX
+PayPal
+Tesla
+Jeff Bezos
+Amazon
+Blue Origin
 
-    Bob, intrigued by Alice's recommendation, decided to make a purchase. He was so satisfied that he also wrote a positive review and shared it with his friend, David. A month later, Bob bought the product again for his brother. 
-
-    David, initially skeptical, read Bob's review and decided to give it a try. He made a purchase and was so impressed that he recommended the product to his colleagues at work. After using the product for a while, David decided to buy another one as a backup.
-
-    Charlie, after careful consideration and reading Alice's review, also decided to buy the product. He was so impressed that he recommended it to his friend, Frank. Frank, inspired by Charlie, decided to buy the product as well and left a positive review online. A few days later, Frank bought another unit of the product for his girlfriend.
-
-
-Extracting customer relationships...
-
-Extracted customer relationships:
-====================================================
-{'name': 'Alice', 'referrals': ['Bob', 'Charlie'], 'actions': [{'action': 'made a purchase', 'outcome': 'received product'}, {'action': 'referred a friend', 'outcome': 'earned referral bonus'}, {'action': 'made a purchase', 'outcome': 'received product'}], 'customer_segment': 'loyal'}
-{'name': 'Bob', 'referrals': ['David'], 'actions': [{'action': 'made a purchase', 'outcome': 'received product'}, {'action': 'referred a friend', 'outcome': 'earned referral bonus'}, {'action': 'made a purchase', 'outcome': 'received product'}], 'customer_segment': 'loyal'}
-{'name': 'David', 'referrals': [], 'actions': [{'action': 'made a purchase', 'outcome': 'received product'}, {'action': 'made a purchase', 'outcome': 'received product'}], 'customer_segment': 'loyal'}
-{'name': 'Charlie', 'referrals': ['Frank'], 'actions': [{'action': 'made a purchase', 'outcome': 'received product'}, {'action': 'referred a friend', 'outcome': 'earned referral bonus'}], 'customer_segment': 'new'}
-{'name': 'Frank', 'referrals': [], 'actions': [{'action': 'made a purchase', 'outcome': 'received product'}, {'action': 'made a purchase', 'outcome': 'received product'}], 'customer_segment': 'new'}
-Upserted customer relationships into people collection.
-{
-    "name": "Alice"
-}
-Question: Who did Alice refer (directly or indirectly) and what actions did they take?
-Answer:
-- Bob performed the action 'made a purchase' 2 time(s), resulting in the outcome: 'received product'
-- Bob performed the action 'referred a friend' 1 time(s), resulting in the outcome: 'earned referral bonus'
-- Frank performed the action 'made a purchase' 2 time(s), resulting in the outcome: 'received product'
-- Charlie performed the action 'referred a friend' 1 time(s), resulting in the outcome: 'earned referral bonus'
-- Charlie performed the action 'made a purchase' 1 time(s), resulting in the outcome: 'received product'
-- David performed the action 'made a purchase' 2 time(s), resulting in the outcome: 'received product'
-
-====================================================
-PROMPT:
-Alice referred the following people (directly or indirectly): 
-- Bob performed the action 'made a purchase' 2 time(s), resulting in the outcome: 'received product'
-- Bob performed the action 'referred a friend' 1 time(s), resulting in the outcome: 'earned referral bonus'
-- Frank performed the action 'made a purchase' 2 time(s), resulting in the outcome: 'received product'
-- Charlie performed the action 'referred a friend' 1 time(s), resulting in the outcome: 'earned referral bonus'
-- Charlie performed the action 'made a purchase' 1 time(s), resulting in the outcome: 'received product'
-- David performed the action 'made a purchase' 2 time(s), resulting in the outcome: 'received product'
-What could be their potential next actions based on their past actions and customer segment?
-Answer:
-Based on their past actions, the customers can engage in the following potential next actions:
-
-- Bob can potentially "make another purchase" considering his past purchase history. As he has also successfully "referred a friend" before, it's possible he may undertake that action again to earn more referral bonuses. 
-
-- Frank, based on his previous purchases, he is likely to "make another purchase" in the future. If he has earned benefits from the product, he may also start "referring friends" to earn additional rewards. 
-
-- Charlie, having made a purchase and referred a friend in the past, might also be prone to "make another purchase". Given his successful referral, another potential action could be "refer another friend".
-
-- David, as a recurring customer, is expected to "make another purchase". In case he finds the referral bonus appealing, he might "refer a friend" as his next action. 
-
-Note: The above predictions are probable actions. Actual behavior can be influenced by various other factors like specific customer preferences, product liking, brand loyalty, and promotional offers.
+Edges:
+Steve Jobs founded Apple
+Steve Jobs worked at Atari
+Steve Wozniak founded Apple
+Steve Jobs founded NeXT
+Steve Wozniak worked at Apple
+Steve Jobs worked at Apple
+Bill Gates founded Microsoft
+Bill Gates worked at Microsoft
+Elon Musk founded SpaceX
+Elon Musk founded PayPal
+Elon Musk founded Tesla
+Jeff Bezos founded Amazon
+Jeff Bezos founded Blue Origin
+Steve Jobs founded Apple
+Steve Jobs worked at Atari
+Steve Jobs founded NeXT
+Steve Jobs worked at Apple
+Steve Wozniak founded Apple
+Steve Wozniak worked at Apple
+Bill Gates founded Microsoft
+Bill Gates worked at Microsoft
+Elon Musk founded SpaceX
+Elon Musk founded PayPal
+Elon Musk founded Tesla
+Jeff Bezos founded Amazon
+Jeff Bezos founded Blue Origin
+print(knowledge_graph.find_related_companies("Steve Jobs"))
+[{'related_companies': [{'_id': 'Atari', 'type': 'company', 'depth': 0}, {'_id': 'NeXT', 'type': 'company', 'depth': 0}, {'_id': 'Apple', 'type': 'company', 'depth': 0}]}]
+print(knowledge_graph.find_related_companies("Elon Musk"))
+[{'related_companies': [{'_id': 'SpaceX', 'type': 'company', 'depth': 0}, {'_id': 'PayPal', 'type': 'company', 'depth': 0}, {'_id': 'Tesla', 'type': 'company', 'depth': 0}]}]
+test
 ```
  
 ## Conclusion
