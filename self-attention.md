@@ -12,6 +12,8 @@ Imagine you're reading a long novel. You don't read every word with the same lev
 
 Attention is a mechanism that allows a transformer to focus on different parts of its input sequence based on their relevance to the current output. This is achieved by assigning weights to each input element, with larger weights indicating greater importance. These weights are calculated using a similarity metric, such as the dot product, between the query vector and each key vector in the input sequence.
 
+![](https://miro.medium.com/v2/resize:fit:716/1*piCQbDMPO1-Kw5ZiNAl-FA.png)
+
 For instance, in translation, attention helps the model concentrate on words or phrases that are semantically connected, leading to more accurate translations. On the other hand, this same mechanism can be exploited to generate misleading or biased text by directing the model's focus towards specific information.
 
 **Attention and Quality:**
