@@ -182,6 +182,35 @@ if __name__ == "__main__":
 
 This code provides a basic model that uses self-attention to predict the next word in a sentence. It demonstrates the core idea of self-attention but lacks the complexity of more advanced models like Transformers, which utilize this mechanism extensively.
 
+## **Additional Considerations:**
+
+- The quality of the word embeddings used can significantly impact the model's performance.
+- The size of the vocabulary and the complexity of the language can also affect the model's accuracy.
+
+**Intelligence is a Product of Training**
+
+The "intelligence" of an LLM is directly tied to the quality and diversity of its training data. Here's how:
+
+* **Data Bias:** If the training data is biased, the LLM will also be biased in its outputs. For example, an LLM trained on mostly news articles might struggle to understand sarcasm or humor. 
+* **Data Limitedness:** The real world is vast and complex. LLMs can only process what they've been trained on. Limited data can lead to incomplete understanding and difficulty handling unexpected situations.
+* **Training Objectives:** Ultimately, LLMs are optimized for the tasks they are trained on. An LLM trained for text summarization may not excel at creative writing tasks, even if the data is vast.
+
+## Attention vs. Understanding:  Shedding Light on the Limits
+
+This blog post has explored the concept of attention in large language models (LLMs) and its role in generating text. While attention allows LLMs to focus on relevant parts of the input sequence, it's crucial to distinguish between attention and true understanding.
+
+**Understanding vs. Attention: A Key Difference**
+
+Attention is a mechanism, a tool. It focuses the LLM's light on specific aspects of the input, but it doesn't guarantee comprehension. Imagine a student highlighting key points in a textbook. Highlighting is a form of attention, but it doesn't necessarily mean the student understands the highlighted material. 
+
+True understanding involves deeper cognitive processes. An LLM with true understanding would not only identify relevant information but also:
+
+* **Grasp the meaning and context:** It would understand how words relate to each other and the overall message.
+* **Reason and infer:** It wouldn't just parrot memorized patterns, but infer new information or draw conclusions based on the input.
+* **Apply knowledge to new situations:** A truly understanding LLM could adapt its knowledge to different contexts and tasks.
+
+Currently, LLMs lack these capabilities. Their focus relies heavily on the statistical patterns present in their training data.
+
 ## Full Source Code
 
 ```
