@@ -88,8 +88,6 @@ While the concept of automatically building knowledge graphs from raw data is ap
 
 ## Good Data for GraphRAG
 
-Good data for GraphRAG is:
-
 * **Rich in entities and relationships:** The data should contain abundant information about entities and their connections.
 * **Consistent and accurate:** Data should be free from errors and inconsistencies to ensure the reliability of the knowledge graph.
 * **Diverse and representative:** The data should cover a wide range of topics and perspectives to avoid biases.
@@ -97,8 +95,6 @@ Good data for GraphRAG is:
 * **Domain-specific:** Data aligned with the target application domain is crucial for effective knowledge graph construction.
 
 ## Bad Data for GraphRAG
-
-Bad data for GraphRAG is:
 
 * **Sparse and noisy:** Data with limited information or many errors can hinder knowledge graph construction.
 * **Inconsistent and contradictory:** Conflicting information can lead to inaccuracies in the graph.
