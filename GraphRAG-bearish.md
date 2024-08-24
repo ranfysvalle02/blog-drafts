@@ -1,5 +1,5 @@
 
-![](https://dist.neo4j.com/wp-content/uploads/20230615211415/1mkYvs8_TmzLhUUI1CShNfw.png)
+![](https://www.datasciencecentral.com/wp-content/uploads/2024/04/Screenshot-2024-04-15-21.11.59.png)
 
 # **Demystifying GraphRAG: Contextual Reasoning for AI**
 
