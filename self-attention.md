@@ -7,6 +7,8 @@ Imagine you're reading a long novel. You don't read every word with the same lev
 
 Attention is a mechanism that allows a transformer to focus on different parts of its input sequence based on their relevance to the current output. This is achieved by assigning weights to each input element, with larger weights indicating greater importance. These weights are calculated using a similarity metric, such as the dot product, between the query vector and each key vector in the input sequence.
 
+For instance, in translation, attention helps the model concentrate on words or phrases that are semantically connected, leading to more accurate translations. On the other hand, this same mechanism can be exploited to generate misleading or biased text by directing the model's focus towards specific information.
+
 **Attention and Quality:**
 
 * **Positive impact:** Attention allows LLMs to focus on the most relevant parts of the input sequence when generating a response. This leads to responses that are more coherent, relevant, and grammatically correct.
@@ -258,5 +260,86 @@ The "intelligence" of an LLM heavily depends on the quality and variety of its t
 **Looking Forward: Responsible Development and Usage**
 
 As LLMs continue to evolve, it's crucial for developers to prioritize high-quality, diverse training data to mitigate bias and limitations. Additionally, we, as users, must be aware of these limitations and approach LLM outputs with a critical eye. By understanding both the power and limitations of attention, we can foster responsible development and usage of LLMs, ensuring they serve as valuable tools, not replacements for human intelligence.  
+
+## FULL SOURCE CODE
+
+```
+import numpy as np
+
+def softmax(x):
+  x -= np.max(x)
+  exp_x = np.exp(x)
+  softmax_x = exp_x / np.sum(exp_x)
+  return softmax_x
+
+def create_word_representations(sentences):
+    word_to_index = {}
+    index_to_word = {}
+    word_embeddings = []
+
+    for sentence in sentences:
+        for word in sentence.split():
+            if word not in word_to_index:
+                word_to_index[word] = len(word_to_index)
+                index_to_word[len(index_to_word)] = word
+                word_embeddings.append(np.random.rand(3))  # Random embeddings
+
+    return np.array(word_embeddings), word_to_index, index_to_word
+
+def calculate_self_attention(query, keys, values):
+    scores = np.dot(query, keys.T) / np.sqrt(keys.shape[1])
+    attention_weights = np.empty_like(scores)
+    for i in range(len(scores)):
+        if len(keys[i].shape) == 1:  # Check if 1D array
+            attention_weights[i] = np.exp(scores[i])  # No need to sum for unique words
+        else:
+            attention_weights[i] = np.exp(scores[i]) / np.sum(np.exp(scores[i]), axis=1, keepdims=True)
+
+    return attention_weights
+
+def predict_next_word_with_self_attention(current_word, context_window, words, word_embeddings, word_to_index, index_to_word):
+    context_embeddings = word_embeddings[[word_to_index[word] for word in context_window]]
+    query = np.mean(context_embeddings, axis=0)  # Average context embeddings
+    keys = values = np.array([word_embeddings[word_to_index[word]] for word in words])
+    attention_weights = calculate_self_attention(query, keys, values)
+    attention_probabilities = softmax(attention_weights)
+    predicted_index = np.argmax(attention_probabilities)  # Select the word with the highest probability
+    predicted_word = index_to_word[predicted_index]
+    return predicted_word, attention_probabilities
+
+if __name__ == "__main__":
+    sentences = [
+        "The quick brown fox jumps over the lazy dog",
+    ]
+
+    word_embeddings, word_to_index, index_to_word = create_word_representations(sentences)
+    current_word = "jumps"
+    context_window_size = 2  # Considering two words before the current word
+
+    for sentence in sentences:
+        words = sentence.split()
+        current_word_index = words.index(current_word)
+        context_window = words[max(0, current_word_index - context_window_size):current_word_index]
+        predicted_word, attention_probabilities = predict_next_word_with_self_attention(current_word, context_window, words, word_embeddings, word_to_index, index_to_word)
+        print(f"\nGiven the word: {current_word}")
+print(f"Context: {' '.join(context_window)}")  # Print context window
+print(f"Sentence: {sentence}")
+print("Attention Probabilities:")
+for word, prob in zip(words, attention_probabilities):
+    print(f"\t{word}: {prob:.4f}")
+print(f"Predicted next word: {predicted_word}\n")
+print("""
+The word embeddings are initialized randomly in this code. 
+This means that the relationships between different words are not captured in the embeddings, 
+which could lead to seemingly random attention probabilities.
+""")
+print("""
+The attention is not placed in the input. 
+Instead, the input triggers the attention mechanism which is used to weight 
+the importance of different words in the sentence for the prediction of the next word.
+""")
+print(f"Prediction process: The model uses the context of the given word '{current_word}' to predict the next word. The attention mechanism assigns different weights to the words in the context based on their relevance. The word with the highest weight is considered as the most relevant word for the prediction.")
+print(f"Attention Impact: The attention probabilities show the relevance of each word in the context for the prediction. The higher the probability, the more impact the word has on the prediction.\n")
+```
 
 
