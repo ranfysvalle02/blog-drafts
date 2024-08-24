@@ -179,6 +179,8 @@ def predict_next_word_with_self_attention(current_word, context_window, words, w
 
 ## Breaking Down the Prediction Process
 
+![](https://miro.medium.com/v2/resize:fit:1400/1*kXg3zEXnzRDzSBrYLKlnxA.png)
+
 This code is implementing a simple version of the self-attention mechanism, which is a key component in Transformer models used in natural language processing. The self-attention mechanism allows the model to weigh the importance of words in a sentence when predicting the next word.
 
 Here's a breakdown of the code:
