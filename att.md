@@ -152,19 +152,6 @@ Here's a breakdown of the code:
 
 Please note that this is a simplified and not a practical implementation of self-attention. In a real-world scenario, the word embeddings would be learned from data rather than randomly assigned, and the attention mechanism would consider all words in the context, not just the current word.
 
-### Key Steps
-1. **Calculate Attention Weights:**
-   - For each word in the sentence, the code calculates a similarity score between that word and the current word.
-   - These scores are then converted into attention weights, which represent how important each word is for predicting the next word.
-
-2. **Create a Weighted Sum:**
-   - The word embeddings of all the words in the sentence are multiplied by their corresponding attention weights.
-   - These weighted embeddings are then summed together to create a single vector.
-
-3. **Find the Closest Word:**
-   - The code calculates the distance between the weighted sum vector and each word embedding in the vocabulary.
-   - The word with the smallest distance is predicted as the next word.
-
 ## Running the Model
 
 Finally, we run the model on a set of sentences. For each sentence, the model predicts the next word given the current word "fox" and prints the attention weights for each word in the sentence and the predicted next word.
