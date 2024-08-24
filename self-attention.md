@@ -20,16 +20,6 @@ The term "intelligence" is often used to describe the capabilities of mathematic
 
 Moreover, the concept of "intelligence" in the context of automating unpredictable workflows is problematic for LLMs. Due to the way 'attention' works, LLMs can be manipulated, leading to potentially undesirable outcomes.
 
-**Understanding vs. Attention: A Key Difference**
-
-Attention is a mechanism, a tool. It focuses the LLM's light on specific aspects of the input, but it doesn't guarantee comprehension. True understanding involves deeper cognitive processes. An LLM with true understanding would not only identify relevant information but also:
-
-* **Grasp the meaning and context:** It would understand how words relate to each other and the overall message.
-* **Reason and infer:** It wouldn't just parrot memorized patterns, but infer new information or draw conclusions based on the input.
-* **Apply knowledge to new situations:** A truly understanding LLM could adapt its knowledge to different contexts and tasks.
-
-Currently, LLMs lack these capabilities. Their focus relies heavily on the statistical patterns present in their training data.
-
 ## Introduction
 
 In this blog post, we will explore the concept of attention through a Python code snippet that uses the self-attention mechanism to predict the next word in a sentence.
