@@ -132,6 +132,57 @@ for sentence in sentences:
     print("Predicted next word:", predicted_word)
     print("\n")
 ```
+## Breaking Down the Prediction Process
+
+### Understanding the Context
+The goal of the code is to predict the next word in a sentence, given a current word. It uses an attention mechanism to weigh the importance of different words in the sentence when making the prediction.
+
+### Key Steps
+1. **Calculate Attention Weights:**
+   - For each word in the sentence, the code calculates a similarity score between that word and the current word.
+   - These scores are then converted into attention weights, which represent how important each word is for predicting the next word.
+
+2. **Create a Weighted Sum:**
+   - The word embeddings of all the words in the sentence are multiplied by their corresponding attention weights.
+   - These weighted embeddings are then summed together to create a single vector.
+
+3. **Find the Closest Word:**
+   - The code calculates the distance between the weighted sum vector and each word embedding in the vocabulary.
+   - The word with the smallest distance is predicted as the next word.
+
+### Visual Example
+Let's break down this process with a simple example:
+```
+Sentence: "The quick brown fox jumps over the lazy dog"
+Current word: "fox"
+```
+
+1. **Calculate Attention Weights:**
+   - The code might determine that "jumps" and "over" are more relevant to predicting the next word after "fox". Therefore, they would have higher attention weights.
+
+2. **Create a Weighted Sum:**
+   - The word embeddings for "jumps" and "over" would be multiplied by their higher weights, while the embeddings for other words would be multiplied by lower weights. The weighted sums of these embeddings would be calculated.
+
+3. **Find the Closest Word:**
+   - The code would compare the weighted sum to the word embeddings of all words in the vocabulary. If the closest match is "lazy", then the predicted next word would be "lazy".
+
+### Code Explanation
+Here's a more detailed explanation of the relevant part of the code:
+
+```python
+# Calculate a weighted sum of word embeddings using the attention weights
+weighted_sum = np.sum(np.array([word_embeddings[word_to_index[word]] for word in words]) * attention_weights[:, None], axis=0)
+
+# Find the word whose embedding is closest to the weighted sum
+closest_index = np.argmin(np.linalg.norm(word_embeddings - weighted_sum, axis=1))
+predicted_word = list(word_to_index.keys())[closest_index]
+```
+
+- `weighted_sum`: This calculates a weighted sum of the word embeddings based on the attention weights.
+- `closest_index`: This finds the index of the word embedding that is closest to the weighted sum.
+- `predicted_word`: This retrieves the word corresponding to the closest index.
+
+By following these steps, the model is able to predict the next word based on the current word and the context provided by the surrounding words.
 
 **Explanation**
 
