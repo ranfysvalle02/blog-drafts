@@ -1,4 +1,4 @@
-**Attention in Transformers: A Closer Look**
+**We should pay more attention to attention**
 
 It all started with: "Attention is all you need."
 
