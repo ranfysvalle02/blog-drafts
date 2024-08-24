@@ -82,11 +82,6 @@ As the model trains on more data, the embeddings are updated through backpropaga
 * **Local Minima**: Random initialization can sometimes lead the model to get stuck in local minima, preventing it from reaching the global optimum.
 * **Slower Convergence**: Random initialization can sometimes require more training epochs to converge to a good solution.
 
-**Alternative Initialization Strategies:**
-
-* **Pre-trained Embeddings**: Using pre-trained embeddings (like Word2Vec or GloVe) can provide a good starting point, especially for tasks with limited training data.
-* **Xavier or He Initialization**: These techniques can help to initialize the weights in a way that is more likely to lead to stable learning.
-
 In summary, while randomly generated embeddings may seem arbitrary at first, they play a crucial role in initializing the model and allowing it to learn meaningful representations of words.
 
 ## Calculating Self-Attention
