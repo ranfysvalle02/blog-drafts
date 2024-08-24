@@ -1,7 +1,7 @@
 
 # **We should pay more attention to attention**
 
-It all started with: "Attention is all you need."
+It all started with: ["Attention is all you need."](https://arxiv.org/abs/1706.03762)
 
 Imagine you're reading a long novel. You don't read every word with the same level of focus. Instead, you pay more attention to certain parts, like the plot twists or character developments. This is similar to how attention works in a language model.
 
