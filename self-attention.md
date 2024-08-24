@@ -180,6 +180,7 @@ def predict_next_word_with_self_attention(current_word, context_window, words, w
 ## Breaking Down the Prediction Process
 
 ![](https://miro.medium.com/v2/resize:fit:1400/1*kXg3zEXnzRDzSBrYLKlnxA.png)
+_(Image Credit to [An illustration of next word prediction with state-of-the-art network architectures like BERT, GPT, and XLNet](https://ajay-arunachalam08.medium.com/an-illustration-of-next-word-prediction-with-state-of-the-art-network-architectures-like-bert-gpt-c0af02921f17) )_
 
 This code is implementing a simple version of the self-attention mechanism, which is a key component in Transformer models used in natural language processing. The self-attention mechanism allows the model to weigh the importance of words in a sentence when predicting the next word.
 
