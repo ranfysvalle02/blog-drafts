@@ -83,16 +83,6 @@ def create_word_representations(sentences):
     return np.array(word_embeddings), word_to_index, index_to_word
 ```
 
-This code implements a basic model that uses **self-attention** to predict the next word in a sentence. It doesn't have a specific name for the entire model itself, but the core functionality relies on the self-attention mechanism.
-
-Here's a breakdown:
-
-* **Self-Attention**: This is the key concept used in the `calculate_self_attention` function. It allows the model to focus on relevant parts of the input sequence (the sentence) when predicting the next word.
-
-* **Word Embeddings**: The model uses randomly generated embeddings to represent each word. These embeddings are then projected into query, key, and value vectors which are used for calculating the attention weights.
-
-**Overall, the model can be considered a simple recurrent neural network (RNN) with a self-attention mechanism for next word prediction.** It demonstrates the core idea of self-attention but lacks the complexity of more advanced models like Transformers, which utilize this mechanism extensively.
-
 ## The Impact of Randomly Generated Embeddings
 
 **Randomly generated embeddings** serve as a starting point for the model to learn meaningful representations of words. They are essentially arbitrary numerical vectors assigned to each word.
