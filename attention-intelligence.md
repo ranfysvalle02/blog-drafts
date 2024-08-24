@@ -50,4 +50,97 @@ Let's introduce an ambiguous sentence: "I saw a man in the park with a telescope
 
 These examples highlight the limitations of LLMs in handling ambiguity and context. While they can generate impressive text based on patterns learned from vast amounts of data, they struggle to understand the nuances of human language.
 
+## A Simple Language Model with Attention
+
+In this blog post, we'll explore a basic implementation of a language model capable of predicting the next word in a sequence based on a given word. This model incorporates a simplified attention mechanism to focus on relevant parts of the input sequence.
+
+**Building the Language Model**
+
+1. **Data Preparation:**
+   - We start with a collection of sentences that will serve as our training data.
+   - These sentences are broken down into individual words, creating a vocabulary.
+
+2. **Word Frequency Calculation:**
+   - Each word in the vocabulary is counted to determine its frequency within the training data.
+   - This information is stored in a dictionary, where the keys are the words and the values are their corresponding frequencies.
+
+3. **Word Embeddings:**
+   - Words are represented as numerical vectors called embeddings, which capture semantic and syntactic information about the words.
+
+4. **Attention Mechanism:**
+   - A simplified attention mechanism is implemented to assign weights to each word in the input sequence based on its relevance to the current prediction.
+   - The attention weights are calculated using a dot product between the current word's embedding and the embeddings of the other words in the sequence.
+
+5. **Prediction:**
+   - The weighted sum of the word embeddings is calculated using the attention weights.
+   - The closest word in the vocabulary to this weighted sum is predicted as the next word.
+
+**Example Implementation**
+
+```python
+import random
+import numpy as np
+
+# Training sentences
+sentences = [
+    "The quick brown fox jumps over the lazy dog.",
+    "She sells seashells by the seashore.",
+    "I love to eat pizza.",
+    "The cat chased the mouse.",
+    "The sun is shining brightly.",
+    "I am feeling happy today.",
+]
+
+# Create word frequency dictionary
+word_freq = {}
+for sentence in sentences:
+    words = sentence.split()
+    for word in words:
+        if word in word_freq:
+            word_freq[word] += 1
+        else:
+            word_freq[word] = 1
+
+# Convert words to numerical representations (simplified example)
+word_to_index = {word: i for i, word in enumerate(word_freq.keys())}
+word_embeddings = np.random.rand(len(word_freq), 3)  # Replace with actual embeddings
+
+def calculate_attention_weights(current_word, words):
+    # A simple dot product-based attention mechanism
+    attention_scores = np.dot(word_embeddings[word_to_index[current_word]], np.array([word_embeddings[word_to_index[word]] for word in words]).T)
+    attention_weights = np.exp(attention_scores) / np.sum(np.exp(attention_scores))
+    return attention_weights
+
+def predict_next_word_with_attention(current_word, words):
+    attention_weights = calculate_attention_weights(current_word, words)
+    weighted_words = np.array([word_embeddings[word_to_index[word]] for word in words]) * attention_weights[:, None]
+    weighted_sum = np.sum(weighted_words, axis=0)
+    closest_index = np.argmin(np.linalg.norm(word_embeddings - weighted_sum, axis=1))
+    predicted_word = list(word_to_index.keys())[closest_index]
+    return predicted_word, attention_weights
+
+# Example usage
+for sentence in sentences:
+    current_word = "to"
+    predicted_word, attention_weights = predict_next_word_with_attention(current_word, sentence.split())
+
+    print("Given the word:", current_word)
+    print("Attention weights for:", sentence)
+    for word, weight in zip(sentence.split(), attention_weights):
+        print(f"{word}: {weight:.4f}")
+
+    print("Predicted next word:", predicted_word)
+    print("\n")
+```
+
+**Explanation**
+
+- The attention weights represent the importance that the model assigns to each word in the input sequence when predicting the next word.
+- Words with higher weights are considered more relevant to the prediction.
+- The weighted sum of word embeddings captures the context of the current word.
+- The prediction is made based on the similarity between the context vector and the word embeddings in the vocabulary.
+
+**Note on Varying Attention Weights**
+
+The attention weights will vary depending on the specific input sentence. This is because the model is learning to dynamically adjust its focus based on the context of the words in the sequence. By analyzing the attention weights for different sentences, you can gain insights into how the model is interpreting and processing language.
 
