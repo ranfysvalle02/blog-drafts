@@ -334,8 +334,7 @@ This means that the relationships between different words are not captured in th
 which could lead to seemingly random attention probabilities.
 """)
 print("""
-The attention is not placed in the input. 
-Instead, the input triggers the attention mechanism which is used to weight 
+The input triggers the attention mechanism which is used to weight 
 the importance of different words in the sentence for the prediction of the next word.
 """)
 print(f"Prediction process: The model uses the context of the given word '{current_word}' to predict the next word. The attention mechanism assigns different weights to the words in the context based on their relevance. The word with the highest weight is considered as the most relevant word for the prediction.")
