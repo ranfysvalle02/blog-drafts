@@ -13,11 +13,6 @@ Attention is a mechanism that allows a transformer to focus on different parts o
     * **Focus on misleading information:**  If the input contains misleading or irrelevant keywords, the LLM's attention might be drawn to them, resulting in inaccurate or nonsensical responses.
     * **Missing key information:**  The LLM might overlook crucial information if the wording is different from what it's trained on. 
 
-### Chunk Quality and Derailment
-
-* **Chunks:** Smaller units of information processed by the LLM.
-* **Derailment:** Certain words within a chunk can "sidetrack" the LLM, causing it to generate unexpected or irrelevant responses.
-
 **The flexibility is the vulnerability:**
 
 * **Exploiting Flexibility:**   refers to manipulating prompts or inputs to trick the LLM into generating unintended outputs. 
@@ -29,13 +24,11 @@ Imagine the LLM as a spotlight. Attention controls where the light shines. Ideal
 
 **How Attention Works in Transformers**
 
-
 In a transformer, each input token is transformed into three vectors: a query, a key, and a value. The query vector represents the current position or token we're focusing on, while the key vectors represent all other positions or tokens in the sequence. The value vectors represent the actual information associated with each token.
 
 The dot product is computed between the query vector and each key vector. This is essentially a measure of how related each input token is to the current position. The dot products are then passed through a softmax function to obtain attention weights, which sum up to 1. These weights represent the probability distribution over all input tokens for the current position.
 
 **The Role of Similarity in Attention Weights**
-
 
 The attention weights are used to compute a weighted sum of the value vectors, which produces the output of the attention layer. This allows the transformer to focus on different parts of the input sequence based on their relevance to the current position.
 
