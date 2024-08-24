@@ -3,6 +3,27 @@
 
 Attention is a mechanism that allows a transformer to focus on different parts of its input sequence based on their relevance to the current output. This is achieved by assigning weights to each input element, with larger weights indicating greater importance. These weights are calculated using a similarity metric, such as the dot product, between the query vector and each key vector in the input sequence.
 
+**Attention and Quality:**
+
+* **Positive impact:** Attention allows LLMs to focus on the most relevant parts of the input sequence when generating a response. This leads to responses that are more coherent, relevant, and grammatically correct.
+* **Negative impact:**  
+    * **Focus on misleading information:**  If the input contains misleading or irrelevant keywords, the LLM's attention might be drawn to them, resulting in inaccurate or nonsensical responses.
+    * **Missing key information:**  The LLM might overlook crucial information if the wording is different from what it's trained on. 
+
+### Chunk Quality and Derailment
+
+* **Chunks:** Smaller units of information processed by the LLM.
+* **Derailment:** Certain words within a chunk can "sidetrack" the LLM, causing it to generate unexpected or irrelevant responses.
+
+**The flexibility is the vulnerability:**
+
+* **Exploiting Flexibility:**   refers to manipulating prompts or inputs to trick the LLM into generating unintended outputs. 
+* **Attention Vulnerability:**   The LLM's reliance on attention makes it susceptible to such manipulation.  By crafting inputs with specific words or phrases that grab the LLM's attention, hackers can steer the model towards generating biased, offensive, or nonsensical content.
+
+**Here's an analogy:**
+
+Imagine the LLM as a spotlight. Attention controls where the light shines. Ideally, it illuminates the important parts of the scene.  However, if there's a shiny object in the corner, the spotlight might get drawn to that, neglecting the main subject.  In the same way, misleading words in a chunk can divert the LLM's attention and lead to poor response quality.
+
 **How Attention Works in Transformers**
 
 
