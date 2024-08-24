@@ -15,13 +15,11 @@ Attention is a mechanism that allows a transformer to focus on different parts o
 
 **The flexibility is the vulnerability:**
 
-The LLM's reliance on attention makes it susceptible to such manipulation.  By crafting inputs with specific words or phrases that grab the LLM's attention, hackers can steer the model towards generating biased, offensive, or nonsensical content.
-
-**Here's an analogy:**
-
-Imagine the LLM as a spotlight. Attention controls where the light shines. Ideally, it illuminates the important parts of the scene.  However, if there's a shiny object in the corner, the spotlight might get drawn to that, neglecting the main subject.  In the same way, misleading words in a chunk can divert the LLM's attention and lead to poor response quality.
+The LLM's reliance on attention makes it susceptible to manipulation.  By crafting inputs with specific words or phrases that grab the LLM's attention, malicious actors can steer the model towards generating biased, offensive, or nonsensical content.
 
 **How Attention Works in Transformers**
+
+Imagine the LLM as a spotlight. Attention controls where the light shines. Ideally, it illuminates the important parts of the scene.  However, if there's a shiny object in the corner, the spotlight might get drawn to that, neglecting the main subject.  In the same way, misleading words in a chunk can divert the LLM's attention and lead to poor response quality.
 
 In a transformer, each input token is transformed into three vectors: a query, a key, and a value. The query vector represents the current position or token we're focusing on, while the key vectors represent all other positions or tokens in the sequence. The value vectors represent the actual information associated with each token.
 
