@@ -193,7 +193,7 @@ Here's a breakdown of the code:
 
 4. The main part of the code creates word representations for a list of sentences, then for each sentence, it predicts the next word given the current word "fox" and prints the attention weights for each word in the sentence and the predicted next word.
 
-Please note that this is a simplified and not a practical implementation of self-attention. In a real-world scenario, the word embeddings would be learned from data rather than randomly assigned, and the attention mechanism would consider all words in the context, not just the current word.
+Please keep in mind that this is a simplified implementation of self-attention. 
 
 ## Running the Model
 
