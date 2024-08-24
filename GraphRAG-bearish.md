@@ -1,5 +1,5 @@
 
-![](https://www.datasciencecentral.com/wp-content/uploads/2024/04/Screenshot-2024-04-15-21.11.59.png)
+![](https://github.com/ranfysvalle02/blog-drafts/blob/main/graphrag.jpg)
 
 # **Demystifying GraphRAG: Contextual Reasoning for AI**
 
