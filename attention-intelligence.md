@@ -42,7 +42,7 @@ While still a simplified representation, this dataset allows us to explore some 
 
 ### The Illusion Shatters
 
-Let's introduce an ambiguous sentence: "I saw a man in the park with a telescope." Our expanded LLM, while more sophisticated than the initial one, still faces challenges. It might generate outputs like:
+Let's introduce an ambiguous sentence: "I saw a man in the park with a telescope." The LLM might generate outputs like:
 
 * **Incorrect interpretation:** "The man chased the mouse with a telescope in the park."
 * **Reliance on familiar patterns:** "The sun is shining brightly on the man with a telescope."
