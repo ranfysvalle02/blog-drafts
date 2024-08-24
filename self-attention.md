@@ -234,7 +234,10 @@ The "intelligence" of an LLM is directly tied to the quality and diversity of it
 
 ## Exploring Different Types of Attention Mechanisms
 
-While we've discussed the basic concept of attention, it's important to note that there are several types of attention mechanisms used in different models. One of the most notable is multi-head attention, which is a key component of Transformer models.
+While we've discussed the basic concept of attention, it's important to note that there are several types of attention mechanisms used in different models. One of the most notable is multi-head attention, which is a key component of Transformer models. 
+
+**NOTE:**
+In most transformer models, the word embeddings remain constant throughout the training process. It's the model weights that are updated during training to improve the model's ability to represent and understand the data.
 
 ### Multi-Head Attention
 
