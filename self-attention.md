@@ -42,9 +42,24 @@ The softmax function is a function that turns a vector of K real values into a v
 
 ```python
 def softmax(x):
+  """
+  This softmax function is often used in machine learning and deep learning to convert 
+  a vector of real numbers into a probability distribution. 
+  Each output value is between 0 and 1 (inclusive), and the sum of all output values is 1. 
+  """
+  # Subtract the max value in the input array from all elements for numerical stability.
+  # This ensures that all values in the array are between 0 and 1, which helps prevent potential overflow or underflow issues.
   x -= np.max(x)
+
+  # Apply the exponential function to each element in the array.
+  # This transforms each value in the array into a positive value.
   exp_x = np.exp(x)
+
+  # Divide each element in the array by the sum of all elements in the array.
+  # This normalizes the values so that they all add up to 1, which is a requirement for a probability distribution.
   softmax_x = exp_x / np.sum(exp_x)
+
+  # Return the resulting array, which represents a probability distribution over the input array.
   return softmax_x
 ```
 
@@ -279,9 +294,24 @@ As LLMs continue to evolve, it's crucial for developers to prioritize high-quali
 import numpy as np
 
 def softmax(x):
+  """
+  This softmax function is often used in machine learning and deep learning to convert 
+  a vector of real numbers into a probability distribution. 
+  Each output value is between 0 and 1 (inclusive), and the sum of all output values is 1. 
+  """
+  # Subtract the max value in the input array from all elements for numerical stability.
+  # This ensures that all values in the array are between 0 and 1, which helps prevent potential overflow or underflow issues.
   x -= np.max(x)
+
+  # Apply the exponential function to each element in the array.
+  # This transforms each value in the array into a positive value.
   exp_x = np.exp(x)
+
+  # Divide each element in the array by the sum of all elements in the array.
+  # This normalizes the values so that they all add up to 1, which is a requirement for a probability distribution.
   softmax_x = exp_x / np.sum(exp_x)
+
+  # Return the resulting array, which represents a probability distribution over the input array.
   return softmax_x
 
 def create_word_representations(sentences):
