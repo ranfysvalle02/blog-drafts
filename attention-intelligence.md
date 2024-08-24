@@ -134,8 +134,19 @@ for sentence in sentences:
 ```
 ## Breaking Down the Prediction Process
 
-### Understanding the Context
-The goal of the code is to predict the next word in a sentence, given a current word. It uses an attention mechanism to weigh the importance of different words in the sentence when making the prediction.
+This code is implementing a simple version of the self-attention mechanism, which is a key component in Transformer models used in natural language processing. The self-attention mechanism allows the model to weigh the importance of words in a sentence when predicting the next word.
+
+Here's a breakdown of the code:
+
+1. `create_word_representations(sentences)`: This function takes a list of sentences as input and creates a word-to-index and index-to-word dictionary, and a list of word embeddings. Each unique word in the sentences is assigned a unique index and a random 3-dimensional vector as its embedding.
+
+2. `calculate_self_attention(query, key, value)`: This function calculates the self-attention weights and the output vector. The attention weights are calculated by taking the dot product of the query and key, scaling it, and applying the softmax function. The output vector is the weighted sum of the value vectors, where the weights are the attention weights.
+
+3. `predict_next_word_with_self_attention(current_word, words, word_embeddings, word_to_index, index_to_word)`: This function predicts the next word given the current word and a list of words (context). It first retrieves the embeddings of the current word and the context words, then calculates the self-attention weights and output vector. The predicted next word is the word whose embedding is closest to the output vector in terms of Euclidean distance.
+
+4. The main part of the code creates word representations for a list of sentences, then for each sentence, it predicts the next word given the current word "fox" and prints the attention weights for each word in the sentence and the predicted next word.
+
+Please note that this is a simplified and not a practical implementation of self-attention. In a real-world scenario, the word embeddings would be learned from data rather than randomly assigned, and the attention mechanism would consider all words in the context, not just the current word.
 
 ### Key Steps
 1. **Calculate Attention Weights:**
@@ -166,25 +177,7 @@ Current word: "fox"
 3. **Find the Closest Word:**
    - The code would compare the weighted sum to the word embeddings of all words in the vocabulary. If the closest match is "lazy", then the predicted next word would be "lazy".
 
-### Code Explanation
-Here's a more detailed explanation of the relevant part of the code:
-
-```python
-# Calculate a weighted sum of word embeddings using the attention weights
-weighted_sum = np.sum(np.array([word_embeddings[word_to_index[word]] for word in words]) * attention_weights[:, None], axis=0)
-
-# Find the word whose embedding is closest to the weighted sum
-closest_index = np.argmin(np.linalg.norm(word_embeddings - weighted_sum, axis=1))
-predicted_word = list(word_to_index.keys())[closest_index]
-```
-
-- `weighted_sum`: This calculates a weighted sum of the word embeddings based on the attention weights.
-- `closest_index`: This finds the index of the word embedding that is closest to the weighted sum.
-- `predicted_word`: This retrieves the word corresponding to the closest index.
-
-By following these steps, the model is able to predict the next word based on the current word and the context provided by the surrounding words.
-
-**Explanation**
+### Explanation
 
 - The attention weights represent the importance that the model assigns to each word in the input sequence when predicting the next word.
 - Words with higher weights are considered more relevant to the prediction.
