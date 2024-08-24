@@ -204,12 +204,10 @@ Finally, we run the model on a set of sentences. For each sentence, the model pr
 if __name__ == "__main__":
     sentences = [
         "The quick brown fox jumps over the lazy dog",
-        "She sells seashells by the seashore",
-        "I love to eat pizza with extra cheese",
     ]
 
     word_embeddings, word_to_index, index_to_word = create_word_representations(sentences)
-    current_word = "fox"
+    current_word = "jumps"
     context_window_size = 2  # Considering two words before the current word
 
     for sentence in sentences:
@@ -218,12 +216,19 @@ if __name__ == "__main__":
         context_window = words[max(0, current_word_index - context_window_size):current_word_index]
         predicted_word, attention_probabilities = predict_next_word_with_self_attention(current_word, context_window, words, word_embeddings, word_to_index, index_to_word)
         print(f"\nGiven the word: {current_word}")
-        print(f"Context: {' '.join(context_window)}")  # Print context window
-        print(f"Sentence: {sentence}")
-        print("Attention Probabilities:")
-        for word, prob in zip(words, attention_probabilities):
-            print(f"\t{word}: {prob:.4f}")
-        print(f"Predicted next word: {predicted_word}\n")
+print(f"Context: {' '.join(context_window)}")  # Print context window
+print(f"Sentence: {sentence}")
+print("Attention Probabilities:")
+for word, prob in zip(words, attention_probabilities):
+    print(f"\t{word}: {prob:.4f}")
+print(f"Predicted next word: {predicted_word}\n")
+print("""
+The word embeddings are initialized randomly in this code. 
+This means that the relationships between different words are not captured in the embeddings, 
+which could lead to seemingly random attention probabilities.
+""")
+print(f"Prediction process: The model uses the context of the given word '{current_word}' to predict the next word. The attention mechanism assigns different weights to the words in the context based on their relevance. The word with the highest weight is considered as the most relevant word for the prediction.")
+print(f"Attention Impact: The attention probabilities show the relevance of each word in the context for the prediction. The higher the probability, the more impact the word has on the prediction.\n")
 ```
 
 This code provides a basic model that uses self-attention to predict the next word in a sentence. It demonstrates the core idea of self-attention but lacks the complexity of more advanced models like Transformers, which utilize this mechanism extensively.
@@ -270,7 +275,7 @@ As LLMs continue to evolve, it's crucial for developers to prioritize high-quali
 
 ## FULL SOURCE CODE
 
-```
+```python
 import numpy as np
 
 def softmax(x):
