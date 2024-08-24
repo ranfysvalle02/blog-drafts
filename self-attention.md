@@ -30,6 +30,18 @@ For instance, in translation, attention helps the model concentrate on words or 
 
 In this blog post, we will explore the concept of attention through a Python code snippet that uses the self-attention mechanism to predict the next word in a sentence.
 
+We will implement a basic language model that uses **self-attention** to predict the next word in a sentence. 
+
+The core functionality relies on the self-attention mechanism.
+
+Here's a breakdown:
+
+* **Self-Attention**: This is the key concept used in the `calculate_self_attention` function. It allows the model to focus on relevant parts of the input sequence (the sentence) when predicting the next word.
+
+* **Word Embeddings**: The model uses randomly generated embeddings to represent each word. These embeddings are then projected into query, key, and value vectors which are used for calculating the attention weights.
+
+**Overall, the model can be considered a simple recurrent neural network (RNN) with a self-attention mechanism for next word prediction.** It demonstrates the core idea of self-attention but lacks the complexity of more advanced models like Transformers, which utilize this mechanism extensively.
+
 ```python
 import numpy as np
 ```
