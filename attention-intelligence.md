@@ -78,59 +78,54 @@ In this blog post, we'll explore a basic implementation of a language model capa
 **Example Implementation**
 
 ```python
-import random
 import numpy as np
 
-# Training sentences
-sentences = [
-    "The quick brown fox jumps over the lazy dog.",
-    "She sells seashells by the seashore.",
-    "I love to eat pizza.",
-    "The cat chased the mouse.",
-    "The sun is shining brightly.",
-    "I am feeling happy today.",
-]
+def create_word_representations(sentences):
+    word_to_index = {}
+    index_to_word = {}
+    word_embeddings = []
 
-# Create word frequency dictionary
-word_freq = {}
-for sentence in sentences:
-    words = sentence.split()
-    for word in words:
-        if word in word_freq:
-            word_freq[word] += 1
-        else:
-            word_freq[word] = 1
+    for sentence in sentences:
+        for word in sentence.split():
+            if word not in word_to_index:
+                word_to_index[word] = len(word_to_index)
+                index_to_word[len(index_to_word)] = word
+                word_embeddings.append(np.random.rand(3))  # Random embeddings
 
-# Convert words to numerical representations (simplified example)
-word_to_index = {word: i for i, word in enumerate(word_freq.keys())}
-word_embeddings = np.random.rand(len(word_freq), 3)  # Replace with actual embeddings
+    return np.array(word_embeddings), word_to_index, index_to_word
 
-def calculate_attention_weights(current_word, words):
-    # A simple dot product-based attention mechanism
-    attention_scores = np.dot(word_embeddings[word_to_index[current_word]], np.array([word_embeddings[word_to_index[word]] for word in words]).T)
-    attention_weights = np.exp(attention_scores) / np.sum(np.exp(attention_scores))
-    return attention_weights
+def calculate_self_attention(query, key, value):
+    scores = np.dot(query, key.T) / np.sqrt(key.shape[1])
+    attention_weights = np.exp(scores) / np.sum(np.exp(scores))
+    output = np.dot(attention_weights, value)
+    return output, attention_weights
 
-def predict_next_word_with_attention(current_word, words):
-    attention_weights = calculate_attention_weights(current_word, words)
-    weighted_words = np.array([word_embeddings[word_to_index[word]] for word in words]) * attention_weights[:, None]
-    weighted_sum = np.sum(weighted_words, axis=0)
-    closest_index = np.argmin(np.linalg.norm(word_embeddings - weighted_sum, axis=1))
-    predicted_word = list(word_to_index.keys())[closest_index]
+def predict_next_word_with_self_attention(current_word, words, word_embeddings, word_to_index, index_to_word):
+    query = word_embeddings[word_to_index[current_word]]
+    key = value = np.array([word_embeddings[word_to_index[word]] for word in words])
+    output, attention_weights = calculate_self_attention(query, key, value)
+    closest_index = np.argmin(np.linalg.norm(word_embeddings - output, axis=1))
+    predicted_word = index_to_word[closest_index]
     return predicted_word, attention_weights
 
-# Example usage
-for sentence in sentences:
-    current_word = "to"
-    predicted_word, attention_weights = predict_next_word_with_attention(current_word, sentence.split())
+if __name__ == "__main__":
+    sentences = [
+        "The quick brown fox jumps over the lazy dog",
+        "She sells seashells by the seashore",
+        "I love to eat pizza with extra cheese",
+    ]
 
-    print("Given the word:", current_word)
-    print("Attention weights for:", sentence)
-    for word, weight in zip(sentence.split(), attention_weights):
-        print(f"{word}: {weight:.4f}")
-
-    print("Predicted next word:", predicted_word)
-    print("\n")
+    word_embeddings, word_to_index, index_to_word = create_word_representations(sentences)
+    current_word = "fox"
+    for sentence in sentences:
+        words = sentence.split()
+        predicted_word, attention_weights = predict_next_word_with_self_attention(current_word, words, word_embeddings, word_to_index, index_to_word)
+        print(f"Given the word: {current_word}")
+        print(f"Sentence: {sentence}")
+        print("Attention Weights:")
+        for word, weight in zip(words, attention_weights):
+            print(f"\t{word}: {weight:.4f}")
+        print(f"Predicted next word: {predicted_word}\n")
 ```
 
 This code implements a basic model that uses **self-attention** to predict the next word in a sentence. It doesn't have a specific name for the entire model itself, but the core functionality relies on the self-attention mechanism.
