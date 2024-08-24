@@ -82,7 +82,7 @@ While the concept of automatically building knowledge graphs from raw data is ap
 
 * **Inaccurate or incomplete knowledge graph:** This can lead to incorrect or misleading information.
 * **Poor graph connectivity:** A sparsely connected graph can limit the ability to find relevant information.
-* **Overfitting to the knowledge graph:** The model might become too reliant on the graph, hindering its ability to handle unseen information.
+* **Overfitting to the knowledge graph:** The model might become too reliant on the graph.
 * **High computational costs:** Excessive resource consumption can limit the practicality of GraphRAG.
 * **Limited explainability:** While GraphRAG improves explainability, complex graph structures can still be difficult to interpret.
 
