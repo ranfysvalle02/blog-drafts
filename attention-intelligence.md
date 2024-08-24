@@ -132,6 +132,43 @@ for sentence in sentences:
     print("Predicted next word:", predicted_word)
     print("\n")
 ```
+
+This code implements a basic model that uses **self-attention** to predict the next word in a sentence. It doesn't have a specific name for the entire model itself, but the core functionality relies on the self-attention mechanism.
+
+Here's a breakdown:
+
+* **Self-Attention**: This is the key concept used in the `calculate_self_attention` function. It allows the model to focus on relevant parts of the input sequence (the sentence) when predicting the next word.
+
+* **Word Embeddings**: The model uses randomly generated embeddings to represent each word. These embeddings are then projected into query, key, and value vectors which are used for calculating the attention weights.
+
+**Overall, the model can be considered a simple recurrent neural network (RNN) with a self-attention mechanism for next word prediction.** It demonstrates the core idea of self-attention but lacks the complexity of more advanced models like Transformers, which utilize this mechanism extensively.
+
+## The Impact of Randomly Generated Embeddings
+
+**Randomly generated embeddings** serve as a starting point for the model to learn meaningful representations of words. They are essentially arbitrary numerical vectors assigned to each word.
+
+**Why use random embeddings?**
+
+1. **Initialization**: Randomly generated embeddings provide a non-zero initial state for the model. This allows the model to start learning and adjusting the embeddings based on the input data.
+2. **Breaking Symmetry**: Random initialization helps to avoid symmetry in the model's parameters, which can hinder learning.
+3. **Exploration**: Randomness can encourage the model to explore different parts of the solution space, potentially leading to better performance.
+
+**How do they evolve?**
+
+As the model trains on more data, the embeddings are updated through backpropagation. The model learns to adjust the embeddings so that words with similar meanings have similar representations. For example, words like "cat" and "dog" might end up having similar embeddings because they are often used in similar contexts.
+
+**Limitations of Random Initialization:**
+
+* **Local Minima**: Random initialization can sometimes lead the model to get stuck in local minima, preventing it from reaching the global optimum.
+* **Slower Convergence**: Random initialization can sometimes require more training epochs to converge to a good solution.
+
+**Alternative Initialization Strategies:**
+
+* **Pre-trained Embeddings**: Using pre-trained embeddings (like Word2Vec or GloVe) can provide a good starting point, especially for tasks with limited training data.
+* **Xavier or He Initialization**: These techniques can help to initialize the weights in a way that is more likely to lead to stable learning.
+
+In summary, while randomly generated embeddings may seem arbitrary at first, they play a crucial role in initializing the model and allowing it to learn meaningful representations of words.
+
 ## Breaking Down the Prediction Process
 
 This code is implementing a simple version of the self-attention mechanism, which is a key component in Transformer models used in natural language processing. The self-attention mechanism allows the model to weigh the importance of words in a sentence when predicting the next word.
@@ -211,5 +248,6 @@ The "intelligence" of an LLM is directly tied to the quality and diversity of it
 * **Data Bias:** If the training data is biased, the LLM will also be biased in its outputs. For example, an LLM trained on mostly news articles might struggle to understand sarcasm or humor. 
 * **Data Limitedness:** The real world is vast and complex. LLMs can only process what they've been trained on. Limited data can lead to incomplete understanding and difficulty handling unexpected situations.
 * **Training Objectives:** Ultimately, LLMs are optimized for the tasks they are trained on. An LLM trained for text summarization may not excel at creative writing tasks, even if the data is vast.
+
 
 
