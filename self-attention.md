@@ -1,5 +1,10 @@
+![](https://www.mdpi.com/applsci/applsci-12-03846/article_deploy/html/images/applsci-12-03846-g006-550.jpg)
 
+_(Image Credit to article[ Attention Map-Guided Visual Explanations for Deep Neural Networks ](https://www.mdpi.com/2076-3417/12/8/3846) )_
 # **We should pay more attention to attention**
+**The Illusion of "Intelligence"**
+
+The term "intelligence" is often used to describe the capabilities of mathematical models like LLMs. However, it's important to note that this "intelligence" is heavily dependent on the quality and diversity of the training data. The model's "intelligence" can be biased, limited, and even misleading. For instance, an LLM trained on mostly news articles might struggle to understand sarcasm or humor. 
 
 It all started with: ["Attention is all you need."](https://arxiv.org/abs/1706.03762)
 
@@ -13,14 +18,9 @@ For instance, in translation, attention helps the model concentrate on words or 
 
 * **Positive impact:** Attention allows LLMs to focus on the most relevant parts of the input sequence when generating a response. This leads to responses that are more coherent, relevant, and grammatically correct.
 * **Negative impact:**  
-    * **Focus on misleading information:**  If the input contains misleading or irrelevant keywords, the LLM's attention might be drawn to them, resulting in inaccurate or nonsensical responses.
+    * **Focus on misleading information:**  If the input contains misleading or irrelevant keywords, the LLM's attention might be drawn to them, resulting in inaccurate, nonsensical or other undesired responses.
     * **Missing key information:**  The LLM might overlook crucial information if the wording is different from what it's trained on. 
 
-**The Illusion of "Intelligence"**
-
-The term "intelligence" is often used to describe the capabilities of mathematical models like LLMs. However, it's important to note that this "intelligence" is heavily dependent on the quality and diversity of the training data. The model's "intelligence" can be biased, limited, and even misleading. For instance, an LLM trained on mostly news articles might struggle to understand sarcasm or humor. 
-
-Moreover, the concept of "intelligence" in the context of automating unpredictable workflows is problematic for LLMs. Due to the way 'attention' works, LLMs can be manipulated, leading to potentially undesirable outcomes.
 
 ## Introduction
 
