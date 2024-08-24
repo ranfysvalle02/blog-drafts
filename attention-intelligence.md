@@ -15,8 +15,7 @@ Attention is a mechanism that allows a transformer to focus on different parts o
 
 **The flexibility is the vulnerability:**
 
-* **Exploiting Flexibility:**   refers to manipulating prompts or inputs to trick the LLM into generating unintended outputs. 
-* **Attention Vulnerability:**   The LLM's reliance on attention makes it susceptible to such manipulation.  By crafting inputs with specific words or phrases that grab the LLM's attention, hackers can steer the model towards generating biased, offensive, or nonsensical content.
+The LLM's reliance on attention makes it susceptible to such manipulation.  By crafting inputs with specific words or phrases that grab the LLM's attention, hackers can steer the model towards generating biased, offensive, or nonsensical content.
 
 **Here's an analogy:**
 
