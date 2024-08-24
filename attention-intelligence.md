@@ -29,7 +29,7 @@ The dot product is computed between the query vector and each key vector. This i
 
 Large Language Models (LLMs) have undeniably revolutionized the way we interact with technology. Their ability to generate human-quality text, translate languages, write different kinds of creative content, and answer your questions in an informative way is nothing short of astonishing. But what happens when these models encounter the unexpected?
 
-To understand the limitations of LLMs, let's revisit our oversimplified model trained on three sentences:
+To understand the limitations of LLMs, let's revisit our oversimplified model trained on a few sentences:
 
 1. The quick brown fox jumps over the lazy dog.
 2. She sells seashells by the seashore.
