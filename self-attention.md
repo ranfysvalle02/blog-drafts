@@ -14,6 +14,24 @@ Attention is a mechanism that allows a transformer to focus on different parts o
     * **Focus on misleading information:**  If the input contains misleading or irrelevant keywords, the LLM's attention might be drawn to them, resulting in inaccurate or nonsensical responses.
     * **Missing key information:**  The LLM might overlook crucial information if the wording is different from what it's trained on. 
 
+**The Illusion of "Intelligence"**
+
+The term "intelligence" is often used to describe the capabilities of mathematical models like LLMs. However, it's important to note that this "intelligence" is heavily dependent on the quality and diversity of the training data. The model's "intelligence" can be biased, limited, and even misleading. For instance, an LLM trained on mostly news articles might struggle to understand sarcasm or humor. 
+
+Moreover, the concept of "intelligence" in the context of automating unpredictable workflows is problematic for LLMs. Due to the way 'attention' works, LLMs can be manipulated, leading to potentially undesirable outcomes.
+
+**Understanding vs. Attention: A Key Difference**
+
+Attention is a mechanism, a tool. It focuses the LLM's light on specific aspects of the input, but it doesn't guarantee comprehension. True understanding involves deeper cognitive processes. An LLM with true understanding would not only identify relevant information but also:
+
+* **Grasp the meaning and context:** It would understand how words relate to each other and the overall message.
+* **Reason and infer:** It wouldn't just parrot memorized patterns, but infer new information or draw conclusions based on the input.
+* **Apply knowledge to new situations:** A truly understanding LLM could adapt its knowledge to different contexts and tasks.
+
+Currently, LLMs lack these capabilities. Their focus relies heavily on the statistical patterns present in their training data.
+
+## Introduction
+
 In this blog post, we will explore the concept of attention through a Python code snippet that uses the self-attention mechanism to predict the next word in a sentence.
 
 ```python
