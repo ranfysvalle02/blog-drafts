@@ -75,7 +75,7 @@ While the concept of automatically building knowledge graphs from raw data is ap
 
 * **Higher-order questions:** GraphRAG can handle complex questions like "Show me all Accounts, Product Groups at risk of late delivery? Explain why?" by traversing the knowledge graph to identify relevant entities and relationships.
 * **Chain of thought reasoning:** By understanding entities, actions, and outcomes, GraphRAG can mimic human-like reasoning, breaking down problems into smaller steps. For example, it can identify factors impacting product delivery, analyze inventory levels, and consider supplier performance.
-* **Leveraging private knowledge:** GraphRAG can incorporate domain-specific knowledge (like a Toyota warehouse manager's mental model) into the graph, enabling deeper understanding and better decision-making.
+* **Leveraging private knowledge:** GraphRAG can incorporate domain-specific knowledge (like a warehouse manager's mental model) into the graph, enabling deeper understanding and better decision-making.
 
 ## Red Flags to Look For
 
