@@ -107,7 +107,60 @@ class AdvancedAgent:
     """
     Advanced agent that can use tools and maintain conversation history.
     """
-    ...
+    def __init__(self, model="gpt-4o", history=None, tools=[]):
+        self.openai = az_client
+        self.model = model
+        self.history = history or ConversationHistory()  # Use provided history or create new one
+        self.tools = tools
+        self.tool_info = {tool.name: tool.description for tool in tools}  # Generate dictionary of tool names and descriptions
+
+    async def generate_text(self, prompt):
+        """
+        Generates text using the provided prompt, considering conversation history and tool usage.
+        """
+        response = self.openai.chat.completions.create(
+            messages=[
+                {"role": "user", "content": "Given this prompt:`" + prompt + "`"},
+                {"role": "user", "content": """
+What tool would best help you to respond? If no best tool, just provide an answer to the best of your ability.
+Return an empty array if you don't want to use any tool for the `tools` key.
+
+AVAILABLE TOOLS: """ + ', '.join([f'"{name}": "{desc}"' for name, desc in self.tool_info.items()]) + """
+
+ALWAYS TRY TO USE YOUR TOOLS FIRST!
+
+[RESPONSE CRITERIA]:
+- JSON object
+- Format: {"tools": ["tool_name"], "prompt": "user input without the command", "answer": "answer goes here"}
+
+[EXAMPLE]:
+{"tools": ["search"], "prompt": "[user input without the command]", "answer": "<search>"}
+{"tools": [], "prompt": "[user input without the command]", "answer": "..."}
+"""}
+            ],
+            model=self.model,
+            response_format={"type": "json_object"}
+        )
+        # add question to history
+        self.history.add_to_history(prompt, is_user=True)
+
+        ai_response = json.loads(response.choices[0].message.content.strip())
+        if not ai_response.get("tools", []):
+            self.history.add_to_history(ai_response.get("answer", ""), is_user=False)
+            return ai_response
+        # Process the response (consider using tools here based on AI suggestion)
+        tools_to_use = ai_response.get("tools", [])
+        clean_prompt = ai_response.get("prompt", "")
+        for tool_name in tools_to_use:
+            tool = next((t for t in self.tools if t.name == tool_name), None)
+            if tool:
+                if tool_name == "search":
+                    ai_response = tool.run(clean_prompt)
+                
+
+        self.history.add_to_history(ai_response, is_user=False)
+        return ai_response
+
 ```
 **The Workflow: Custom Process**
 
@@ -118,7 +171,33 @@ class CustomProcess:
     """
     Class representing a process that consists of multiple tasks.
     """
-    ...
+    def __init__(self, tasks):
+        self.tasks = tasks
+
+    async def run(self):
+        """
+        Runs all tasks in the process asynchronously.
+        """
+        results = []
+        for i, task in enumerate(self.tasks):
+            if task.input and task.input.output:
+                if task.name == "step_2":
+                    alltext = ""
+                    for yt_result in task.input.output["web_search_results"]:
+                        video_id = extract_youtube_id_from_href(yt_result["href"])
+                        if video_id:
+                            try:
+                                transcript = YouTubeTranscriptApi.get_transcript(video_id)
+                                if transcript:
+                                    alltext = (' '.join(item['text'] for item in transcript))
+                                    task.description += f"""\nYoutube Transcript for {video_id}:\n""" + alltext
+                                    print(f"Added transcript for {video_id}")
+                            except Exception as e:
+                                print(f"Error fetching transcript for {video_id}")
+            result = await task.run()  # Pass the result of the previous task to the next task
+            results.append(result)
+        print("Process complete.")
+        return results
 ```
 
 **The Adventure: Running the AI Assistant**
@@ -139,7 +218,28 @@ async def main():
         name="step_1",
         tool_use_required=True
     )
-    ...
+    task2 = Task(
+        description=f"""
+Write a concise bullet point report on `{user_input}` using the provided [task_context].
+IMPORTANT! Use the [task_context]
+
+[Response Criteria]:
+- Bullet point summary
+- Minimum of 100 characters
+- Use the provided [task_context]
+
+""",
+        agent=AdvancedAgent(
+            history=ConversationHistory(MDB_URI),
+            tools=[]
+        ),
+        input=task1,
+        name="step_2"
+    )
+
+    # Create process
+    my_process = CustomProcess([task1, task2])
+
     # Run process and print the result
     result = await my_process.run()
     print(result[-1].get("answer", ""))
