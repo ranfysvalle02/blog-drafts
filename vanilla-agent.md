@@ -116,6 +116,32 @@ class SearchTool(Tool):
 ```
 **The Actions: Tasks**
 
+```python
+class Task:
+    """
+    Class representing a task for the agent to complete.
+    """
+    def __init__(self, description, agent, tools=[], input=None, name="", tool_use_required=False):
+        self.description = description
+        self.agent = agent
+        self.tools = tools
+        self.output = None
+        self.input = input
+        self.name = name
+        self.tool_use_required = tool_use_required
+
+    async def run(self):
+        """
+        Runs the task using the agent and tools, optionally adding additional context.
+        """
+        # Use the agent and tools to perform the task
+        if self.input:
+            self.description += "\nUse this task_context to complete the task:\n[task_context]\n" + str(self.input.output) + "\n[end task_context]\n"
+        result = await self.agent.generate_text(self.description)
+        self.output = result
+        return result
+```
+
 Tasks are the actions that our AI assistant can perform using its skills. For example, a task could be to search for information on a specific topic and summarize the findings. Each task is represented as an instance of the `Task` class, which includes a description of the task, the agent that will perform the task, the tools that the agent will use, and the input that the task will process.
 
 **The Brain: Advanced Agent and Custom Process**
