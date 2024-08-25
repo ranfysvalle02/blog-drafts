@@ -270,6 +270,10 @@ While we've discussed the basic concept of attention, it's important to note tha
 **NOTE:**
 In most transformer models, the word embeddings remain constant throughout the training process. It's the model weights that are updated during training to improve the model's ability to represent and understand the data.
 
+![Transformers in generative models.](https://storage.googleapis.com/gweb-research2023-media/images/TransformerMusic3-Transformer.width-800.png)
+
+_(Image Credit to [Transformers in music recommendation](https://research.google/blog/transformers-in-music-recommendation/) )_
+
 ### Multi-Head Attention
 
 Multi-head attention is a type of attention mechanism that allows the model to focus on different parts of the input sequence simultaneously. It does this by splitting the input into multiple "heads" and applying the attention mechanism to each head independently. This allows the model to capture various aspects of the input sequence, such as different levels of abstraction or different types of relationships between words.
