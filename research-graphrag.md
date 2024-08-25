@@ -1,4 +1,4 @@
-## GraphRAG: Elevating RAG with Knowledge Graphs
+## GraphRAG on MongoDB
 
 **GraphRAG** is a powerful extension of Retrieval-Augmented Generation (RAG) that leverages knowledge graphs to enhance information retrieval and response generation. Unlike traditional RAG, which relies on text similarity, GraphRAG captures intricate relationships between entities, enabling deeper understanding and more accurate responses.
 
