@@ -208,6 +208,35 @@ ALWAYS TRY TO USE YOUR TOOLS FIRST!
         return ai_response
 
 ```
+
+## **Expanding on `response_format={"type": "json_object"}`**
+
+By structuring responses in JSON format, you're essentially providing a blueprint for how the AI's thoughts can be interpreted and processed. The use of `response_format={"type": "json_object"}` when interacting with the OpenAI API is crucial for providing clear instructions to the AI model and receiving structured responses. Let's delve deeper into its significance and benefits.
+
+### **Why JSON Objects?**
+
+* **Clarity and Structure:** JSON objects offer a human-readable and machine-processable format for organizing data. This makes it easier to parse and interpret the model's responses.
+* **Flexibility:** JSON can represent a wide range of data types, including strings, numbers, arrays, and objects. This flexibility allows for complex responses and customization.
+* **Consistent Format:** By specifying the `json_object` response format, you ensure that the model's output adheres to a predictable structure, simplifying subsequent processing.
+
+### **Key Components of the JSON Object**
+
+When using the `json_object` format, the AI model's response typically includes the following components:
+
+* **`tools`:** An array of tool names that the model suggests using to complete the task. Empty array if no tool.
+* **`prompt`:** The refined prompt that the model will use after considering the available tools. [no command]
+* **`answer`:** The generated response, which might be a direct answer or an instruction to use one of the suggested tools.
+
+### **Example Response**
+
+```json
+{
+  "tools": ["search"],
+  "prompt": "What is the capital of France?",
+  "answer": "<search>"
+}
+```
+
 **The Workflow: Custom Process**
 
 Sometimes, our AI assistant needs to perform a series of tasks in a specific order. That's where the `CustomProcess` class comes in. It allows us to chain tasks together to create more complex workflows. For instance, we might have a process that involves searching for information, analyzing the results, and then summarizing the findings.
