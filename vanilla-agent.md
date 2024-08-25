@@ -1,5 +1,21 @@
 **Title:** Building an Advanced AI Agent with OpenAI, MongoDB, and DuckDuckGo
 
+Ditch the pre-built libraries and unleash the raw power of Python! Contrary to popular belief, crafting a generative AI *agent* doesn't require a mountain of complex libraries. With just a few well-placed lines of code, you can take control and build a custom AI agent that bends to your will and can implement custom processes/workflows. Intrigued? This guide will equip you with the building blocks to forge your very own generative AI agent from scratch, giving you the freedom to experiment and innovate.
+
+We'll delve into the following aspects:
+
+- **Harnessing OpenAI:** Empower your agent with OpenAI's capabilities for generating human-quality text, enabling it to engage in natural conversations.
+- **Persistent Memory with MongoDB:** Implement MongoDB as a reliable database to store conversation history, ensuring your agent remembers past interactions across sessions.
+- **Targeted Web Searches with DuckDuckGo:** Integrate DuckDuckGo for tailored web searches, allowing your agent to access and process real-world information effectively.
+- **Structured Task Management:** Utilize Python's object-oriented programming features to design well-structured tasks, tools, and a central agent, fostering a modular and maintainable architecture.
+
+**Setting Up the Environment (Prerequisites):**
+
+1. **Python:** Ensure you have Python 3.6 or later installed on your system. You can verify this by running `python3 --version` in your terminal. If not installed, download it from [https://www.python.org/downloads/](https://www.python.org/downloads/).
+2. **OpenAI API Key:** Visit [https://beta.openai.com/account/api-keys](https://beta.openai.com/account/api-keys) and create an API key. Store this securely, as it grants access to OpenAI's services.
+3. **MongoDB:** Install a MongoDB client for your operating system (instructions available at [https://www.mongodb.com/try/download/community](https://www.mongodb.com/try/download/community)). We'll be using the `pymongo` library to interact with MongoDB from Python.
+
+
 **The Foundation: Setting Up the Environment**
 
 Our first step is to set up our environment. This involves importing necessary libraries and defining some constants. We're using libraries like `openai` for AI model interaction, `pymongo` for database management, `duckduckgo_search` for web search, and `youtube_transcript_api` for fetching YouTube video transcripts.
