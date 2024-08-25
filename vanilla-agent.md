@@ -2,6 +2,8 @@
 
 Ditch the "bloated" libraries and unleash the raw power of Python! Contrary to popular belief, crafting a generative AI *agent* doesn't require a mountain of complex libraries. With just a few well-placed lines of code, you can take control and build a custom AI agent that bends to your will and can implement custom processes/workflows. Intrigued? This guide will equip you with the building blocks to forge your very own generative AI agent from scratch, giving you the freedom to experiment and innovate.
 
+[Github Source Code](https://github.com/ranfysvalle02/vanilla-agents)
+
 **Key Components and How They Work:**
 
 1. **Tools:** These are the building blocks of your AI's functionality. Think of them as specialized skills. For instance, a `SearchTool` might leverage DuckDuckGo to retrieve information from the web.
