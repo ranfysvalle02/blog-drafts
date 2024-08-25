@@ -267,3 +267,6 @@ if __name__ == "__main__":
 ```
 
 
+**What will you build?**
+
+Now that you've seen the foundation for building your own AI agent, it's time to experiment! Explore different tools, tasks, and workflows to tailor your agent to your specific needs. Remember, the possibilities are endless!
