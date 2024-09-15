@@ -1,5 +1,20 @@
 ## Reasoning in Large Language Models: A Brainstorm
 
+**Introduction**
+
+Large Language Models (LLMs) have made significant strides in recent years, demonstrating impressive capabilities in tasks such as generating human-quality text, translating languages, and writing different kinds of creative content. However, despite their impressive performance, it's important to understand that LLMs are not capable of true reasoning. The claim that they can "reason" is often a misconception, based on a superficial understanding of their underlying mechanisms.
+
+**The Illusion of Reasoning**
+
+The illusion of reasoning in LLMs stems from their ability to generate coherent and contextually relevant text. When presented with a prompt or question, LLMs can produce responses that appear to be the result of logical thought. However, this is primarily due to their statistical models, which have been trained on vast amounts of text data. LLMs essentially learn patterns and associations within this data, allowing them to predict the most likely next word or phrase in a given context.
+
+**The Limitations of Statistical Models**
+
+While statistical models are powerful tools, they have inherent limitations. LLMs cannot truly understand the meaning or implications of the information they process. They are simply manipulating symbols based on statistical probabilities. As a result, they can often produce nonsensical or misleading outputs, even when their responses appear to be logical.
+
+LLMs are powerful tools, but it's essential to recognize their limitations. While they can generate impressive text, they are not capable of true reasoning. The illusion of reasoning is a product of their statistical models and the way they are trained. As we continue to develop and refine LLMs, it's important to maintain a clear understanding of their capabilities and limitations.
+
+
 **Understanding Reasoning**
 
 Reasoning, at its core, involves the ability to draw conclusions or make inferences based on given information or evidence. It requires the application of logic, critical thinking, and problem-solving skills. In the context of large language models (LLMs), reasoning can manifest in various ways, such as:
