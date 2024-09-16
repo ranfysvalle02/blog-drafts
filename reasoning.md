@@ -18,9 +18,7 @@ Some types of reasoning:
 * **Analogical Reasoning:** Identifying similarities between different situations.
 * **Causal Reasoning:** Understanding cause-and-effect relationships.
 
-**Implementing Reasoning in LLMs**
-
-  **Reinforcement Learning:**
+**Implementing Reasoning in LLMs: Reinforcement Learning:**
    * **Reward-based learning:** Training LLMs to make decisions based on rewards or punishments.
    * **Reasoning as a game:** Formulating reasoning tasks as games where the LLM learns to make optimal choices.
    * **Example:** Training an LLM to play a reasoning game like chess or Go.
