@@ -27,29 +27,14 @@ Reasoning, at its core, involves the ability to draw conclusions or make inferen
 
 **Implementing Reasoning in LLMs**
 
-Several approaches can be considered to enhance reasoning capabilities in LLMs:
+Below are a few approaches that can be considered to enhance reasoning capabilities in LLMs:
 
 1. **Knowledge Graphs and Semantic Networks:**
    * **Representing knowledge:** Storing factual information in a structured format.
    * **Reasoning over knowledge:** Using logical rules to infer new information.
    * **Example:** Linking concepts like "apple" and "fruit" in a knowledge graph to enable inferences like "apples are fruits."
 
-2. **Symbolic Reasoning:**
-   * **Formal logic:** Employing formal systems (e.g., propositional logic, first-order logic) to represent and manipulate knowledge.
-   * **Inference rules:** Applying inference rules to derive new conclusions from existing knowledge.
-   * **Example:** Using logical rules to prove mathematical theorems.
-
-3. **Neural-Symbolic Integration:**
-   * **Combining strengths:** Leveraging the strengths of both neural networks and symbolic reasoning.
-   * **Hybrid models:** Developing models that can learn from data and reason over structured knowledge.
-   * **Example:** Using a neural network to learn patterns in natural language and a symbolic reasoner to apply logical rules.
-
-4. **Meta-Learning and Transfer Learning:**
-   * **Learning to learn:** Training LLMs to learn new tasks quickly and efficiently.
-   * **Transferring knowledge:** Applying knowledge learned on one task to another related task.
-   * **Example:** Pre-training an LLM on a large dataset of text and then fine-tuning it for specific reasoning tasks.
-
-5. **Reinforcement Learning:**
+2. **Reinforcement Learning:**
    * **Reward-based learning:** Training LLMs to make decisions based on rewards or punishments.
    * **Reasoning as a game:** Formulating reasoning tasks as games where the LLM learns to make optimal choices.
    * **Example:** Training an LLM to play a reasoning game like chess or Go.
