@@ -54,7 +54,7 @@ Several approaches can be considered to enhance reasoning capabilities in LLMs:
    * **Reasoning as a game:** Formulating reasoning tasks as games where the LLM learns to make optimal choices.
    * **Example:** Training an LLM to play a reasoning game like chess or Go.
 
-_NOTE: At the core of OpenAI o1's capabilities is its large-scale reinforcement learning algorithm. This approach teaches the model how to think productively by encouraging it to generate chains of thought that lead to correct solutions. The ability to generate chains of thought is a crucial aspect of o1's reasoning abilities. By breaking down complex problems into smaller, more manageable steps, o1 can develop more effective strategies for solving them. This approach not only improves accuracy but also provides valuable insights into the model's thought processes._
+_NOTE: At the core of OpenAI o1's capabilities is its large-scale reinforcement learning algorithm. This approach teaches the model how to think productively by encouraging it to generate chains of thought that lead to correct solutions. By breaking down complex problems into smaller, more manageable steps, o1 can develop more effective strategies for solving them. This approach not only improves accuracy but also provides valuable insights into the model's thought processes._
 
 **Challenges and Future Directions**
 
