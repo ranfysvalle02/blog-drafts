@@ -59,6 +59,7 @@ In essence, it's a way of thinking that goes beyond automatic responses or pre-l
 _NOTE: At the core of OpenAI o1's capabilities is its large-scale reinforcement learning algorithm. This approach teaches the model how to think productively by encouraging it to generate chains of thought that lead to correct solutions. By breaking down complex problems into smaller, more manageable steps, o1 can develop more effective strategies for solving them. This approach not only improves accuracy but also provides valuable insights into the model's thought processes._
 
 **Reasoning is Bias**
+
 Consider the following insight from OpenAI:
 
 *“For example, in the future, we may wish to monitor the chain of thought for signs of manipulating the user. However, for this to work, the model must have freedom to express its thoughts in unaltered form. We cannot train any policy compliance or user preferences onto the chain of thought. We also do not want to make an unaligned chain of thought directly visible to users.”*
