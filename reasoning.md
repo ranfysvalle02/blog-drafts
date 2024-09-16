@@ -60,7 +60,7 @@ _NOTE: At the core of OpenAI o1's capabilities is its large-scale reinforcement 
 
 **Reasoning is Bias**
 
-Consider the following insight from (OpenAI)[https://openai.com/index/learning-to-reason-with-llms/]:
+Consider the following insight from [OpenAI](https://openai.com/index/learning-to-reason-with-llms/):
 
 *“For example, in the future, we may wish to monitor the chain of thought for signs of manipulating the user. However, for this to work, the model must have freedom to express its thoughts in unaltered form. We cannot train any policy compliance or user preferences onto the chain of thought.”*
 
