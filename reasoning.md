@@ -20,14 +20,7 @@ Some types of reasoning:
 
 **Implementing Reasoning in LLMs**
 
-Below are a few approaches that can be considered to enhance reasoning capabilities in LLMs:
-
-1. **Knowledge Graphs and Semantic Networks:**
-   * **Representing knowledge:** Storing factual information in a structured format.
-   * **Reasoning over knowledge:** Using logical rules to infer new information.
-   * **Example:** Linking concepts like "apple" and "fruit" in a knowledge graph to enable inferences like "apples are fruits."
-
-2. **Reinforcement Learning:**
+  **Reinforcement Learning:**
    * **Reward-based learning:** Training LLMs to make decisions based on rewards or punishments.
    * **Reasoning as a game:** Formulating reasoning tasks as games where the LLM learns to make optimal choices.
    * **Example:** Training an LLM to play a reasoning game like chess or Go.
