@@ -29,6 +29,15 @@ Some types of reasoning:
 
 While LLMs can mimic some of these forms through pre-learned patterns, true reasoning requires a deliberate cognitive framework, which they lack.
 
+**A deliberate cognitive framework** is a structured mental approach that involves:
+
+* **Conscious thought:** Deliberately considering information and making decisions.
+* **Critical analysis:** Evaluating information, identifying strengths, weaknesses, and biases.
+* **Problem-solving:** Applying strategies to overcome challenges and find solutions.
+* **Logical reasoning:** Using rules and principles to draw valid conclusions.
+
+In essence, it's a way of thinking that goes beyond automatic responses or pre-learned patterns. It requires active engagement with information, the ability to make informed judgments, and the capacity to solve problems creatively.
+
 **Implementing Reasoning in LLMs via Reinforcement Learning**
    * **Reward-based learning:** Training LLMs to make decisions based on rewards or punishments.
    * **Reasoning as a game:** Formulating reasoning tasks as games where the LLM learns to make optimal choices.
