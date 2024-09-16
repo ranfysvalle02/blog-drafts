@@ -46,7 +46,7 @@ In essence, it's a way of thinking that goes beyond automatic responses or pre-l
     * Using logic to connect the dots and identify the culprit.
     * Being open to new information and adjusting their thinking as needed.
 
-**In contrast, a simple pattern-matching system** might:
+* **In contrast, a simple pattern-matching system** might:
     * Look for similarities between the current case and previous ones.
     * Suggest a solution based on past experiences.
     * But it might miss important details or fail to consider alternative explanations.
