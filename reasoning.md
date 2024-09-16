@@ -9,8 +9,9 @@ While statistical models are powerful tools, they have inherent limitations. LLM
 
 **Understanding Reasoning**
 
-Reasoning, at its core, involves the ability to draw conclusions or make inferences based on given information or evidence. It requires the application of logic, critical thinking, and problem-solving skills. In the context of large language models (LLMs), reasoning can manifest in various ways, such as:
+Reasoning, at its core, involves the ability to draw conclusions or make inferences based on given information or evidence. It requires the application of logic, critical thinking, and problem-solving skills. 
 
+Some types of reasoning:
 * **Deductive Reasoning:** Applying general rules to specific cases.
 * **Inductive Reasoning:** Drawing general conclusions from specific observations.
 * **Abductive Reasoning:** Inferring the most likely explanation for a given observation.
