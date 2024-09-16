@@ -56,7 +56,7 @@ In essence, it's a way of thinking that goes beyond automatic responses or pre-l
 
 _NOTE: At the core of OpenAI o1's capabilities is its large-scale reinforcement learning algorithm. This approach teaches the model how to think productively by encouraging it to generate chains of thought that lead to correct solutions._
 
-**Reasoning is Bias**
+**REASONING == BIAS**
 
 Consider the following insight from [OpenAI](https://openai.com/index/learning-to-reason-with-llms/):
 
