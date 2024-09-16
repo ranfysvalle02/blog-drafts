@@ -56,15 +56,8 @@ In essence, it's a way of thinking that goes beyond automatic responses or pre-l
    * **Reasoning as a game:** Formulating reasoning tasks as games where the LLM learns to make optimal choices.
    * **Example:** Training an LLM to play a reasoning game like chess or Go.
 
-_NOTE: At the core of OpenAI o1's capabilities is its large-scale reinforcement learning algorithm. This approach teaches the model how to think productively by encouraging it to generate chains of thought that lead to correct solutions._
+_NOTE: At the core of [OpenAI](https://openai.com/index/learning-to-reason-with-llms/) o1's capabilities is its large-scale reinforcement learning algorithm. This approach teaches the model how to think productively by encouraging it to generate chains of thought that lead to correct solutions._
 
-**REASONING == BIAS**
-
-Consider the following insight from [OpenAI](https://openai.com/index/learning-to-reason-with-llms/):
-
-*“For example, in the future, we may wish to monitor the chain of thought for signs of manipulating the user. However, for this to work, the model must have freedom to express its thoughts in unaltered form. We cannot train any policy compliance or user preferences onto the chain of thought.”*
-
-In other words, a model trained with a specific chain of thought can become biased toward that particular approach, limiting its creativity and hindering its ability to consider alternative solutions. This can potentially lead to unintended consequences, such as attempts to manipulate users.
 
 **Python Example: Strawberry Problem Solved with GPT3.5 + CoT "Reasoning"**
 
