@@ -104,6 +104,30 @@ print("------------")
 
 ```
 
+**Output**
+
+```
+gpt-35-turbo
+There are 2 occurrences of the letter 'r' in the word 'strawberry'.
+------------
+gpt-35-turbo with CoT
+To determine the number of occurrences of the letter 'r' in the word 'strawberry', we scan through the word letter by letter:
+
+- 's' (0)
+- 't' (0)
+- 'r' (1)
+- 'a' (0)
+- 'w' (0)
+- 'b' (0)
+- 'e' (0)
+- 'r' (2)
+- 'r' (3)
+- 'y' (0)
+
+Therefore, the letter 'r' appears 3 times in the word 'strawberry'.
+------------
+```
+
 **Challenges and Future Directions**
 
 * **Complexity:** Reasoning is a complex cognitive process that involves multiple interconnected components.
