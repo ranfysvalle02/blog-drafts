@@ -51,8 +51,6 @@ In essence, it's a way of thinking that goes beyond automatic responses or pre-l
     * Suggest a solution based on past experiences.
     * But it might miss important details or fail to consider alternative explanations.
 
-**So, a deliberate cognitive framework is like a detective's toolkit, while a pattern-matching system is more like a simple rulebook.**
-
 **Implementing Reasoning in LLMs via Reinforcement Learning**
    * **Reward-based learning:** Training LLMs to make decisions based on rewards or punishments.
    * **Reasoning as a game:** Formulating reasoning tasks as games where the LLM learns to make optimal choices.
