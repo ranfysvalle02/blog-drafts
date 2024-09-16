@@ -62,9 +62,9 @@ _NOTE: At the core of OpenAI o1's capabilities is its large-scale reinforcement 
 
 Consider the following insight from OpenAI:
 
-*“For example, in the future, we may wish to monitor the chain of thought for signs of manipulating the user. However, for this to work, the model must have freedom to express its thoughts in unaltered form. We cannot train any policy compliance or user preferences onto the chain of thought. We also do not want to make an unaligned chain of thought directly visible to users.”*
+*“For example, in the future, we may wish to monitor the chain of thought for signs of manipulating the user. However, for this to work, the model must have freedom to express its thoughts in unaltered form. We cannot train any policy compliance or user preferences onto the chain of thought.”*
 
-This quote reflects a tension: controlling reasoning processes can introduce bias, but unaligned reasoning could lead to unintended consequences. A model trained with a specific chain of thought may reflect a singular path as "correct," limiting creativity or alternative conclusions.
+In other words, a model trained with a specific chain of thought can become biased toward that particular approach, limiting its creativity and hindering its ability to consider alternative solutions. This can potentially lead to unintended consequences, such as attempts to manipulate users.
 
 **Challenges and Future Directions**
 
