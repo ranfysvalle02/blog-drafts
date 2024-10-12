@@ -22,17 +22,17 @@ The platform has had a significant impact on various teams across MongoDB. Custo
 
 ## How CoachGTM Works
 
-CoachGTM is powered by MongoDB Atlas Vector Search. The process involves several key technical steps:
+CoachGTM is powered by MongoDB Atlas. The process involves several key technical steps:
 
 1. **Indexing with MongoDB Atlas Vector Search:** CoachGTM creates highly efficient index vector representations of thousands of documents, including websites, pdfs, and docs. They are ingested to the index every 24 hours, ensuring the information is always up to date.
 
-2. **Scalability and Performance Optimization:** MongoDB Atlas Vector Search is designed to handle large-scale vector data with exceptional efficiency. It seamlessly scales search infrastructure as data grows, ensuring optimal performance at all times.
+2. **Scalability and Performance Optimization:** MongoDB Atlas is designed to handle large-scale vector data with exceptional efficiency. It seamlessly scales search infrastructure as data grows, ensuring optimal performance at all times.
 
 3. **Hybrid Search Implementation:** CoachGTM uses a hybrid search approach that combines keyword-based searches with vector similarity searches. This approach works better than semantic search alone and boosts correct document matching by around 20%.
 
 4. **Result Fusion and Ranking:** After the hybrid search, CoachGTM employs LLM-powered result fusion techniques to combine and rerank the search results from MongoDB Atlas that are most relevant to the query.
 
-By harnessing the power of MongoDB Atlas Vector Search, CoachGTM delivers fast and highly relevant context to MongoDB employees, ushering in a new AI wave in revenue operations.
+By harnessing the power of MongoDB Atlas, CoachGTM delivers fast and highly relevant context to MongoDB employees, ushering in a new AI wave in revenue operations.
 
 ## MongoDB Atlas: The Powerhouse Behind CoachGTM
 
@@ -61,7 +61,7 @@ By leveraging the capabilities of MongoDB Atlas, CoachGTM can efficiently store,
 
 ## The Magic of Storing Vectors and Metadata Together
 
-One of the most powerful aspects of MongoDB Atlas Vector Search is its ability to store both vectors and associated metadata within a single document. This seamless integration eliminates the need for complex data pipelines and ensures that your data remains tightly coupled and easily accessible.
+One of the most powerful aspects of MongoDB Atlas is its ability to store both vectors and associated metadata within a single document. This seamless integration eliminates the need for complex data pipelines and ensures that your data remains tightly coupled and easily accessible.
 
 **Key Benefits:**
 
@@ -81,7 +81,7 @@ MongoDB Atlas offers a truly unified data platform that can handle both your ope
 
 ## Conclusion
 
-The ability to store vectors and metadata together in MongoDB Atlas Vector Search offers a powerful and flexible solution for managing your AI and machine learning workloads. By leveraging this capability, you can simplify your data management processes, enhance your query capabilities, and gain deeper insights into your data.
+The ability to store vectors and metadata together in MongoDB Atlas offers a powerful and flexible solution for managing your AI and machine learning workloads. By leveraging this capability, you can simplify your data management processes, enhance your query capabilities, and gain deeper insights into your data.
 
 CoachGTM is more than just a bot; it's a revolution in customer success and sales. By providing on-time technical expertise, it empowers CSMs and sales teams, fostering trust and engagement with customers. With its automated workflows, enterprise-grade security, and multilingual capabilities, CoachGTM is set to transform the way businesses interact with their customers. 
 
