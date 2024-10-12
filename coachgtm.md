@@ -4,7 +4,7 @@ In the world of customer success and sales, time is money. Every minute spent se
 
 ## What is CoachGTM?
 
-CoachGTM is more than just a bot; it's an extension of your team. It utilizes an extensive knowledgebase to offer technical guidance, process assistance, and industry expertise. 
+CoachGTM is more than just a bot; its is part of the MongoDB team. It utilizes an extensive knowledgebase to offer technical guidance, process assistance, and industry expertise. 
 
 ## The Birth of CoachGTM
 
