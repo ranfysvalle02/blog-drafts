@@ -26,7 +26,7 @@ CoachGTM is powered by MongoDB Atlas Vector Search. The process involves several
 
 3. **Hybrid Search Implementation:** CoachGTM uses a hybrid search approach that combines keyword-based searches with vector similarity searches. This approach works better than semantic search alone and boosts correct document matching by around 20%.
 
-4. **Result Fusion and Ranking:** After the hybrid search, Mendable employs LLM-powered result fusion techniques to combine and rerank the search results from MongoDB Atlas that are most relevant to the query.
+4. **Result Fusion and Ranking:** After the hybrid search, CoachGTM employs LLM-powered result fusion techniques to combine and rerank the search results from MongoDB Atlas that are most relevant to the query.
 
 By harnessing the power of MongoDB Atlas Vector Search, CoachGTM delivers fast and highly relevant context to MongoDB employees, ushering in a new AI wave in revenue operations.
 
