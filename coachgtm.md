@@ -18,7 +18,7 @@ The platform has had a significant impact on various teams across MongoDB. Custo
 
 ## How CoachGTM Works
 
-Mendable uses MongoDB Atlas Vector Search to power CoachGTM. The process involves several key technical steps:
+CoachGTM is powered by MongoDB Atlas Vector Search. The process involves several key technical steps:
 
 1. **Indexing with MongoDB Atlas Vector Search:** CoachGTM creates highly efficient index vector representations of thousands of documents, including websites, pdfs, and docs. They are ingested to the index every 24 hours, ensuring the information is always up to date.
 
