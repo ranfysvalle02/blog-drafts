@@ -6,6 +6,10 @@ In the world of customer success and sales, time is money. Every minute spent se
 
 CoachGTM is more than just a bot; its is part of the MongoDB team. It utilizes an extensive knowledgebase to offer technical guidance, process assistance, and industry expertise. 
 
+Connecting MDB technical questions to underlying business problems so that we can become more intimate with our customers thereby unlocking longer term value. 
+
+Goals: build trust, build credibility, build champions.
+
 ## The Birth of CoachGTM
 
 The journey of CoachGTM started when James Underhill, Director of Sales Operations and Strategy at MongoDB, asked Fabian Valle, a hacker/engineer in SalesOps, if he could create a Slackbot that could act as a technical question responder. Despite never having created a Slackbot before, Fabian, along with SK from the product side, took up the challenge. The result was a quick, value-adding solution that was well-received by the sales team. Quickly becoming a permanent member of the MongoDB ecosystem, CoachGTM continues to add value today with more features planned in the roadmap.
