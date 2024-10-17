@@ -1,3 +1,12 @@
+### **Why JSON Tokenization?**
+
+JSON tokenization is essential for several reasons:
+
+- **Efficient Data Retrieval**: Tokenizing JSON allows more granular indexing and faster querying of nested fields.
+- **Text Analysis**: Breaking down JSON fields into tokens enables deeper insights, such as word embeddings in NLP tasks.
+- **Integration with NoSQL Databases**: Document-oriented databases like MongoDB store JSON-like documents, and tokenization improves the efficiency of querying, indexing, and search operations.
+- **Data Cleaning & Transformation**: Tokenizing JSON data aids in validating, cleaning, and transforming data across pipelines.
+
 ### **What is JSON Tokenization?**
 
 At its core, JSON (JavaScript Object Notation) is a lightweight data-interchange format consisting of **key-value pairs** and **arrays**. Tokenization of JSON involves breaking down the structure into atomic elements that represent both the data and its hierarchical relationships.
@@ -181,7 +190,6 @@ The choice of strategy depends on the application and the type of downstream pro
 - **Type-Aware Tokenization**: Best for applications where data types are essential for understanding and processing, such as machine learning tasks.
 - **Schema-Aware Tokenization**: Necessary when working in environments that require strict validation and schema adherence, such as in data migration or API interactions.
 
----
 
 ### **Conclusion**
 
