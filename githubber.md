@@ -1,6 +1,3 @@
-Here's the markdown organized by adding categories and concepts as headings:
-
-```markdown
 # README.md
 [![GitHub](https://img.shields.io/badge/GitHub-ranfysvalle02-blue.svg)](https://github.com/ranfysvalle02)
 
@@ -223,4 +220,4 @@ Here's the markdown organized by adding categories and concepts as headings:
 
 - **[repo:prompt-dolla](https://github.com/ranfysvalle02/prompt-dolla)**  
   Integrates language models into database workflows for smarter data handling.
-```
+
